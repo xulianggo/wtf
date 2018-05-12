@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+
+//TODO auto build .jar
+//android.libraryVariants.all { variant ->
+//    task("generate${variant.name}Javadoc", type: Javadoc) {
+//        description "Generates Javadoc for $variant.name."
+//        source = variant.javaCompile.source
+//        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+//        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+//    }
+//
+
+//// 生成jar文件
+//    task("jar${variant.name}", type: Jar) {
+//        description "Bundles compiled .class files into a JAR file for $variant.name."
+//        dependsOn variant.javaCompile
+//        from variant.javaCompile.destinationDir
+//        exclude '**/R.class', '**/R$*.class', '**/R.html', '**/R.*.html'
+//    }
+//}
+
+android {
+	compileSdkVersion Integer.parseInt(ANDROID_BUILD_SDK_VERSION)
+
+		defaultConfig {
+
+			minSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION)
+				targetSdkVersion Integer.parseInt(ANDROID_BUILD_TARGET_SDK_VERSION)
+
+				versionCode Integer.parseInt(ANDROID_BUILD_VERSION_CODE)
+				versionName ANDROID_BUILD_VERSION_NAME
+		}
+	sourceSets {
+		main {
+			//=> app/js
+			assets.srcDirs = ['../js']
+		}
+	}
+
+	//    buildTypes {
+	//        release {
+	//            minifyEnabled false
+	//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+	//        }
+	//    }
+
+}
+allprojects {
+	tasks.withType(JavaCompile) {
+		options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+	}
+}
+dependencies {
+	//implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation files('libs/minimal-json-0.9.4.jar')
+}

@@ -1,0 +1,900 @@
+/**
+ * js-mini-native framework alike weex/wx/DeviceOne/NativeScript/ReactNative by anonymous
+ * <p>
+ * platform.js
+ * => platform and app manager
+ * $appName/app.js
+ * => app
+ */
+
+package wtf.sdk;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.os.StrictMode;
+import android.util.Log;
+import android.view.Gravity;
+import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
+import android.widget.Toast;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import wtf.sdk.h5.JsBridgeWebView;
+import wtf.sdk.h5.SimpleHybridWebViewUi;
+import wtf.sdk.js.JSEngineWebView;
+
+public class platform {
+    public final static String NETWORK_STATUS = "_network_status_";
+    //    public final static String NETWORK_STATUS = "_network_status_";
+//    final static String ANDROID_APPLICATION = "_android_applicaton_";
+    final static String ANDROID_APPLICATION = "_android_applicaton_";
+    final static String UI_MAPPING = "ui_mapping";
+    final static String API_AUTH = "api_auth";
+    final static String API_MAPPING = "api_mapping";
+
+    //    static {
+    //        //native
+    //        System.loadLibrary("wtf-lib");
+    //    }
+    final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
+    //    final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
+    private static Map<String, Object> _memStore = new HashMap<String, Object>();
+    //    private static Map<String, Object> _memStore = new HashMap<String, Object>();
+    private static JSO _jAppConfig = null;//new info.cmptech.JSO();
+    private static String _localWebRoot = "";
+    private Context androidContext;
+
+    //constructor
+    public platform(Context ctx) {
+        this.androidContext = ctx;
+        JSEngineWebView jsw = null;
+        try {
+            jsw = new JSEngineWebView(this.androidContext);
+            //injext the native object
+            jsw.addJavascriptInterface(new nativewtf(this.androidContext), "native");
+            //init with the platform.js
+            jsw.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String json_string) {
+                    Log.v(LOGTAG, " platform.js => " + json_string);
+                }
+            });
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+            String sWarning = t.getMessage();
+            quickShowMsgMain(sWarning);
+            //wtf.KillAppSelf();
+        }
+    }
+
+    //factory
+    public static platform buildWTF(Context ctx) {
+        return new platform(ctx);
+    }
+
+    public static Object getCacheFromMem(String key) {
+        return _memStore.get(key);
+    }
+
+    public static Object setCacheToMem(String key, Object val) {
+        return _memStore.put(key, val);
+    }
+
+    //need to call setApplication before invoke....
+    public static Application getApplication() {
+        Application _thisApp = null;
+        try {
+            _thisApp = (Application) getCacheFromMem(ANDROID_APPLICATION);
+//            if (null == _thisApp) {
+//                _thisApp = (Application) Class.forName("android.app.ActivityThread")
+//                        .getMethod("currentApplication").invoke(null, (Object[]) null);
+//                if (null != _thisApp) {
+//                    setCacheToMem(ANDROID_APPLICATION, _thisApp);
+//                }
+//            }
+            if (null == _thisApp) KillAppSelf();
+        } catch (Throwable t) {
+            t.printStackTrace();
+            KillAppSelf();
+        }
+        return _thisApp;
+    }
+
+    public static void setApplication(Application _thisApp) {
+        if (null != _thisApp) {
+            setCacheToMem(ANDROID_APPLICATION, _thisApp);
+        }
+    }
+
+    public static Context getAppContext() {
+        return getApplication().getApplicationContext();
+    }
+
+    public static void quickShowMsgMain(String msg) {
+        quickShowMsg(getAppContext(), msg);
+    }
+
+    public static void KillAppSelf() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
+
+    public static void quickShowMsg(Context mContext, String msg) {
+        //@ref http://blog.csdn.net/droid_zhlu/article/details/7685084
+        //A toast is a view containing a quick little message for the user.
+        // The toast class helps you create and show those.
+        try {
+            Toast toast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+//    public static Object getCacheFromMem(String key) {
+//        return _memStore.get(key);
+//    }
+
+//    public static Object setCacheToMem(String key, Object val) {
+//        return _memStore.put(key, val);
+//    }
+
+//    public static Context getAppContext() {
+//        return getApplication().getApplicationContext();
+//    }
+
+//    public static void quickShowMsgMain(String msg) {
+//        quickShowMsg(getAppContext(), msg);
+//    }
+
+    //NOTES: for alert blocking, using appAlert/appConfirm
+//    public static void quickShowMsg(Context mContext, String msg) {
+//        //@ref http://blog.csdn.net/droid_zhlu/article/details/7685084
+//        //A toast is a view containing a quick little message for the user.
+//        // The toast class helps you create and show those.
+//        try {
+//            Toast toast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
+//            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+//            toast.show();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+    //persistent save/load
+    //NOTES:  because getSetting will cause mis-understanding
+    public static String getSavedSetting(Context mContext, String whichSp, String field) {
+        SharedPreferences sp = mContext.getSharedPreferences(whichSp, Context.MODE_PRIVATE);
+        String s = sp.getString(field, "");
+        return s;
+    }
+
+    public static void saveSetting(Context mContext, String whichSp, String field, String value) {
+        SharedPreferences sp = (SharedPreferences) mContext.getSharedPreferences(whichSp, Context.MODE_PRIVATE);
+        if (null == value) value = "";//I want to store sth not null
+
+        sp.edit().putString(field, value).apply();
+    }
+
+    public static String webPost(String uu, String post_s) {
+        String return_s = null;
+
+        try {
+            URL url = new URL(uu);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            try {
+
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+
+                OutputStream out = new BufferedOutputStream(conn.getOutputStream());
+
+                //write to the stream
+                out.write(post_s.getBytes("UTF-8"));
+
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                return_s = stream2string(in);
+            } finally {
+                try {
+                    conn.disconnect();
+                } catch (Throwable t) {
+                }
+            }
+        } catch (Throwable ex) {
+            //TODO 如果是 filenotfound的exception，多数是因为远程错误400之类的，待处理
+            ex.printStackTrace();
+            return_s = ex.getMessage();
+            if (isEmptyString(return_s)) {
+                return_s = "" + ex.getClass().getName();
+            }
+        }
+        return return_s;
+    }
+
+    public static JSO fileUpload(String u, String localFile, HybridCallback progressUploadListener) {
+        String mLineEnd = "\r\n";
+
+        String mTwoHyphens = "--";
+
+        String boundary = "*****";
+
+        long length = 0;
+        int mBytesRead, mbytesAvailable, mBufferSize;
+        byte[] buffer;
+        int maxBufferSize = 64 * 1024;
+        String return_s = "";
+        JSO rt = new JSO();
+        try {
+
+            File uploadFile = new File(getTempDirectoryPath() + localFile);//TODO TMP...
+            long mTtotalSize = uploadFile.length();
+            FileInputStream fileInputStream = new FileInputStream(uploadFile);
+
+            URL url = new URL(u);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            //如果有必要则可以设置Cookie
+//                conn.setRequestProperty("Cookie","JSESSIONID="+cookie);
+
+            // Set size of every block for post
+
+            con.setChunkedStreamingMode(64 * 1024);
+
+            // Allow Inputs & Outputs
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setUseCaches(false);
+
+            // Enable POST method
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Connection", "Keep-Alive");
+            con.setRequestProperty("Charset", "UTF-8");
+            con.setRequestProperty("Content-Type",
+                    "multipart/form-data;boundary=" + boundary);
+            DataOutputStream outputStream = null;
+            outputStream = new DataOutputStream(con.getOutputStream());
+            outputStream.writeBytes(mTwoHyphens + boundary + mLineEnd);
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", new Locale("en_US")).format(new Date());
+
+            outputStream.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\"" + timeStamp + ".jpg\"" + mLineEnd);
+            outputStream.writeBytes("Content-Type:application/octet-stream \r\n");
+            outputStream.writeBytes(mLineEnd);
+
+            mbytesAvailable = fileInputStream.available();
+            mBufferSize = Math.min(mbytesAvailable, maxBufferSize);
+            buffer = new byte[mBufferSize];
+
+            // Read file
+            mBytesRead = fileInputStream.read(buffer, 0, mBufferSize);
+
+            while (mBytesRead > 0) {
+                outputStream.write(buffer, 0, mBufferSize);
+                length += mBufferSize;
+
+                //progressUploadListener((int) ((length * 100) / mTtotalSize));
+                int i = ((int) ((length * 100) / mTtotalSize));
+                if (null != progressUploadListener)
+                    progressUploadListener.onCallBack(JSO.s2o("{\"i\":" + i + "}"));
+                Log.v(LOGTAG, "fileUpload ... " + i);
+
+                mbytesAvailable = fileInputStream.available();
+
+                mBufferSize = Math.min(mbytesAvailable, maxBufferSize);
+
+                mBytesRead = fileInputStream.read(buffer, 0, mBufferSize);
+            }
+            outputStream.writeBytes(mLineEnd);
+            outputStream.writeBytes(mTwoHyphens + boundary + mTwoHyphens + mLineEnd);
+            if (null != progressUploadListener)
+                progressUploadListener.onCallBack(JSO.s2o("{\"i\":" + 100 + "}"));
+            Log.v(LOGTAG, "fileUpload ... " + (100));
+
+            // Responses from the server (code and message)
+            //int serverResponseCode = con.getResponseCode();
+            //String serverResponseMessage = con.getResponseMessage();
+
+            InputStream in = new BufferedInputStream(con.getInputStream());
+            return_s = stream2string(in);
+
+            rt = JSO.s2o(return_s);
+
+            fileInputStream.close();
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return_s = ex.toString();
+            Log.v(LOGTAG, "uploadError");
+        }
+        if (isEmptyString(rt.getChild("STS").toString())) {
+            rt.setChild("STS", "KO");
+            rt.setChild("s", return_s);
+        }
+        return rt;
+    }
+
+    //Wrap the raw webPost for cmp api call
+    public static JSO apiPost(String url, JSO jo) {
+        String return_s = null;
+        try {
+            String post_s = jo.toString();
+            return_s = webPost(url, post_s);
+        } catch (Exception ex) {
+            return_s = ex.getMessage();
+            if (isEmptyString(return_s)) {
+                return_s = "" + ex.getClass().getName();
+            }
+            ex.printStackTrace();
+        }
+        try {
+            if (return_s != null && return_s != "")
+                return JSO.s2o(return_s);
+        } catch (Exception ex) {
+        }
+        JSO rt = new JSO();
+        rt.setChild("STS", JSO.s2o("KO"));
+        rt.setChild("errmsg", JSO.s2o(return_s));
+
+        return rt;
+    }
+
+    public static String isoDateTime() {
+        //String time_s = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("en_US"));
+        String time_s = df.format(new Date());
+        return time_s;
+    }
+
+    private static String readAssetInStrWithoutComments(String s) {
+        return readAssetInStrWithoutComments(getAppContext(), s);
+    }
+
+    private static String readAssetInStrWithoutComments(Context c, String urlStr) {
+        InputStream in = null;
+        try {
+            in = c.getAssets().open(urlStr);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            do {
+                line = bufferedReader.readLine();
+                if (line != null && !line.matches("^\\s*\\/\\/.*")) {
+                    sb.append(line);
+                }
+            } while (line != null);
+
+            bufferedReader.close();
+            in.close();
+
+            return sb.toString();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
+                //in = null;
+            }
+        }
+        return null;
+    }
+
+    //init (replace the app config)
+    public static void initAppConfig(JSO o) {
+        _jAppConfig = o;
+    }
+
+    public static JSO wholeAppConfig() {
+        return _jAppConfig;
+    }
+
+    public static void setAppConfig(String K, JSO V) {
+        _jAppConfig.setChild(K, V);
+    }
+
+    public static void checkAppConfig() {
+        if (_jAppConfig == null || _jAppConfig.isNull()) {
+            final String sJsonConf = readAssetInStrWithoutComments("config.json");
+            final JSO o = JSO.s2o(sJsonConf);
+            initAppConfig(o);
+        }
+    }
+
+    public static JSO getAppConfig(String k) {
+        return _jAppConfig.getChild(k);
+    }
+
+    public static boolean isEmptyString(String s) {
+        if (s == null || "".equals(s)) return true;
+        if ("null".equals(s)) return true;//tmp solution for json optString() return string "null"
+        return false;
+    }
+
+    public static boolean isEmpty(Object o) {
+        if (o == null) return true;
+        return false;
+    }
+
+    public static String getString(Object o) {
+        if (o == null) return null;
+        return o.toString();
+    }
+
+    public static String optString(Object o) {
+        if (o == null) return "";
+        String rt = o.toString();
+        if (rt == null) return "";
+        return rt;
+    }
+
+    public static void appAlert(Context ctx, String msg, AlertDialog.OnClickListener clickListener) {
+        AlertDialog.Builder b2;
+        b2 = new AlertDialog.Builder(ctx);
+        b2.setMessage(msg).setPositiveButton("Close", clickListener);
+        b2.setCancelable(false);//click other place would cause cancel
+        b2.create();
+        b2.show();
+    }
+
+    public static void appConfirm(
+            Context ctx, String msg,
+            AlertDialog.OnClickListener okListener,
+            AlertDialog.OnClickListener cancelListener) {
+        if (null == cancelListener) {
+            cancelListener = new AlertDialog.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //dialog.cancel();
+                    //Log.v(LOGTAG, ".appConfirm().click()");
+                }
+            };
+        }
+        if (null == ctx) ctx = getAppContext();
+        AlertDialog.Builder b2;
+        b2 = new AlertDialog.Builder(ctx);
+        b2.setMessage(msg)
+                .setPositiveButton("NO", cancelListener)
+                .setNegativeButton("YES", okListener);
+        b2.setCancelable(false);
+        b2.create();
+        b2.show();
+    }
+
+    public static void startUi(String name, String overrideParam_s, Activity caller) {
+        startUi(name, overrideParam_s, caller, null);
+    }
+
+    public static void startUi(String name, String overrideParam_s, Activity caller, HybridUiCallback cb) {
+        checkAppConfig();
+
+        JSO uia = getAppConfig(UI_MAPPING);
+        if (uia == null || uia.isNull()) {
+            platform.quickShowMsgMain("config.json error!!!");
+            //HybridTools.appAlert(getAppContext(),"config.json error !",null);
+            return;
+        }
+
+        JSO defaultParam = uia.getChild(name);
+        if (defaultParam == null || defaultParam.isNull()) {
+            //quickShowMsg(caller.getApplication(), "config not found " + name + " !");
+            quickShowMsgMain("config not found " + name + " !");
+            return;
+        }
+
+        JSO overrideParam = JSO.s2o(overrideParam_s);
+        JSO callParam = JSO.basicMerge(defaultParam, overrideParam);
+        Log.v(LOGTAG, "param after merge=" + callParam);
+
+        String mode = callParam.getChild("mode").toString();
+        String clsName = callParam.getChild("class").toString();
+        if (isEmptyString(clsName)) {
+            if ("WebView".equalsIgnoreCase(mode)) {
+                clsName = SimpleHybridWebViewUi.class.getName();
+            } else {
+                quickShowMsgMain("config.json error!!! config not found for name=" + name);
+                return;
+            }
+        }
+
+        //////////////////////////////////////////////
+        //caller, calleeClass, uiDataJSO, cb
+        Intent intent = null;
+        try {
+            intent = new Intent(caller, Class.forName(clsName));
+        } catch (Exception ex) {
+            quickShowMsgMain("not found " + clsName);
+            return;
+        }
+
+        if (!isEmptyString(name)) {
+            callParam.setChild("name", JSO.s2o(name));
+        }
+
+        String uiData_s = JSO.o2s(callParam);
+
+        intent.putExtra("uiData", uiData_s);
+
+        try {
+            final Intent tmpIntent = intent;
+            final Activity tmpCaller = caller;
+
+            HybridUi.tmpUiCallback = cb;//tmp ugly working solution, improve in future...
+
+            tmpCaller.startActivity(tmpIntent);
+        } catch (Throwable t) {
+            Log.v(LOGTAG, "Throwable " + t.getMessage() + "  check manifest xml???");
+            quickShowMsgMain("Error:" + t.getMessage());
+        }
+    }
+
+    protected static JSO findSubAuth(JSO jso, String nameOf) {
+        JSO _found = null;
+        Iterator it = jso.getChildKeys().iterator();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            try {
+                if (Pattern.matches(key, nameOf)) {
+                    _found = jso.getChild(key);
+                    break;
+                }
+            } catch (PatternSyntaxException ex) {
+                Log.v(LOGTAG, "wrong regexp=" + key);
+                ex.printStackTrace();
+            }
+        }
+        return _found;
+    }
+
+    public static void preRegisterApiHandlers(JsBridgeWebView wv, final HybridUi callerAct) {
+        String name = optString(callerAct.getUiData("name"));
+        if (isEmptyString(name)) {
+            quickShowMsgMain("ConfigError: caller act name empty?");
+            return;
+        }
+        JSO uia = getAppConfig(API_AUTH);
+        if (uia == null) {
+            platform.quickShowMsgMain("ConfigError: empty " + API_AUTH);
+            return;
+        }
+        JSO apia = getAppConfig(API_MAPPING);
+        if (apia == null) {
+            platform.quickShowMsgMain("ConfigError: empty " + API_MAPPING);
+            return;
+        }
+
+        //JSONObject authObj = uia.optJSONObject(name);
+        JSO authObj = uia.getChild(name);
+        if (authObj == null || authObj.isNull()) {
+            platform.quickShowMsgMain("ConfigError: not found auth for " + name + " !!!");
+            return;
+        }
+        Log.v(LOGTAG, " authObj=" + authObj);
+
+        String address = optString(callerAct.getUiData("address"));
+        JSO foundAuth = findSubAuth(authObj, address);
+        if (foundAuth == null) {
+            platform.quickShowMsgMain("ConfigError: not found match auth for address (" + address + ") !!!");
+            return;
+        }
+        Log.v(LOGTAG, " foundAuth=" + foundAuth);
+        ArrayList<JSO> ja = foundAuth.asArrayList();
+        for (int i = 0; i < ja.size(); i++) {
+            String v = ja.get(i).asString();
+            if (!isEmptyString(v)) {
+                String clsName = apia.getChild(v).asString();
+                Log.v(LOGTAG, "binding api " + v + " => " + clsName);
+                if (isEmptyString(clsName)) {
+                    platform.quickShowMsgMain("ConfigError: config not found for api=" + v);
+                    continue;
+                }
+                Class targetClass = null;
+                try {
+                    //reflection:
+                    targetClass = Class.forName(clsName);
+                    Log.v(LOGTAG, "class " + clsName + " found for name " + name);
+                } catch (ClassNotFoundException e) {
+                    platform.quickShowMsgMain("ConfigError: class not found " + clsName);
+                    continue;
+                }
+                try {
+                    HybridApi api = (HybridApi) targetClass.newInstance();
+                    api.setCallerUi(callerAct);
+                    wv.registerHandler(v, api);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    platform.quickShowMsgMain("ConfigError: faile to create api of " + clsName);
+                    continue;
+                }
+            }
+        }
+
+    }
+
+    public static boolean copyAssetFolder(AssetManager assetManager,
+                                          String fromAssetPath, String toPath) {
+        try {
+            Log.v(LOGTAG, "copyAssetFolder " + fromAssetPath + "=>" + toPath);
+            String[] files = assetManager.list(fromAssetPath);
+            new File(toPath).mkdirs();
+            boolean res = true;
+            for (String file : files)
+                if (file.contains("."))
+                    res &= copyAssetFile(assetManager,
+                            fromAssetPath + "/" + file,
+                            toPath + "/" + file);
+                else
+                    res &= copyAssetFolder(assetManager,
+                            fromAssetPath + "/" + file,
+                            toPath + "/" + file);
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean copyAssetFile(AssetManager assetManager, String fromAssetPath, String toPath) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            Log.v(LOGTAG, "copyAsset " + fromAssetPath + "=>" + toPath);
+            in = assetManager.open(fromAssetPath);
+            new File(toPath).createNewFile();
+            out = new FileOutputStream(toPath);
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+    }
+
+    //@ref http://stackoverflow.com/questions/10500775/parse-json-from-httpurlconnection-object
+    public static String stream2string(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
+    public static int getStrLen(String rt_s) {
+        if (rt_s == null) return -1;
+        return rt_s.length();
+    }
+
+    static public String classNameOf(Object o) {
+        if (o == null) return "null";
+        return o.getClass().getName();
+    }
+
+    public static String getLocalWebRoot() {
+        if (isEmptyString(_localWebRoot)) {
+            _localWebRoot = "/android_asset/web/";
+        }
+        return _localWebRoot;
+    }
+
+    //@ref http://stackoverflow.com/questions/8258725/strict-mode-in-android-2-2
+    //StrictMode.ThreadPolicy was introduced since API Level 9 and the default thread policy had been changed since API Level 11,
+    // which in short, does not allow network operation (eg: HttpClient and HttpUrlConnection)
+    // get executed on UI thread. If you do this, you get NetworkOnMainThreadException.
+    public static void uiNeedNetworkPolicyHack() {
+        int _sdk_int = android.os.Build.VERSION.SDK_INT;
+        if (_sdk_int > 8) {
+            try {
+                Log.d(LOGTAG, "setThreadPolicy for api level " + _sdk_int);
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+    }
+
+//    public static void KillAppSelf() {
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        System.exit(0);
+//    }
+
+    public static String readAssetInStr(String file_s) {
+        return readAssetInStr(file_s, false);//default original
+    }
+
+//    public static String readAssetInStr(String file_s, boolean filterRowComments) {
+//        InputStream in = null;
+//        try {
+//            in = getAppContext().getAssets().open(file_s);
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+//            String line = null;
+//            StringBuilder sb = new StringBuilder();
+//            do {
+//                line = bufferedReader.readLine();
+//                if (filterRowComments) {
+//                    if (line != null && !line.matches("^\\s*\\/\\/.*")) {
+//                        sb.append(line + "\n");
+//                    }
+//                } else {
+//                    sb.append(line + "\n");
+//                }
+//            } while (line != null);
+//
+//            bufferedReader.close();
+//            in.close();
+//
+//            return sb.toString();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        } finally {
+//            if (in != null) {
+//                try {
+//                    in.close();
+//                } catch (IOException e) {
+//                }
+//                //in = null;
+//            }
+//        }
+//        return null;
+//    }
+
+    public static boolean checkPermission(HybridUi thisHybriUi, String perm) {
+        int permissionCheck = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            permissionCheck = thisHybriUi.getApplicationContext().checkSelfPermission(perm);
+            Log.v(LOGTAG, "permissionCheck(" + perm + ")=" + permissionCheck);
+
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                thisHybriUi.requestPermissions(new String[]{perm}, 1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static File getTempDirectoryPath() {
+        return getAppContext().getCacheDir();
+    }
+
+    public static String readAssetInStr(String file_s, boolean filterRowComments) {
+        InputStream in = null;
+        try {
+            in = getAppContext().getAssets().open(file_s);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            do {
+                line = bufferedReader.readLine();
+                if (filterRowComments) {
+                    if (line != null && !line.matches("^\\s*\\/\\/.*")) {
+                        sb.append(line + "\n");
+                    }
+                } else {
+                    sb.append(line + "\n");
+                }
+            } while (line != null);
+
+            bufferedReader.close();
+            in.close();
+
+            return sb.toString();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                }
+                //in = null;
+            }
+        }
+        return null;
+    }
+
+    public native String stringFromJNI();
+
+    class nativewtf {
+        private Context _context;
+
+        public nativewtf(Context context) {
+            _context = context;
+        }
+
+        @JavascriptInterface
+        public String getVersion() {
+            //Log.v(LOGTAG, " getVersion()");
+            return "20161216";
+        }
+
+//        @JavascriptInterface
+//        public String testJNI() {
+//            //Log.v(LOGTAG, " testJNI()");
+//            return stringFromJNI();//see .cpp
+//        }
+
+        @JavascriptInterface
+        public void quickShowMsgMain(String s) {
+            platform.quickShowMsgMain(s);
+        }
+    }
+}
+
+//stub
+//            jsw.evaluateJavascript("nativewtf.getVersion()", new ValueCallback<String>() {
+//                @Override
+//                public void onReceiveValue(String json_string) {
+//                    Log.v(LOGTAG, " DEBUG " + json_string);
+//                }
+//            });
+//            jsw.evaluateJavascript("({screen_width:screen.width,screen_height:screen.height,testJNI:nativewtf.testJNI()})", new ValueCallback<String>() {
+//                @Override
+//                public void onReceiveValue(String json_string) {
+//                    Log.v(LOGTAG, " DEBUG " + json_string);
+//                }
+//            });
+//TODO 先测试 基本，再以后动态....
+//            String platform_js = readAssetInStr("platform.js", true);
+//            Log.v(LOGTAG, platform_js);
