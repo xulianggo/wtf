@@ -42,7 +42,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,18 +50,17 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import wtf.sdk.h5.JsBridgeWebView;
 import wtf.sdk.h5.SimpleHybridWebViewUi;
-import wtf.sdk.js.JSEngineWebView;
+import wtf.sdk.js.JsEngineWebView;
 
 public class WtfTools {
     public final static String NETWORK_STATUS = "_network_status_";
     //    public final static String NETWORK_STATUS = "_network_status_";
 //    final static String ANDROID_APPLICATION = "_android_applicaton_";
-    final static String ANDROID_APPLICATION = "_android_applicaton_";
-    final static String UI_MAPPING = "ui_mapping";
-    final static String API_AUTH = "api_auth";
-    final static String API_MAPPING = "api_mapping";
+    public final static String ANDROID_APPLICATION = "_android_applicaton_";
+    public final static String UI_MAPPING = "ui_mapping";
+    public final static String API_AUTH = "api_auth";
+    public final static String API_MAPPING = "api_mapping";
 
     //    static {
     //        //native
@@ -76,16 +74,19 @@ public class WtfTools {
     private static String _localWebRoot = "";
     private Context androidContext;
 
+    public JsEngineWebView jsw = null;
+
     //constructor
     public WtfTools(Context ctx) {
         this.androidContext = ctx;
-        JSEngineWebView jsw = null;
+
         try {
-            jsw = new JSEngineWebView(this.androidContext);
+            jsw = new JsEngineWebView(this.androidContext);
 
             //inject the native object for WtfTools.js only !!!
             jsw.addJavascriptInterface(new nativewtf(this.androidContext), "native");
 
+            //TODO 错了，不要在这里运行，应该另外弄....
             //init with the WtfTools.js
             jsw.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
                 @Override
@@ -568,7 +569,7 @@ public class WtfTools {
         }
     }
 
-    protected static JSO findSubAuth(JSO jso, String nameOf) {
+    public static JSO findSubAuth(JSO jso, String nameOf) {
         JSO _found = null;
         Iterator it = jso.getChildKeys().iterator();
         while (it.hasNext()) {
@@ -584,71 +585,6 @@ public class WtfTools {
             }
         }
         return _found;
-    }
-
-    public static void preRegisterApiHandlers(JsBridgeWebView wv, final WtfUi callerAct) {
-        String name = optString(callerAct.getUiData("name"));
-        if (isEmptyString(name)) {
-            quickShowMsgMain("ConfigError: caller act name empty?");
-            return;
-        }
-        JSO uia = getAppConfig(API_AUTH);
-        if (uia == null) {
-            WtfTools.quickShowMsgMain("ConfigError: empty " + API_AUTH);
-            return;
-        }
-        JSO apia = getAppConfig(API_MAPPING);
-        if (apia == null) {
-            WtfTools.quickShowMsgMain("ConfigError: empty " + API_MAPPING);
-            return;
-        }
-
-        //JSONObject authObj = uia.optJSONObject(name);
-        JSO authObj = uia.getChild(name);
-        if (authObj == null || authObj.isNull()) {
-            WtfTools.quickShowMsgMain("ConfigError: not found auth for " + name + " !!!");
-            return;
-        }
-        Log.v(LOGTAG, " authObj=" + authObj);
-
-        String address = optString(callerAct.getUiData("address"));
-        JSO foundAuth = findSubAuth(authObj, address);
-        if (foundAuth == null) {
-            WtfTools.quickShowMsgMain("ConfigError: not found match auth for address (" + address + ") !!!");
-            return;
-        }
-        Log.v(LOGTAG, " foundAuth=" + foundAuth);
-        ArrayList<JSO> ja = foundAuth.asArrayList();
-        for (int i = 0; i < ja.size(); i++) {
-            String v = ja.get(i).asString();
-            if (!isEmptyString(v)) {
-                String clsName = apia.getChild(v).asString();
-                Log.v(LOGTAG, "binding api " + v + " => " + clsName);
-                if (isEmptyString(clsName)) {
-                    WtfTools.quickShowMsgMain("ConfigError: config not found for api=" + v);
-                    continue;
-                }
-                Class targetClass = null;
-                try {
-                    //reflection:
-                    targetClass = Class.forName(clsName);
-                    Log.v(LOGTAG, "class " + clsName + " found for name " + name);
-                } catch (ClassNotFoundException e) {
-                    WtfTools.quickShowMsgMain("ConfigError: class not found " + clsName);
-                    continue;
-                }
-                try {
-                    WtfApi api = (WtfApi) targetClass.newInstance();
-                    api.setCallerUi(callerAct);
-                    wv.registerHandler(v, api);
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                    WtfTools.quickShowMsgMain("ConfigError: faile to create api of " + clsName);
-                    continue;
-                }
-            }
-        }
-
     }
 
     public static boolean copyAssetFolder(AssetManager assetManager,

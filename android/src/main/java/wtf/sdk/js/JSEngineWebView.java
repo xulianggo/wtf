@@ -1,6 +1,6 @@
 package wtf.sdk.js;
 
-//JS Engine utilized WebView
+//Tiny JS Engine Utilized WebView
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -14,18 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("SetJavaScriptEnabled")
-public class JSEngineWebView {
+public class JsEngineWebView {
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();//Log.v(LOGTAG,s);
 
     protected WebView mWebView;
+
     private List<String> _jsia = new ArrayList<String>();
 
     @SuppressLint("AddJavascriptInterface")
-    public JSEngineWebView(Context ctx, String name) throws Throwable {
+    public JsEngineWebView(Context ctx, String name) throws Throwable {
         _init(ctx, name);
     }
 
-    public JSEngineWebView(Context ctx) throws Throwable {
+    public JsEngineWebView(Context ctx) throws Throwable {
         _init(ctx, "default");
     }
 
@@ -45,12 +46,11 @@ public class JSEngineWebView {
 
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-        //@NOTES: 这里要加载让页面有所东西，才好处理 JavascriptInterface
-        loadJavaScript("console.log('loaded JSEngineWebView " + name + "')");
+        //@NOTES: Important here, that some must be done to let come JavascriptInterface
+        this._loadJavaScript("console.log('loaded JsEngineWebView " + name + "')");
     }
 
-    //warn: dont use unless u know
-    public void loadJavaScript(String jsstr) {
+    private void _loadJavaScript(String jsstr) {
         byte[] data;
         try {
             jsstr = "<script>" + jsstr + "</script>";
@@ -70,6 +70,7 @@ public class JSEngineWebView {
         mWebView.addJavascriptInterface(obj, name);
     }
 
+    //TODO ValueCallback<String> => WtfJsCallback ?
     //@NOTES: the evaluateJavascript() has bug for those js with comments....
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void evaluateJavascript(String js, ValueCallback<String> resultCallback) {
@@ -99,12 +100,12 @@ public class JSEngineWebView {
         }
     }
 
-    public WebView getWebView() {
-        return mWebView;
-    }
+//    public WebView getWebView() {
+//        return mWebView;
+//    }
 }
 
-//stub
+//stub TODO
 //    private static final String[] mFilterMethods = {"getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait",};
 //
 //    private boolean filterMethods(String methodName) {

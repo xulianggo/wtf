@@ -23,6 +23,7 @@ import android.webkit.WebViewClient;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,72 @@ public class JsBridgeWebView extends WebView {
         } else {
             _nativejsb = new nativejsb(context);
         }
+    }
+
+    //TODO 应该移回去 JsBridgeWebView那里....
+    public static void preRegisterApiHandlers(JsBridgeWebView wv, final WtfUi callerAct) {
+        String name = WtfTools.optString(callerAct.getUiData("name"));
+        if (WtfTools.isEmptyString(name)) {
+            WtfTools.quickShowMsgMain("ConfigError: caller act name empty?");
+            return;
+        }
+        JSO uia = WtfTools.getAppConfig(WtfTools.API_AUTH);
+        if (uia == null) {
+            WtfTools.quickShowMsgMain("ConfigError: empty " + WtfTools.API_AUTH);
+            return;
+        }
+        JSO apia = WtfTools.getAppConfig(WtfTools.API_MAPPING);
+        if (apia == null) {
+            WtfTools.quickShowMsgMain("ConfigError: empty " + WtfTools.API_MAPPING);
+            return;
+        }
+
+        //JSONObject authObj = uia.optJSONObject(name);
+        JSO authObj = uia.getChild(name);
+        if (authObj == null || authObj.isNull()) {
+            WtfTools.quickShowMsgMain("ConfigError: not found auth for " + name + " !!!");
+            return;
+        }
+        Log.v(LOGTAG, " authObj=" + authObj);
+
+        String address = WtfTools.optString(callerAct.getUiData("address"));
+        JSO foundAuth = WtfTools.findSubAuth(authObj, address);
+        if (foundAuth == null) {
+            WtfTools.quickShowMsgMain("ConfigError: not found match auth for address (" + address + ") !!!");
+            return;
+        }
+        Log.v(LOGTAG, " foundAuth=" + foundAuth);
+        ArrayList<JSO> ja = foundAuth.asArrayList();
+        for (int i = 0; i < ja.size(); i++) {
+            String v = ja.get(i).asString();
+            if (!WtfTools.isEmptyString(v)) {
+                String clsName = apia.getChild(v).asString();
+                Log.v(LOGTAG, "binding api " + v + " => " + clsName);
+                if (WtfTools.isEmptyString(clsName)) {
+                    WtfTools.quickShowMsgMain("ConfigError: config not found for api=" + v);
+                    continue;
+                }
+                Class targetClass = null;
+                try {
+                    //reflection:
+                    targetClass = Class.forName(clsName);
+                    Log.v(LOGTAG, "class " + clsName + " found for name " + name);
+                } catch (ClassNotFoundException e) {
+                    WtfTools.quickShowMsgMain("ConfigError: class not found " + clsName);
+                    continue;
+                }
+                try {
+                    WtfApi api = (WtfApi) targetClass.newInstance();
+                    api.setCallerUi(callerAct);
+                    wv.registerHandler(v, api);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    WtfTools.quickShowMsgMain("ConfigError: faile to create api of " + clsName);
+                    continue;
+                }
+            }
+        }
+
     }
 
     private boolean filterMethods(String methodName) {

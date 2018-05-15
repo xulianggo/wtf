@@ -47,7 +47,7 @@ public class SimpleHybridWebViewUi extends WtfUi {
         }
 
         //pre-register api handlers base on config.json:
-        WtfTools.preRegisterApiHandlers(_wv, this);
+        JsBridgeWebView.preRegisterApiHandlers(_wv, this);
 
 //        String ind = HybridTools.optString(this.getUiData("ind"));
 //        if (!HybridTools.isEmptyString(ind)) {
