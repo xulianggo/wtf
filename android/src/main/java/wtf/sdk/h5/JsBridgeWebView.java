@@ -26,11 +26,11 @@ import org.json.JSONArray;
 import java.util.HashMap;
 import java.util.Map;
 
-import wtf.sdk.HybridApi;
-import wtf.sdk.HybridCallback;
-import wtf.sdk.HybridUi;
+import wtf.sdk.WtfApi;
+import wtf.sdk.WtfCallback;
+import wtf.sdk.WtfUi;
 import wtf.sdk.JSO;
-import wtf.sdk.platform;
+import wtf.sdk.WtfTools;
 
 //import android.app.ProgressDialog;
 
@@ -40,7 +40,7 @@ public class JsBridgeWebView extends WebView {
 
     private static final String[] mFilterMethods = {"getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait",};
     //    protected ProgressDialog progressDialog = null;
-    Map<String, HybridApi> messageHandlers = new HashMap<String, HybridApi>();
+    Map<String, WtfApi> messageHandlers = new HashMap<String, WtfApi>();
     private nativejsb _nativejsb = null;
 
     public JsBridgeWebView(Context context, AttributeSet attrs) {
@@ -85,7 +85,7 @@ public class JsBridgeWebView extends WebView {
         this.setWebChromeClient(new MyWebChromeClient(context, this));
     }
 
-    public void registerHandler(String handlerName, HybridApi handler) {
+    public void registerHandler(String handlerName, WtfApi handler) {
         if (handler != null) {
             messageHandlers.put(handlerName, handler);
         }
@@ -107,13 +107,13 @@ public class JsBridgeWebView extends WebView {
         @JavascriptInterface
         public String js2app(final String callBackId, String handlerName, final String param_s) {
 
-            final String uiName = ((HybridUi) _context).getUiData("name").toString();
+            final String uiName = ((WtfUi) _context).getUiData("name").toString();
 
             Log.v(LOGTAG, " js2app handlerName " + handlerName + " uiName " + uiName);
 
             //TODO !!!! 这里要有个 auth-mapping (url-regexp) check!!!!
 
-            final HybridCallback responseFunction = new HybridCallback() {
+            final WtfCallback responseFunction = new WtfCallback() {
 
                 @Override
                 public void onCallBack(final JSO jso) {
@@ -142,7 +142,7 @@ public class JsBridgeWebView extends WebView {
                 }
 
             };
-            final HybridApi handler = messageHandlers.get(handlerName);
+            final WtfApi handler = messageHandlers.get(handlerName);
 
             if (handler != null) {
                 (new Thread(new Runnable() {
@@ -155,7 +155,7 @@ public class JsBridgeWebView extends WebView {
             } else {
                 String msg = " api " + handlerName + " for uiName(" + uiName + ") not registered";
                 Log.v(LOGTAG, msg);
-                platform.quickShowMsgMain(msg);
+                WtfTools.quickShowMsgMain(msg);
             }
             return "OK";
         }
@@ -173,7 +173,7 @@ public class JsBridgeWebView extends WebView {
         @Override
         public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
             try {
-                platform.appAlert(_ctx, message, new AlertDialog.OnClickListener() {
+                WtfTools.appAlert(_ctx, message, new AlertDialog.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -189,7 +189,7 @@ public class JsBridgeWebView extends WebView {
 
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult jsrst) {
-            platform.appConfirm(_ctx, message, new AlertDialog.OnClickListener() {
+            WtfTools.appConfirm(_ctx, message, new AlertDialog.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     jsrst.confirm();
@@ -301,7 +301,7 @@ public class JsBridgeWebView extends WebView {
 
         public void notifyPollingInject(WebView view, String url) {
             //inject
-            String jsContent = platform.readAssetInStr("WebViewJavascriptBridge.js", true);
+            String jsContent = WtfTools.readAssetInStr("WebViewJavascriptBridge.js", true);
 
             //NOTES: no need to runOnUiThread() here...because called by onPageXXXX
             view.loadUrl("javascript:" + jsContent);

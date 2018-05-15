@@ -20,14 +20,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class HybridUi extends Activity {
+public class WtfUi extends Activity {
 
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
     //TODO TMP UGLY SOLUTION...TO IMPROVE LATER !!!
-    public static HybridUiCallback tmpUiCallback = null;
+    public static WtfUiCallback tmpUiCallback = null;
     private JSO _uiData;
     private JSO _responseData;
-    private Map<String, HybridCallback> _cba = new HashMap<String, HybridCallback>();
+    private Map<String, WtfCallback> _cba = new HashMap<String, WtfCallback>();
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
@@ -39,7 +39,7 @@ public class HybridUi extends Activity {
 
         initUiData(JSO.s2o(s_uiData));
 
-        Log.v(LOGTAG, "HybridUi onCreate() try push ");
+        Log.v(LOGTAG, "WtfUi onCreate() try push ");
 
         hookCallback();
 
@@ -56,13 +56,13 @@ public class HybridUi extends Activity {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            HybridUi.tmpUiCallback = null;
+            WtfUi.tmpUiCallback = null;
         }
     }
 
     public void resetTopBar() {
         //N: FullScreen + top status, Y: Have Bar + top status, M: only bar - top status, F: full screen - top status
-        String topbar = platform.optString(getUiData("topbar"));
+        String topbar = WtfTools.optString(getUiData("topbar"));
 
         switch (topbar) {
             case "F":
@@ -131,14 +131,14 @@ public class HybridUi extends Activity {
     }
 
     //TODO 暂时只支持一对一 on/trigger， 以后有需求再改一对多（类似jQuery）
-    public void on(String eventName, HybridCallback cb) {
+    public void on(String eventName, WtfCallback cb) {
         Log.v(LOGTAG, "Hybrid.on( " + eventName + ")");
         _cba.remove(eventName);
         _cba.put(eventName, cb);
     }
 
     public boolean trigger(String eventName, JSO o) {
-        HybridCallback cb = _cba.get(eventName);
+        WtfCallback cb = _cba.get(eventName);
         if (cb == null) {
             Log.v(LOGTAG, "trigger() found no handler for " + eventName);
             return false;//have no handler
@@ -172,7 +172,7 @@ public class HybridUi extends Activity {
     public void initUiData(JSO o) {
         if (o == null) return;
         _uiData = o;
-        this.setUiData("_init_time_", JSO.s2o(platform.isoDateTime()));
+        this.setUiData("_init_time_", JSO.s2o(WtfTools.isoDateTime()));
     }
 
     public JSO wholeUiData() {

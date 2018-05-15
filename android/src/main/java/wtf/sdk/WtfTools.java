@@ -1,11 +1,13 @@
 /**
  * js-mini-native framework alike weex/wx/DeviceOne/NativeScript/ReactNative by anonymous
  * <p>
- * platform.js
- * => platform and app manager
+ * WtfTools.js
+ * => WtfTools and app manager
  * $appName/app.js
  * => app
  */
+
+//TODO change WtfTools to WtfTool so that sync name with iOS....
 
 package wtf.sdk;
 
@@ -53,7 +55,7 @@ import wtf.sdk.h5.JsBridgeWebView;
 import wtf.sdk.h5.SimpleHybridWebViewUi;
 import wtf.sdk.js.JSEngineWebView;
 
-public class platform {
+public class WtfTools {
     public final static String NETWORK_STATUS = "_network_status_";
     //    public final static String NETWORK_STATUS = "_network_status_";
 //    final static String ANDROID_APPLICATION = "_android_applicaton_";
@@ -75,18 +77,20 @@ public class platform {
     private Context androidContext;
 
     //constructor
-    public platform(Context ctx) {
+    public WtfTools(Context ctx) {
         this.androidContext = ctx;
         JSEngineWebView jsw = null;
         try {
             jsw = new JSEngineWebView(this.androidContext);
-            //injext the native object
+
+            //inject the native object for WtfTools.js only !!!
             jsw.addJavascriptInterface(new nativewtf(this.androidContext), "native");
-            //init with the platform.js
+
+            //init with the WtfTools.js
             jsw.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String json_string) {
-                    Log.v(LOGTAG, " platform.js => " + json_string);
+                    Log.v(LOGTAG, " WtfTools.js => " + json_string);
                 }
             });
 
@@ -99,8 +103,8 @@ public class platform {
     }
 
     //factory
-    public static platform buildWTF(Context ctx) {
-        return new platform(ctx);
+    public static WtfTools buildWTF(Context ctx) {
+        return new WtfTools(ctx);
     }
 
     public static Object getCacheFromMem(String key) {
@@ -243,7 +247,7 @@ public class platform {
         return return_s;
     }
 
-    public static JSO fileUpload(String u, String localFile, HybridCallback progressUploadListener) {
+    public static JSO fileUpload(String u, String localFile, WtfCallback progressUploadListener) {
         String mLineEnd = "\r\n";
 
         String mTwoHyphens = "--";
@@ -501,12 +505,12 @@ public class platform {
         startUi(name, overrideParam_s, caller, null);
     }
 
-    public static void startUi(String name, String overrideParam_s, Activity caller, HybridUiCallback cb) {
+    public static void startUi(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
         checkAppConfig();
 
         JSO uia = getAppConfig(UI_MAPPING);
         if (uia == null || uia.isNull()) {
-            platform.quickShowMsgMain("config.json error!!!");
+            WtfTools.quickShowMsgMain("config.json error!!!");
             //HybridTools.appAlert(getAppContext(),"config.json error !",null);
             return;
         }
@@ -555,7 +559,7 @@ public class platform {
             final Intent tmpIntent = intent;
             final Activity tmpCaller = caller;
 
-            HybridUi.tmpUiCallback = cb;//tmp ugly working solution, improve in future...
+            WtfUi.tmpUiCallback = cb;//tmp ugly working solution, improve in future...
 
             tmpCaller.startActivity(tmpIntent);
         } catch (Throwable t) {
@@ -582,7 +586,7 @@ public class platform {
         return _found;
     }
 
-    public static void preRegisterApiHandlers(JsBridgeWebView wv, final HybridUi callerAct) {
+    public static void preRegisterApiHandlers(JsBridgeWebView wv, final WtfUi callerAct) {
         String name = optString(callerAct.getUiData("name"));
         if (isEmptyString(name)) {
             quickShowMsgMain("ConfigError: caller act name empty?");
@@ -590,19 +594,19 @@ public class platform {
         }
         JSO uia = getAppConfig(API_AUTH);
         if (uia == null) {
-            platform.quickShowMsgMain("ConfigError: empty " + API_AUTH);
+            WtfTools.quickShowMsgMain("ConfigError: empty " + API_AUTH);
             return;
         }
         JSO apia = getAppConfig(API_MAPPING);
         if (apia == null) {
-            platform.quickShowMsgMain("ConfigError: empty " + API_MAPPING);
+            WtfTools.quickShowMsgMain("ConfigError: empty " + API_MAPPING);
             return;
         }
 
         //JSONObject authObj = uia.optJSONObject(name);
         JSO authObj = uia.getChild(name);
         if (authObj == null || authObj.isNull()) {
-            platform.quickShowMsgMain("ConfigError: not found auth for " + name + " !!!");
+            WtfTools.quickShowMsgMain("ConfigError: not found auth for " + name + " !!!");
             return;
         }
         Log.v(LOGTAG, " authObj=" + authObj);
@@ -610,7 +614,7 @@ public class platform {
         String address = optString(callerAct.getUiData("address"));
         JSO foundAuth = findSubAuth(authObj, address);
         if (foundAuth == null) {
-            platform.quickShowMsgMain("ConfigError: not found match auth for address (" + address + ") !!!");
+            WtfTools.quickShowMsgMain("ConfigError: not found match auth for address (" + address + ") !!!");
             return;
         }
         Log.v(LOGTAG, " foundAuth=" + foundAuth);
@@ -621,7 +625,7 @@ public class platform {
                 String clsName = apia.getChild(v).asString();
                 Log.v(LOGTAG, "binding api " + v + " => " + clsName);
                 if (isEmptyString(clsName)) {
-                    platform.quickShowMsgMain("ConfigError: config not found for api=" + v);
+                    WtfTools.quickShowMsgMain("ConfigError: config not found for api=" + v);
                     continue;
                 }
                 Class targetClass = null;
@@ -630,16 +634,16 @@ public class platform {
                     targetClass = Class.forName(clsName);
                     Log.v(LOGTAG, "class " + clsName + " found for name " + name);
                 } catch (ClassNotFoundException e) {
-                    platform.quickShowMsgMain("ConfigError: class not found " + clsName);
+                    WtfTools.quickShowMsgMain("ConfigError: class not found " + clsName);
                     continue;
                 }
                 try {
-                    HybridApi api = (HybridApi) targetClass.newInstance();
+                    WtfApi api = (WtfApi) targetClass.newInstance();
                     api.setCallerUi(callerAct);
                     wv.registerHandler(v, api);
                 } catch (Throwable t) {
                     t.printStackTrace();
-                    platform.quickShowMsgMain("ConfigError: faile to create api of " + clsName);
+                    WtfTools.quickShowMsgMain("ConfigError: faile to create api of " + clsName);
                     continue;
                 }
             }
@@ -800,7 +804,7 @@ public class platform {
 //        return null;
 //    }
 
-    public static boolean checkPermission(HybridUi thisHybriUi, String perm) {
+    public static boolean checkPermission(WtfUi thisHybriUi, String perm) {
         int permissionCheck = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             permissionCheck = thisHybriUi.getApplicationContext().checkSelfPermission(perm);
@@ -877,7 +881,7 @@ public class platform {
 
         @JavascriptInterface
         public void quickShowMsgMain(String s) {
-            platform.quickShowMsgMain(s);
+            WtfTools.quickShowMsgMain(s);
         }
     }
 }
@@ -896,5 +900,5 @@ public class platform {
 //                }
 //            });
 //TODO 先测试 基本，再以后动态....
-//            String platform_js = readAssetInStr("platform.js", true);
+//            String platform_js = readAssetInStr("WtfTools.js", true);
 //            Log.v(LOGTAG, platform_js);

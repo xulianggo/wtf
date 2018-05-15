@@ -8,10 +8,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
-import wtf.sdk.HybridUi;
-import wtf.sdk.platform;
+import wtf.sdk.WtfUi;
+import wtf.sdk.WtfTools;
 
-public class SimpleHybridWebViewUi extends HybridUi {
+public class SimpleHybridWebViewUi extends WtfUi {
     //final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
     private JsBridgeWebView _wv = null;
 
@@ -20,8 +20,8 @@ public class SimpleHybridWebViewUi extends HybridUi {
 
         super.onCreate(savedInstanceState);
 
-        String title = platform.optString(this.getUiData("title"));
-        if (!platform.isEmptyString(title)) {
+        String title = WtfTools.optString(this.getUiData("title"));
+        if (!WtfTools.isEmptyString(title)) {
             setTitle(title);
         }
 
@@ -31,23 +31,23 @@ public class SimpleHybridWebViewUi extends HybridUi {
         _wv.setBackgroundColor(Color.TRANSPARENT);
         setContentView(_wv);
 
-        String address = platform.optString(this.getUiData("address"));
+        String address = WtfTools.optString(this.getUiData("address"));
 
         String url = "";
         if (address == null || "".equals(address)) {
-            url = "file://" + platform.getLocalWebRoot() + "error.htm";
+            url = "file://" + WtfTools.getLocalWebRoot() + "error.htm";
         } else {
             if (address.matches("^\\w+://.*$")) {
                 //if have schema already
                 url = address;
             } else {
                 //assume local...
-                url = "file://" + platform.getLocalWebRoot() + address;
+                url = "file://" + WtfTools.getLocalWebRoot() + address;
             }
         }
 
         //pre-register api handlers base on config.json:
-        platform.preRegisterApiHandlers(_wv, this);
+        WtfTools.preRegisterApiHandlers(_wv, this);
 
 //        String ind = HybridTools.optString(this.getUiData("ind"));
 //        if (!HybridTools.isEmptyString(ind)) {

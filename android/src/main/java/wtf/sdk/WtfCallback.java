@@ -1,5 +1,5 @@
 package wtf.sdk;
 
-public interface HybridCallback {
+public interface WtfCallback {
     void onCallBack(JSO jso);
 }
