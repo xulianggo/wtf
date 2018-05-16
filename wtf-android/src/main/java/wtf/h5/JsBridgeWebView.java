@@ -1,7 +1,5 @@
 package wtf.h5;
 
-//deprecated,稍后重写一个
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,20 +25,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import wtf.sdk.JSO;
 import wtf.sdk.WtfApi;
 import wtf.sdk.WtfCallback;
-import wtf.sdk.WtfUi;
-import wtf.sdk.JSO;
 import wtf.sdk.WtfTools;
-
-//import android.app.ProgressDialog;
+import wtf.sdk.WtfUi;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class JsBridgeWebView extends WebView {
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
 
-    private static final String[] mFilterMethods = {"getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait",};
+    //private static final String[] mFilterMethods = {"getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait",};
     //    protected ProgressDialog progressDialog = null;
+
     Map<String, WtfApi> messageHandlers = new HashMap<String, WtfApi>();
     private nativejsb _nativejsb = null;
 
@@ -65,7 +62,6 @@ public class JsBridgeWebView extends WebView {
         }
     }
 
-    //TODO 应该移回去 JsBridgeWebView那里....
     public static void preRegisterApiHandlers(JsBridgeWebView wv, final WtfUi callerAct) {
         String name = WtfTools.optString(callerAct.getUiData("name"));
         if (WtfTools.isEmptyString(name)) {
@@ -131,15 +127,15 @@ public class JsBridgeWebView extends WebView {
 
     }
 
-    private boolean filterMethods(String methodName) {
-        for (String method : mFilterMethods) {
-            if (method.equals(methodName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+//    private boolean filterMethods(String methodName) {
+//        for (String method : mFilterMethods) {
+//            if (method.equals(methodName)) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
 
     private void init(Context context) {
         this.setVerticalScrollBarEnabled(false);

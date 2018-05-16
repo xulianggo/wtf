@@ -102,7 +102,7 @@ public class WtfTools {
         }
     }
 
-    //factory
+    //factory for some function can't be static??? TODO !!!
     public static WtfTools buildWTF(Context ctx) {
         return new WtfTools(ctx);
     }
@@ -120,14 +120,21 @@ public class WtfTools {
         Application _thisApp = null;
         try {
             _thisApp = (Application) getCacheFromMem(ANDROID_APPLICATION);
-//            if (null == _thisApp) {
-//                _thisApp = (Application) Class.forName("android.app.ActivityThread")
-//                        .getMethod("currentApplication").invoke(null, (Object[]) null);
-//                if (null != _thisApp) {
-//                    setCacheToMem(ANDROID_APPLICATION, _thisApp);
-//                }
-//            }
-            if (null == _thisApp) KillAppSelf();
+            if (null == _thisApp) {
+                try {
+                    _thisApp = (Application) Class.forName("android.app.ActivityThread")
+                            .getMethod("currentApplication").invoke(null, (Object[]) null);
+                    if (null != _thisApp) {
+                        setCacheToMem(ANDROID_APPLICATION, _thisApp);
+                    }
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+            if (null == _thisApp) {
+                Log.e(LOGTAG, "getApplication => null, seems forgot to setApplication and can't get from android.app.ActivityThread");
+                KillAppSelf();
+            }
         } catch (Throwable t) {
             t.printStackTrace();
             KillAppSelf();

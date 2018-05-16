@@ -1,6 +1,6 @@
 package wtf.sdk;
 
-//Tiny JS Engine Utilized WebView
+//Tiny JS Engine using WebView
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -78,7 +78,9 @@ public class JsEngineWebView {
         mWebView.evaluateJavascript(js, resultCallback);
     }
 
+    //manually destroy()
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressWarnings("deprecation")
     public void destroy() {
         if (mWebView != null) {
             for (String n : _jsia) {
@@ -88,9 +90,9 @@ public class JsEngineWebView {
             mWebView.loadUrl("about:blank");
             mWebView.stopLoading();
 
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-//                mWebView.freeMemory();
-//            }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                mWebView.freeMemory();
+            }
 
             mWebView.clearHistory();
             mWebView.removeAllViews();
