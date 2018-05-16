@@ -74,21 +74,21 @@ public class WtfTools {
     private static String _localWebRoot = "";
     private Context androidContext;
 
-    public JsEngineWebView jsw = null;
+    public JsEngineWebView jswv = null;
 
     //constructor
     public WtfTools(Context ctx) {
         this.androidContext = ctx;
 
         try {
-            jsw = new JsEngineWebView(this.androidContext);
+            jswv = new JsEngineWebView(this.androidContext);
 
             //inject the native object for WtfTools.js only !!!
-            jsw.addJavascriptInterface(new nativewtf(this.androidContext), "native");
+            jswv.addJavascriptInterface(new nativewtf(this.androidContext), "native");
 
             //TODO 错了，不要在这里运行，应该另外弄....
             //init with the WtfTools.js
-            jsw.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
+            jswv.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String json_string) {
                     Log.v(LOGTAG, " WtfTools.js => " + json_string);
@@ -823,13 +823,13 @@ public class WtfTools {
 }
 
 //stub
-//            jsw.evaluateJavascript("nativewtf.getVersion()", new ValueCallback<String>() {
+//            jswv.evaluateJavascript("nativewtf.getVersion()", new ValueCallback<String>() {
 //                @Override
 //                public void onReceiveValue(String json_string) {
 //                    Log.v(LOGTAG, " DEBUG " + json_string);
 //                }
 //            });
-//            jsw.evaluateJavascript("({screen_width:screen.width,screen_height:screen.height,testJNI:nativewtf.testJNI()})", new ValueCallback<String>() {
+//            jswv.evaluateJavascript("({screen_width:screen.width,screen_height:screen.height,testJNI:nativewtf.testJNI()})", new ValueCallback<String>() {
 //                @Override
 //                public void onReceiveValue(String json_string) {
 //                    Log.v(LOGTAG, " DEBUG " + json_string);
