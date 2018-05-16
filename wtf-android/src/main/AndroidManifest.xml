@@ -4,6 +4,6 @@
     <application>
         <activity android:name="wtf.sdk.WtfUi" />
         <!--<activity android:name="wtf.sdk.WtfNativeUi" />-->
-        <activity android:name="wtf.sdk.h5.SimpleHybridWebViewUi" />
+        <activity android:name="wtf.h5.SimpleHybridWebViewUi" />
     </application>
 </manifest>
