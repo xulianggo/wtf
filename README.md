@@ -1,7 +1,6 @@
 # wtf
 
-a tiny framework.
-
+a tiny framework.  u can check wtf-tiny-app for reference and play ground
 
 # spec
 

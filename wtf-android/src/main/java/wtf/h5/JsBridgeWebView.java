@@ -1,4 +1,4 @@
-package wtf.sdk.h5;
+package wtf.h5;
 
 //deprecated,稍后重写一个
 

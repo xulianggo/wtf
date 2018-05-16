@@ -50,8 +50,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import wtf.sdk.h5.SimpleHybridWebViewUi;
-import wtf.sdk.js.JsEngineWebView;
+import wtf.h5.SimpleHybridWebViewUi;
 
 public class WtfTools {
     public final static String NETWORK_STATUS = "_network_status_";

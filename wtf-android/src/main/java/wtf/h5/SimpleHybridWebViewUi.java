@@ -1,4 +1,4 @@
-package wtf.sdk.h5;
+package wtf.h5;
 
 //deprecated, 因为这种能直接访问api的是之前的尝试，并不安全（对全是自己的页面可以接受）。
 // 对其它高可扩展性的 混编，需要重构设计

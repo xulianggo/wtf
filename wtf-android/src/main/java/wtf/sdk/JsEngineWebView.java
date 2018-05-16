@@ -1,4 +1,4 @@
-package wtf.sdk.js;
+package wtf.sdk;
 
 //Tiny JS Engine Utilized WebView
 

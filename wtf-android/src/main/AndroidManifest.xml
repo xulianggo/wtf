@@ -1,1 +1,9 @@
-<manifest package="wtf.sdk" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="wtf.sdk" >
+    <application>
+        <activity android:name="wtf.sdk.WtfUi" />
+        <!--<activity android:name="wtf.sdk.WtfNativeUi" />-->
+        <activity android:name="wtf.sdk.h5.SimpleHybridWebViewUi" />
+    </application>
+</manifest>
