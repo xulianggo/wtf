@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta charset="UTF-8">
+        
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: cdvfile: https://acev2.asiaweiluy.com https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *">
+    <!--<meta name="viewport" content="width=device-width,initial-scale=1.0"/>-->
+    <meta name="viewport" content="initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <style>
+        * {
+            -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+        }
+    #background {
+        background:url(app/bg.jpg) no-repeat center;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 0;
+    }
+    @media screen and (orientation:portrait) {
+        #background { background-size:auto 100%; }
+    }
+    @media screen and (orientation:landscape) {
+        #background { background-size:100% auto; }
+    }
+    html,body{
+        width:100%;
+        height:100%;
+        margin:0px;
+        padding:0px;
+        font-size:0.9em;
+        /*
+        color:white;
+        background-color:black;
+         */
+    }
+    body {
+        -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+        -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+        -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+        font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+        
+        text-transform:uppercase;
+    }
+    </style>
+</head>
+<body>
+<h2><a href="root.htm">root</a></h2>
+<div id='loading'>
+    <table width="100%" height="100%" border="3">
+        <tr height="30%">
+            <td align="center" valign="bottom">
+                <a href="javascript:test_nativejsb()">test_nativejsb()</a><br/>
+                
+                <a href="javascript:test_wkwebview()">test_wkwebview()</a><br/>
+                
+							<a href="20161104.index.html">test 20161104</a><br/>
+<a href="https://almsaeedstudio.com/themes/AdminLTE/index2.html">adminlte</a><br/>
+                <a href="javascript:console.log('console log test');alert('typeof window = ' + (typeof window));">alert test</a><br/>
+<a href="javascript:alert(confirm('typeof window = ' + (typeof window)));">confirm test</a><br/>
+
+<a href="javascript:alert(prompt('prompt title','typeof window = ' + (typeof window)));">prompt test</a><br/>
+
+                <a href="javascript:test_web();">Test web()</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_open_1();">
+                    _app_activity_open (topbar:Y)</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_open_2();">
+                    _app_activity_open (topbar:N)</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_open_3();">
+                    _app_activity_open (topbar:M)</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_open_4();">
+                    _app_activity_open (topbar:F)</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_open_5();">
+                    _app_activity_open (UiHome topbar:Y)</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_open_6();">
+                    _app_activity_open (UiHome topbar:M)</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                <a href="javascript:test_app_activity_close();">Test test_app_activity_close</a>&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+
+app_set_topbar
+<a href="javascript:app_set_topbar('Y');">Y</a>
+<a href="javascript:app_set_topbar('N');">N</a>
+<a href="javascript:app_set_topbar('F');">F</a>
+<a href="javascript:app_set_topbar('M');">M</a>
+<br/>
+<div id="divError"></div>
+<script>
+function s2o(s){try{return(new Function('return '+s))();}catch(ex){}};function o2s(o){return JSON.stringify(o);};
+function test_wkwebview()
+{
+    //alert("typeof window.webkit = "+typeof window.webkit);
+    try{
+        window.webkit.messageHandlers.nativejsb.postMessage({CallBackId:1234,data:{haha:111}});
+    }catch(ex){alert(ex);}
+}
+function test_nativejsb(){
+    /*
+    var rrr=window.WebViewJavascriptBridge.callHandler('_app_pingpong',
+        {},
+    function( rt ){
+        alert('open1='+o2s(rt) +",rrr.getStatus()="+rrr.getStatus());
+        //alert(rrr.getStatus();
+    });
+     */
+    alert(nativejsb.getVersion());
+}
+function app_set_topbar(mode){
+    window.WebViewJavascriptBridge.callHandler('app_set_topbar',
+        {"mode":mode},
+    function( rt ){
+        alert('open1='+o2s(rt));
+    });
+}
+function test_app_activity_open_1(){
+window.WebViewJavascriptBridge.callHandler('_app_activity_open', {"title":Math.random(),topbar:'Y',address:'http://app.jump.ws/core/apitest.htm?'+Math.random()},function( rt ){
+alert('open1='+o2s(rt));
+});
+}
+function test_app_activity_open_2(){
+window.WebViewJavascriptBridge.callHandler('_app_activity_open', {topbar:'N',address:'http://app.jump.ws/core/apitest.htm?'+Math.random()},function( rt ){
+alert('open2='+o2s(rt));
+});
+}
+function test_app_activity_open_3(){
+window.WebViewJavascriptBridge.callHandler('_app_activity_open', {topbar:'M',address:'http://app.jump.ws/core/apitest.htm?'+Math.random()},function( rt ){
+alert('open2='+rt);
+});
+}
+function test_app_activity_open_4(){
+window.WebViewJavascriptBridge.callHandler('_app_activity_open', {topbar:'F',address:'http://app.jump.ws/core/apitest.htm?'+Math.random()},function( rt ){
+alert('open4='+o2s(rt));
+});
+}
+function test_app_activity_open_5(){
+    window.WebViewJavascriptBridge.callHandler('_app_activity_open', {name:'UiHome', topbar:'Y'}, function( rt ){
+alert('open5='+o2s(rt));
+});
+}
+function test_app_activity_open_6(){
+window.WebViewJavascriptBridge.callHandler('_app_activity_open', {topbar:'M', name:'UiHome'}, function( rt ){
+alert('open6='+o2s(rt));
+});
+}
+function test_app_activity_close(){
+window.WebViewJavascriptBridge.callHandler('_app_activity_close', {},function( rt ){
+alert("close return "+o2s(rt));
+});
+}
+
+function test_web(){
+window.WebViewJavascriptBridge.callHandler('_app_web', {"url":"https://jump.ws/"},function( rt ){
+alert(o2s(rt));
+});
+}
+                </script>
+                <img src='app/loading.gif' onclick='location.reload();'/></td>
+        </tr>
+        <tr height="70%">
+            <td align="center" valign="top">
+                <div id='stage'></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- network checking (by api);
+try remote launcher
+$appid=_app_get_id();//from app packing..
+
+try get remote config file:
+http://app.jump.ws/{$appid}/
+
+set a timeout checker...
+-->
+<script>
+window.onerror=function(a,b,c){
+	divError.innerHTML=a;
+	//alert(“Error:”+o2s(a)+";"+o2s(b));
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

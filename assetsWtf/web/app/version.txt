@@ -1,0 +1,12 @@
+# q.js
+#https://cdnjs.cloudflare.com/ajax/libs/q.js/2.0.3/q.min.js
+# 2+ needs "require"...
+# so using:
+https://github.com/kriskowal/q/raw/v1/q.js
+
+# jq.js
+2.2.3.min (dont get v3, adminLTE/bootstrap not running good at v3 yet)
+
+# jstorage.js (for jsb_desktop)
+
+https://cdnjs.cloudflare.com/ajax/libs/jStorage/0.4.12/jstorage.min.js

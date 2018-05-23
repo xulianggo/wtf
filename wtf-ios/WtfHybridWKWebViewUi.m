@@ -31,6 +31,7 @@
     }
 }
 //---- protocol <WKScriptMessageHandler> ----
+//TODO need to improve that if prepare so much thing for every msg posted, the performance is very bad !!!
 - (void)userContentController: (WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message{
     
@@ -404,7 +405,7 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     
     webConfig.userContentController= userController;
     
-    //[webConfig.userContentController addScriptMessageHandler:self name:@"nativejsb"];
+    //window.webkit.messageHandlers.nativejsb
     [webConfig.userContentController addScriptMessageHandler:[WKScriptMessageHandler initWithWtfUi:caller] name:@"nativejsb"];
     
     id rt = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webConfig];

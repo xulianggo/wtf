@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: cdvfile: https://acev2.asiaweiluy.com https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <style>
+			* {
+				-webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+			}
+			#background {
+				background:url(app/bg.jpg) no-repeat center;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				z-index: 0;
+			}
+			@media screen and (orientation:portrait) {
+				#background { background-size:auto 100%; }
+			}
+			@media screen and (orientation:landscape) {
+				#background { background-size:100% auto; }
+			}
+			html,body{
+				width:100%;
+				height:100%;
+				margin:0px;
+				padding:0px;
+				font-size:0.9em;
+                background-color:black;
+			}
+			body {
+				-webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+				-webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+				-webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+				font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+
+				text-transform:uppercase;
+			}
+		</style>
+</head>
+<body>
+<div id="background"></div>
+<div id="divDebugCtrl" style="position:absolute;top:3%;left:5%;width:90%;display:">
+    <input type="button" value="open" onclick="test_open();" />
+    <input type="button" value="openself" onclick="test_openself();" />
+    <input type="button" value="reload" onclick="location.reload();" />
+    <input type="button" value="exitApp" onclick="navigator.app.exitApp();" />
+    <input type="button" value="test_plugin_ace" onclick="test_plugin_ace();"></input>
+    <a href="root_demo.htm"/>root_demo</a>
+</div>
+<div style="position:absolute;top:56%;left:5%;width:90%;height:40%" id="divDebugWrap">
+    <div id="divDebug" style="width:100%;height:100%;display:none"></div>
+</div>
+
+</body>
+</html>

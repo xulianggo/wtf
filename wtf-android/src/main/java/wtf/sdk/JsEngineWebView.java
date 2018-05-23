@@ -2,6 +2,10 @@ package wtf.sdk;
 
 //Tiny JS Engine using WebView
 
+// for Android <4.4, inject a WebSocket is todo. but obviously, now no more small android is needed to supported?
+//* once we want to make the old android works, above behaviours seems need to be implemented
+//@ref https://github.com/anismiles/websocket-android-phonegap/tree/master/src/com/strumsoft/websocket/phonegap
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;

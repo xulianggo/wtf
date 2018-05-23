@@ -65,14 +65,6 @@
     return [self trigger:eventName :nil];
 }
 
-/** NOTES: remember to call initUi at viewDidLoad
- -(void) viewDidLoad
- {
- [super viewDidLoad];
- [self initUi];
- }
- */
-
 - (void)initUi
 {
     [self resetTopBarBtn];

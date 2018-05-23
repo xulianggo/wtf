@@ -20,11 +20,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
@@ -66,40 +66,66 @@ public class WtfTools {
     //        System.loadLibrary("wtf-lib");
     //    }
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
-    //    final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
+
     private static Map<String, Object> _memStore = new HashMap<String, Object>();
     //    private static Map<String, Object> _memStore = new HashMap<String, Object>();
     private static JSO _jAppConfig = null;//new info.cmptech.JSO();
     private static String _localWebRoot = "";
     private Context androidContext;
 
-    public JsEngineWebView jswv = null;
+    private static JsEngineWebView _jswv = null;
 
-    //constructor
     public WtfTools(Context ctx) {
         this.androidContext = ctx;
 
+//        try {
+//            jswv = new JsEngineWebView(this.androidContext);
+//
+//            //inject the native object for WtfTools.js only !!!
+//            jswv.addJavascriptInterface(new nativewtf(this.androidContext), "native");
+//
+//            //TODO 错了，不要在这里运行，应该另外弄....
+//            //init with the WtfTools.js
+//            jswv.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
+//                @Override
+//                public void onReceiveValue(String json_string) {
+//                    Log.v(LOGTAG, " WtfTools.js => " + json_string);
+//                }
+//            });
+//
+//        } catch (Throwable t) {
+//            t.printStackTrace();
+//            String sWarning = t.getMessage();
+//            quickShowMsgMain(sWarning);
+//            //wtf.KillAppSelf();
+//        }
+    }
+
+    //TODO get other build
+//    public static JsEngineWebView getJSWV(name){
+//
+//    }
+    //default Root JSWV....
+    public static JsEngineWebView getJSWV() {
+        Context _ctx = getAppContext();
         try {
-            jswv = new JsEngineWebView(this.androidContext);
-
-            //inject the native object for WtfTools.js only !!!
-            jswv.addJavascriptInterface(new nativewtf(this.androidContext), "native");
-
-            //TODO 错了，不要在这里运行，应该另外弄....
-            //init with the WtfTools.js
-            jswv.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String json_string) {
-                    Log.v(LOGTAG, " WtfTools.js => " + json_string);
-                }
-            });
-
-        } catch (Throwable t) {
-            t.printStackTrace();
-            String sWarning = t.getMessage();
-            quickShowMsgMain(sWarning);
-            //wtf.KillAppSelf();
+            _jswv = new JsEngineWebView(_ctx);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
+
+        //inject the native object for WtfTools.js only !!!
+        //_jswv.addJavascriptInterface(new nativewtf(_ctx), "native");
+
+        //TODO 错了，不要在这里运行，应该另外弄....
+        //init with the WtfTools.js
+//        jswv.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
+//            @Override
+//            public void onReceiveValue(String json_string) {
+//                Log.v(LOGTAG, " WtfTools.js => " + json_string);
+//            }
+//        });
+        return _jswv;
     }
 
     //factory for some function can't be static??? TODO !!!
@@ -746,16 +772,25 @@ public class WtfTools {
 //        return null;
 //    }
 
+//    public static int checkSelfPermission(WtfUi thisUi, String perm){
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            return thisUi.getApplicationContext().checkSelfPermission(perm);
+//        }
+//    }
+
+    //错误的，尽快重写 !!!!
     public static boolean checkPermission(WtfUi thisHybriUi, String perm) {
         int permissionCheck = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             permissionCheck = thisHybriUi.getApplicationContext().checkSelfPermission(perm);
             Log.v(LOGTAG, "permissionCheck(" + perm + ")=" + permissionCheck);
 
-            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                thisHybriUi.requestPermissions(new String[]{perm}, 1);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                //thisHybriUi.requestPermissions(new String[]{perm}, 1);
                 return true;
             }
+        }else{
+            //抄过来用
         }
         return false;
     }

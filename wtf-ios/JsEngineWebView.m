@@ -423,10 +423,7 @@
     [userController addUserScript:userScript];
     
     webConfig.userContentController= userController;
-    
-    //[webConfig.userContentController addScriptMessageHandler:self name:@"nativejsb"];
-//    [webConfig.userContentController addScriptMessageHandler:[WKScriptMessageHandler initWithWtfUi:caller] name:@"nativejsb"];
-//    
+
     id rt = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webConfig];
     
     //add scheme "local" ('coz WKWebView default don't support file)

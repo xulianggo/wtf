@@ -35,9 +35,6 @@ import wtf.sdk.WtfUi;
 public class JsBridgeWebView extends WebView {
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
 
-    //private static final String[] mFilterMethods = {"getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait",};
-    //    protected ProgressDialog progressDialog = null;
-
     Map<String, WtfApi> messageHandlers = new HashMap<String, WtfApi>();
     private nativejsb _nativejsb = null;
 
@@ -127,16 +124,6 @@ public class JsBridgeWebView extends WebView {
 
     }
 
-//    private boolean filterMethods(String methodName) {
-//        for (String method : mFilterMethods) {
-//            if (method.equals(methodName)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-
     private void init(Context context) {
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);
@@ -172,14 +159,11 @@ public class JsBridgeWebView extends WebView {
 
             final String uiName = ((WtfUi) _context).getUiData("name").toString();
 
-            Log.v(LOGTAG, " js2app handlerName " + handlerName + " uiName " + uiName);
-
-            //TODO !!!! 这里要有个 auth-mapping (url-regexp) check!!!!
-
             final WtfCallback responseFunction = new WtfCallback() {
 
                 @Override
                 public void onCallBack(final JSO jso) {
+                    //这里 runOnUiThread 是经验，要在它的主线程上面来 evaluateJavascript、loadUrl
                     ((Activity) _context).runOnUiThread(new Runnable() {
                         //@TargetApi(Build.VERSION_CODES.KITKAT)
                         @Override
@@ -269,7 +253,7 @@ public class JsBridgeWebView extends WebView {
         @Override
         public boolean onJsPrompt(WebView view, String origin, String message, String defaultValue, final JsPromptResult result) {
 
-            if ("nativejsb:".equals(message)) {
+            if ("nativejsb:".equals(message)) { //for < API 17, we using prompt() to hack
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     try {
                         JSONArray array = new JSONArray(defaultValue);
@@ -317,8 +301,8 @@ public class JsBridgeWebView extends WebView {
     }
 
     class MyWebViewClient extends WebViewClient {
-        Context _ctx = null;
-        JsBridgeWebView wv = null;
+        Context _ctx;
+        JsBridgeWebView wv;
 
         public MyWebViewClient(Context context, JsBridgeWebView wv) {
             this._ctx = context;
@@ -366,10 +350,9 @@ public class JsBridgeWebView extends WebView {
             //inject
             String jsContent = WtfTools.readAssetInStr("WebViewJavascriptBridge.js", true);
 
-            //NOTES: no need to runOnUiThread() here...because called by onPageXXXX
             view.loadUrl("javascript:" + jsContent);
 
-            //NOTES: <= JELLY_BEAN_MR1 will have a security problem...
+            //for < API 17
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 String nativejsb_s = "window.nativejsb=window.WebViewJavascriptBridge.nativejsb;";
                 view.loadUrl("javascript:" + nativejsb_s);

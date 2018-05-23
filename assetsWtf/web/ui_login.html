@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AsiaWeiLuy V2 UiLogin</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+<script language="javascript">
+var ArrLang = {
+"account_login":{"en":"Account","kh":"គណនី","zh-cn":"账号登陆","zh-tw":"賬號登陸"},
+"phone_login":{"en":"Phone","kh":"ទូរស័ព្ទី","zh-cn":"手机登陆","zh-tw":"手機登陸"},
+"Account":{"en":"Account","kh":"ឈ្មោះគណនី","zh-cn":"账号","zh-tw":"賬號"},
+"Password":{"en":"Password","kh":"លេខកូដសម្ងាត់","zh-cn":"密码","zh-tw":"密碼"},
+"Login":{"en":"Login","kh":"គណនី","zh-cn":"登陆","zh-tw":"登陸"},
+"logintip":{"en":"User or pass is empty","kh":"ឈ្មោះអ្នកប្រើប្រាស់ឬពាក្យសម្ងាត់គឺទទេ់","zh-cn":"用户名或者密码为空","zh-tw":"用戶名或者密碼爲空"},
+"Register":{"en":"Register","kh":"ចុះឈ្មោះ","zh-cn":"注册","zh-tw":"註冊"}
+};
+</script>
+</head>
+<body>
+<div id='loading7' style="position:absolute;top:30%;width:100%;visibility:hidden"><center><img src="app/loading.gif"/></center></div>
+<style>
+.nodisplay{display:none}.invisible{visibility:hidden;}.forcewrap{white-space:pre-wrap;white-space:-moz-pre-wrap; white-space:-pre-wrap; white-space:-o-pre-wrap; word-wrap:break-word;word-break:break-all;}.forcenowrap{white-space:nowrap;word-wrap:normal;word-break:normal;}html,body{margin:0;padding-left:0px;background:#F9F9F9;}*{font-family:"Tahoma",Arial,sans-serif;font-size:12pt;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-webkit-tap-highlight-color: rgba(0,0,0,0);}a{color:#00699e;font-weight:bold;text-decoration:none;}a:hover{color:#0b98b2;text-decoration:underline;}.wappagetitle{margin-top:14px;margin-left:14px;margin-bottom:4px;}@font-face {src: url("./Inconsolata.ttf");font-family: Inconsolata;}.consolas,.consolas td,.consolas input,.consolas span{font-family:"Inconsolata","Anonymous Pro";}.fl{float:left;}.fr{float:Right;}select,input,label,button,font{vertical-align:middle;height:2em;}select{-webkit-appearance:menulist-button;}.em100 *{font-size:1em;}.em105 *{font-size:1.05em;}.em108 *{font-size:1.08em;}.em110 *{font-size:1.1em;}.em120 *{font-size:1.2em;}.em140 *{font-size:1.4em;}.em130 *{font-size:1.3em;}.textbox-readonly{background-color:#DDDDDD;border:1 solid #808080;;}hr{width:98%}input{padding-left:5px;}input,select{border-radius:5px;border: 1px solid rgb(31,31,31);height:30px;padding-left:5px;}input:disabled{color:rgb(100,100,100)}input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }input[type="number"] { -moz-appearance: textfield; }.wapmaxwidth{padding-left:10px; padding-right:10px;}.wapwidth{width:100%;max-width:624px;}@media screen and (max-width:639px){.wapmaxwidth{padding-left:0px;max-width:450px;overflow-x: scroll;}.wapwidth{width:100%;max-width:450px;}}@media screen and (min-width:640px){.wapwidth{padding-left:10px;}.wapdl{border-radius:6px;}.wapdl dd.last .left_div{border-bottom-left-radius:6px;}.wapdl dd.last .right_div{border-bottom-right-radius:6px}};
+/*2016-12-04 16:34:02*/
+	td{padding: 5px;}
+	body{font-size:14px}
+	.wapwidth .selectLang{position:absolute;right:20px;top:18px;}
+	.wapwidth .LogoIcon{display:block;margin:10px auto;width:135px;height:135px;border-radius:50%;background:url('./app/pic_login_logo_blue.png') no-repeat left center;background-size:100% 100%;}
+	.em110 select,.em110 input{height:45px;}
+	.em110 tr td{display:block;width:100%;}
+	.em110 tr td select{background:url('./app/ico_login_iphone.png') no-repeat 8px center;background-size:30px auto;padding-left:35px;float:left;width:45.5%;border-radius:5px 0 0 5px;}
+	.em110 tr td .phone_input{display:inline-block;float:left;width:54%;max-width:none!important;border-left:none;border-radius:0 5px 5px 0;}
+	.em110 tr input#login_input{background:url('./app/ico_login_account.png') no-repeat 8px center;background-size:30px auto;padding-left:45px;}
+	.em110 tr input#password_input{background:url('./app/ico_login_lock.png') no-repeat 8px center;background-size:30px auto;padding:0 45px;}
+	.em110 tr td .forgetPwd{position:absolute;width:28px;height:28px;background:url('./app/forgot_password.png')no-repeat center center;background-size:100% 100%;top:14px;right:15px;}
+	.wapwidth .footerBtn{clear:both;display:block;margin-top:28px;text-align:center;padding:0 4%;}
+    .wapwidth .footerBtn .regMB,.wapwidth .footerBtn .regAE{background:none;border:2px solid rgb(59,143,223);color:#36F;border-radius:4px;height:45px;width:45%;align:center;margin-right:2%}
+	.wapwidth .footerBtn .regAE{}
+
+/* adjust the submit/button */
+input[type="button"],input[type="submit"] {-webkit-appearance:none;}
+
+</style>
+<span id="span_version" style="position:absolute;top:20px;left:15px;"></span>
+<div class="wapwidth" style="margin:0;padding:20px;">
+	<div class="selectLang">
+        <select class="lang_select" id="login_langSelect" name="login_langSelect" onchange="myapp.InitLoginPage()">
+            <option value="en">EN</option>
+            <option value="kh">ខ្មែរ</option>
+            <option value="zh-cn">中文</option>
+        </select>
+    </div>
+	<center>
+    		<div class="LogoIcon"></div>
+			<table class="em110" style="width:100%;">
+				<tr>
+					<td align="center" style="padding-bottom:0px;font-size:1em"><input type="radio" id="login_type" name="login_type" value="LoginByUserName" checked onClick="myapp.ChangeLoginType()" style="width:30px"
+                        />&nbsp;<span id="account_login">Account</span>
+						&nbsp;<input type="radio" id="login_type" name="login_type" value="LoginByPhoneNum" onClick="myapp.ChangeLoginType()" style="width:30px"/>&nbsp;<span id="phone_login">Phone</span>
+					</td>
+				</tr>
+				<tr id="login_By_Name">
+					<td align="center" ><input style="width:100%" type="text" id="login_input" name="login_input" autocomplete="off"/></td>
+				</tr>
+				<tr id="login_By_Num" style="display:none;">
+				<td align="center" nowrap="nowrap" style="width:100%"><select class="easyui-combobox phone_select" id="login_phone_country_code" name="login_phone_country_code" required="true" data-options="editable:false,panelHeight:'auto'" style="font-size:1em">
+<option value="+855">KH:+855</option>
+<option value="+84">VN:+84</option>
+<option value="+66">TH:+66</option>
+<option value="+852">HK:+852</option>
+<option value="+86">CN:+86</option>
+</select>
+<input type="tel" onkeypress="return (event.charCode >= 48 &amp;&amp; event.charCode <= 57);" id="login_phone_num" name="login_phone_num" class="easyui-numberbox consolas phone_input" autocomplete="off" placeholder="" data-options="precision:0,groupSeparator:'',required:true" style="max-width:110px;font-size:1em">
+</td>
+				</tr>
+				<tr>
+					<td align="center" style="position:relative;">
+                    	<input style="width:100%;font-size:1em" type="password" id="password_input" name="password_input" autocomplete="off"/>
+                    	<div class="forgetPwd" onclick="myapp.ForgetPassword()"></div>
+                    </td>
+				</tr>
+				<tr>
+					<td align="center">
+						<!--<input type="hidden" id="AsAgency" name="AsAgency" value="{$AsAgency}"/>-->
+						<input type="submit" id="sub_login" onclick="myapp.login_bin();" style="background:rgb(59,143,223);color:#fff;border:none;border-radius:8px;display:block;width:100%;height:60px;" value="Login"/>
+					</td>
+				</tr>
+			</table>
+	</center>
+    <div class="footerBtn">
+    	<input type="button" value="Register(MB)" class="regMB" id="regMB" onclick="myapp.JoinMB()"/>
+      <input type="button" value="Register(AE)" class="regAE" id="regAE" onclick="myapp.JoinAE()"/>
+    </div>
+</div>
+<script src="app/jq.js"></script>
+<script src="app/q.js"></script>
+<script src="app/common.js"></script>
+<script language="javascript">
+
+</script>
+<!-- REQUIRED JS SCRIPTS -->
+
+<script src="app/wtfjsbridge.js"></script>
+<script src="app/jsb_desktop.js"></script>
+<script src="app/jstorage.js"></script>
+<script>
+main('ui_login');
+</script>
