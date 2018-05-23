@@ -27,80 +27,80 @@
 			}
 		},
 		_js2app: function(msg, cb){
-                 		if (cb) {
-                 			msgId=(msgId + 1) % 1000000;
-                 			var callTime=cb.time=(new Date()).getTime();
-                 			var callbackId = msg.callbackId = 'cb_' + msgId + '_' + callTime;
-                 			responseCallbacks[callbackId] = cb;
-                 		}
-                 		if("undefined"!=typeof nativejsb){
-                 		//android-WebView or iOS-UIWebView injected
-                 			return nativejsb.js2app(msg.callbackId,msg.handlerName,o2s(msg.data));
-                 		}else if("undefined"!=typeof window.webkit.messageHandlers.nativejsb){
-                 		//iOS-WKWebView
-                 			window.webkit.messageHandlers.nativejsb.postMessage(msg);
-                 		}else{
-                 		    console.log("WebViewJavascriptBridge ERROR no nativejsb found")
-                 		}
-                 	},
-		_app2js: function (msg){
-                 		var _this=this;
-                 		setTimeout(function(){
-                 			var callback=null;
-                 			if (msg.responseId) {
-                 				//this msg is a "Reply", so find the original callback
-                 				callback = responseCallbacks[msg.responseId];
-                 				if (!callback) { return; }
-                 				callback(msg.responseData);
-                 				try{
-                 					responseCallbacks[msg.responseId]=null;
-                 					delete responseCallbacks[msg.responseId];
-                 					_gc();
-                 				}catch(ex){console.log(ex);}
-                 			} else {
-                 				var handler = null;
-                 				if (msg.handlerName) {
-                 					handler = msgHandlerSet[msg.handlerName];
-                 					if(handler==null){
-                 						console.log("WebViewJavascriptBridge: not found handler name="+msg.handlerName);
-                 					}else{
-                 						try {
-                 							if (msg.callbackId) {
-                 								var callbackResponseId = msg.callbackId;
-                 								callback = function(responseData) {
-                 									win.WebViewJavascriptBridge._js2app({
-                 										responseId: callbackResponseId,
-                 										responseData: responseData
-                 									});
-                 								};
-                 							}
-                 							handler(msg.data, callback);
-                 						} catch (exception) {
-                 							console.log("WebViewJavascriptBridge: WARNING: javascript handler threw.", message, exception);
-                 						}
-                 					}
-                 				}else{
-                 					console.log("WebViewJavascriptBridge ERROR: unsupported msg from app!!!",msg);
-                 				}
-                 			}
-                 		},1);
-                 		return {STS:"_app2js"};
-                 	},
-		//for old JSB...
+			if (cb) {
+				msgId=(msgId + 1) % 1000000;
+				var callTime=cb.time=(new Date()).getTime();
+				var callbackId = msg.callbackId = 'cb_' + msgId + '_' + callTime;
+				responseCallbacks[callbackId] = cb;
+			}
+			if("undefined"!=typeof nativejsb){
+				//android-WebView or iOS-UIWebView injected
+				return nativejsb.js2app(msg.callbackId,msg.handlerName,o2s(msg.data));
+			}else if("undefined"!=typeof window.webkit.messageHandlers.nativejsb){
+				//iOS-WKWebView
+				window.webkit.messageHandlers.nativejsb.postMessage(msg);
+			}else{
+				console.log("WebViewJavascriptBridge ERROR no nativejsb found")
+			}
+		},
+		_app2js: function (msg, callback){
+			var _this=this;
+			setTimeout(function(){
+				if (msg.responseId) {
+					//this msg is a "Reply", so find the original callback
+					callback = responseCallbacks[msg.responseId];
+					if (!callback) { return; }
+					callback(msg.responseData);
+					try{
+						responseCallbacks[msg.responseId]=null;
+						delete responseCallbacks[msg.responseId];
+						_gc();
+					}catch(ex){console.log(ex);}
+				} else {
+					var handler = null;
+					if (msg.handlerName) {
+						if(handler = msgHandlerSet[msg.handlerName]){
+							try {
+								if (msg.callbackId) {
+									var callbackResponseId = msg.callbackId;
+									callback = function(responseData) {
+										win.WebViewJavascriptBridge._js2app({
+											responseId: callbackResponseId,
+											responseData: responseData
+										});
+									};
+								}
+								handler(msg.data, callback);
+							} catch (exception) {
+								console.log("WebViewJavascriptBridge: WARNING: javascript handler threw.", message, exception);
+							}
+
+						}else{
+							console.log("WebViewJavascriptBridge: not found handler name="+msg.handlerName);
+						}
+					}else{
+						console.log("WebViewJavascriptBridge ERROR: unsupported msg from app!!!",msg);
+					}
+				}
+			},1);
+			return {STS:"_app2js"};
+		},
+		//for old JSB：
 		init:function(){console.log(' init() is called.')},
+		//spec
 		registerHandler:function (handlerName, handler) { msgHandlerSet[handlerName] = handler },
 		callHandler:function (handlerName, data, cb) {
-                    		return win.WebViewJavascriptBridge._js2app({
-                    			handlerName: handlerName,
-                    			data: data
-                    		}, function( rt ){
-                    			if(cb){
-                    				if ('string'==typeof rt){
-                    					try{ rt=s2o(rt) } catch(ex){}
-                    				}
-                    				cb(rt);
-                    			}
-                    		});
-                    	}
+			return win.WebViewJavascriptBridge._js2app({
+				handlerName: handlerName,
+				data: data
+			}, function( rt ){
+				if(cb){
+					if ('string'==typeof rt){
+						try{ rt=s2o(rt) } catch(ex){}
+					}
+					cb(rt);
+				}
+			});
+		}
 	};
 })(window);

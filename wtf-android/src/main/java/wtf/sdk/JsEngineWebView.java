@@ -34,6 +34,8 @@ public class JsEngineWebView {
         _init(ctx, "default");
     }
 
+    //稍后再 未经KITKAT?
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void _init(Context context, String name) throws Throwable {
 
         int chk = Build.VERSION_CODES.KITKAT;
@@ -51,20 +53,22 @@ public class JsEngineWebView {
         mWebView.getSettings().setJavaScriptEnabled(true);
 
         //@NOTES: Important here, that some must be done to let come JavascriptInterface
-        this._loadJavaScript("console.log('loaded JsEngineWebView " + name + "')");
+        //this._loadJavaScript("console.log('loaded JsEngineWebView " + name + "')");
+
+        //mWebView.evaluateJavascript("console.log('loaded JsEngineWebView " + name + "')",null);
     }
 
-    private void _loadJavaScript(String jsstr) {
-        byte[] data;
-        try {
-            jsstr = "<script>" + jsstr + "</script>";
-            data = jsstr.getBytes("UTF-8");
-            final String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-            mWebView.loadUrl("data:text/html;charset=utf-8;base64," + base64);
-        } catch (final Throwable t) {
-            t.printStackTrace();
-        }
-    }
+//    private void _loadJavaScript(String jsstr) {
+//        byte[] data;
+//        try {
+//            jsstr = "<script>" + jsstr + "</script>";
+//            data = jsstr.getBytes("UTF-8");
+//            final String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+//            mWebView.loadUrl("data:text/html;charset=utf-8;base64," + base64);
+//        } catch (final Throwable t) {
+//            t.printStackTrace();
+//        }
+//    }
 
     @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
     public void addJavascriptInterface(Object obj, String name) {
@@ -80,6 +84,11 @@ public class JsEngineWebView {
     public void evaluateJavascript(String js, ValueCallback<String> resultCallback) {
 
         mWebView.evaluateJavascript(js, resultCallback);
+    }
+
+    public void evaluateJavascript(String js) {
+        //mWebView.evaluateJavascript("setTimeout(function(){"+js+"},11)", null);
+        mWebView.evaluateJavascript(js, null);
     }
 
     //manually destroy()

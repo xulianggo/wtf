@@ -33,7 +33,10 @@ android {
 	sourceSets {
 		main {
 			//=> app/js
-			assets.srcDirs = ['../js','../assetsWtf']
+			assets.srcDirs = [//'../js'
+							  //,
+							  '../assetsWtf'
+			]
 		}
 	}
 

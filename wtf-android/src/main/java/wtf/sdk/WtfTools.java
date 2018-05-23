@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.os.Build;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
@@ -101,15 +100,14 @@ public class WtfTools {
 //        }
     }
 
-    //TODO get other build
-//    public static JsEngineWebView getJSWV(name){
-//
-//    }
+
     //default Root JSWV....
-    public static JsEngineWebView getJSWV() {
+    private static JsEngineWebView getJSWV() {
         Context _ctx = getAppContext();
         try {
-            _jswv = new JsEngineWebView(_ctx);
+            if (_jswv == null) {
+                _jswv = new JsEngineWebView(_ctx);
+            }
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -126,6 +124,10 @@ public class WtfTools {
 //            }
 //        });
         return _jswv;
+    }
+
+    public static void evalJs(String jsString) {
+        getJSWV().evaluateJavascript(jsString);
     }
 
     //factory for some function can't be static??? TODO !!!
@@ -534,6 +536,17 @@ public class WtfTools {
         b2.show();
     }
 
+    public static void startJs(String name) {
+        startJs(name, null, null, null);
+    }
+
+    public static void startJs(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
+        checkAppConfig();
+        //TODO 抄 startUi()
+        String js_str = readAssetInStr(name);
+        evalJs(js_str);
+    }
+
     public static void startUi(String name, String overrideParam_s, Activity caller) {
         startUi(name, overrideParam_s, caller, null);
     }
@@ -789,7 +802,7 @@ public class WtfTools {
                 //thisHybriUi.requestPermissions(new String[]{perm}, 1);
                 return true;
             }
-        }else{
+        } else {
             //抄过来用
         }
         return false;
