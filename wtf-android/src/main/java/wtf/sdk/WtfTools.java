@@ -130,8 +130,7 @@ public class WtfTools {
         getJSWV().evaluateJavascript(jsString);
     }
 
-    //factory for some function can't be static??? TODO !!!
-    public static WtfTools buildWTF(Context ctx) {
+    public static WtfTools shareInstance(Context ctx) {
         return new WtfTools(ctx);
     }
 

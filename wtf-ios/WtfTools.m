@@ -460,4 +460,68 @@ SINGLETON_shareInstance(WtfTools);
         [hybridManager.uiRoot trigger:WtfHybridEventAppResume];
     }
 }
+
+////////////////////////
+
+-(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler
+{
+    [self on:eventName :handler :nil];
+    return self;
+}
+
+-(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData
+{
+    if(nil==handler){
+        return self;
+    }
+    if(nil==self.eventHandlers){
+        self.eventHandlers=[NSMutableDictionary dictionary];
+    }
+    if(nil==self.eventHandlers[eventName]){
+        self.eventHandlers[eventName]=[NSMutableArray array];
+    }
+    [self.eventHandlers[eventName] addObject:handler];
+    return self;
+}
+
+-(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData
+{
+    NSLog(@"trigger(%@) is called.", eventName);
+    NSArray * dict =self.eventHandlers[eventName];
+    if(nil!=dict){
+        NSUInteger c =[dict count];
+        for(int i=0; i<c; i++){
+            HybridEventHandler hdl=[dict objectAtIndex:i];
+            if(nil!=hdl){
+                if(nil==triggerData) triggerData=[JSO id2o:@{}];
+                NSLog(@"with triggerData %@", [triggerData toString]);
+                hdl(eventName, triggerData);
+            }
+        }
+    }
+    return self;
+}
+
+-(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler
+{
+    if(nil==self.eventHandlers){
+        self.eventHandlers=[NSMutableDictionary dictionary];
+    }
+    [self.eventHandlers[eventName] removeObject:handler];
+    return self;
+}
+-(instancetype) off :(NSString *)eventName
+{
+    if(nil==self.eventHandlers){
+        self.eventHandlers=[NSMutableDictionary dictionary];
+    }
+    //TODO some mem leak will appear!!!
+    self.eventHandlers[eventName]=[NSMutableArray array];
+    return self;
+}
+
+-(instancetype) trigger :(NSString *)eventName
+{
+    return [self trigger:eventName :nil];
+}
 @end

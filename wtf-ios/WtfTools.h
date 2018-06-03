@@ -30,6 +30,8 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 //NOTES: use for events quick handling
 @property (strong) WtfUi uiRoot;
 
+@property (strong, nonatomic) NSMutableDictionary* eventHandlers;
+
 //Singleton Pattern:
 + (WtfTools *) shareInstance;
 
@@ -98,6 +100,16 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (void) notifyPause;
 + (void) notifyResume;
+
+//////////////////// quick event skeleton
+-(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
+-(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
+-(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
+-(instancetype) off:(NSString*)eventName;
+
+-(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
+-(instancetype) trigger :(NSString *)eventName;
+
 
 @end
 
