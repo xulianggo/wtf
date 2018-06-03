@@ -132,6 +132,31 @@ SINGLETON_shareInstance(WtfTools);
     return [[self wholeAppConfig] getChild:key];
 }
 
++ (void)appAlert:(NSString *)msg callback:(WtfBlock)callback
+{
+    //dispatch_async fix :
+    //This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.
+    //This will cause an exception in a future release
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:msg message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:(void (^ __nullable)(UIAlertAction *action))callback];
+        [alertController addAction:ok];
+        
+        //modal it
+        [[self findTopRootView] presentViewController:alertController animated:NO completion:^(){
+            //
+        }];
+    });
+}
++ (void)appAlert:(NSString *)msg
+{
+    [self appAlert:msg callback:^(){
+        NSLog(@" completion after appAlert()");
+    }];
+}
+
+//TODO make it as a hint ... as what android did???!!!
 + (void)quickShowMsgMain:(NSString *)msg{
 
     [self quickShowMsgMain:msg callback:^(){
