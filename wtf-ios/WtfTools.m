@@ -504,7 +504,7 @@ SINGLETON_shareInstance(WtfTools);
 
 -(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler
 {
-    if(nil==self.eventHandlers){
+    if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
         self.eventHandlers=[NSMutableDictionary dictionary];
     }
     [self.eventHandlers[eventName] removeObject:handler];
@@ -512,10 +512,9 @@ SINGLETON_shareInstance(WtfTools);
 }
 -(instancetype) off :(NSString *)eventName
 {
-    if(nil==self.eventHandlers){
+    if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
         self.eventHandlers=[NSMutableDictionary dictionary];
     }
-    //TODO some mem leak will appear!!!
     self.eventHandlers[eventName]=[NSMutableArray array];
     return self;
 }
