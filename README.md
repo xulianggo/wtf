@@ -11,21 +11,60 @@ JSO
 
 config.js (see example)
 
-WtfTools
-	=>
-		.wholeAppConfig()
-		.getAppConfig(keyName)
-		  => ._jAppConfig as JSO
-		.I18N(key)
-		  => ._i18n as JSO
-		.jswv as JsEngineWebView
-		.startUi(uiName) launch ui as defined in config.json
-
-    .quickShowMsgMain() /* tool tip */
-    .quickAlert()
-    .quickPrompt()
-    
-    .quickRegExpMatch(regex_s, txt)
-    .quickRegExpReplace(regex_s, src, tgt)
+# WtfTools
+## WtfTools (Common)
+```
+	(WtfTools) shareInstance()
+	checkAppConfig()
+	(JSO) wholeAppConfig() /* get config from config.js */
+	(JSO) getAppConfig(keyName)
+	(JSO) I18N(key)
+	jswv as JsEngineWebView
+	startUi(uiName) launch ui as defined in config.json
+	quickShowMsg() /* tool tip */
+	quickShowMsgMain() /* tool tip at global level */
+	appAlert()
+	appConfirm()
+	appPrompt()
+	KillAppSelf
+	readAssetInStr
+	(boolean)isEmptyString(s)
+	saveUserConfig
+	loadUserConfig
+	MemorySave(k,v)
+	(JSO) MemoryLoad(k)
+```
+## WtfTools	(Android)
+```
+.readAssetInStrWithoutComments
+.isoDateTime
 
 ```
+## WtfTools	(iOS)
+```
+	countDown
+	suspendApp
+	findTopRootView
+	fullPathOfAsset
+	+(NSString *)readAssetInStr :(NSString *)filename :(BOOL)removeComments;
+	quickRegExpMatch(regex_s, txt)
+	quickRegExpReplace(regex_s, src, tgt)
+	os_compare
+	is_simulator
+	call_c_do_m
+	base64encode
+	base64decode
+	I18N
+	(NSString) getBuildType
+	+ (void) notifyPause;
+	+ (void) notifyResume;
+
+-(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
+-(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
+-(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
+-(instancetype) off:(NSString*)eventName;
+
+-(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
+-(instancetype) trigger :(NSString *)eventName;
+```
+

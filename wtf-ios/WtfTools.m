@@ -216,7 +216,7 @@ SINGLETON_shareInstance(WtfTools);
     [self call_o_do_m:app :@"suspend"];
 }
 
-+ (void) quitGracefully
++ (void) KillAppSelf
 {
     [self suspendApp];
     
@@ -245,7 +245,7 @@ SINGLETON_shareInstance(WtfTools);
 //        //((void (*)(id, SEL, NSString *))[cls methodForSelector:sss])(cls, sss, @"local");
 //    }
 //}
-+ (void) call_c_do_m_1 :(NSString *)ccc :(NSString *)mmm :(NSString *) vvv
++ (void) call_c_do_m :(NSString *)ccc :(NSString *)mmm :(NSString *) vvv
 {
     Class cls = NSClassFromString(ccc);
     SEL sel = NSSelectorFromString(mmm);
@@ -378,10 +378,8 @@ SINGLETON_shareInstance(WtfTools);
     return NO;
 }
 
-+ (NSString *) btoa:(NSString *)s { return [[s dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];}
-+ (NSString *) base64encode:(NSString *)s { return [self btoa:s]; }
-+ (NSString *) atob:(NSString *)s { return [[NSString alloc] initWithData:[[NSData alloc] initWithBase64EncodedString:s options:0] encoding:NSUTF8StringEncoding];}
-+ (NSString *) base64decode:(NSString *)s { return [self atob:s]; }
++ (NSString *) base64encode:(NSString *)s { return [[s dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];}
++ (NSString *) base64decode:(NSString *)s { return [[NSString alloc] initWithData:[[NSData alloc] initWithBase64EncodedString:s options:0] encoding:NSUTF8StringEncoding];}
 
 //TODO maybe support save app config in future? no, don't think so.
 //+ (void)saveAppConfig

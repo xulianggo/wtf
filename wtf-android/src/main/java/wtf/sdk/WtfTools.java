@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.webkit.JavascriptInterface;
@@ -74,7 +73,7 @@ public class WtfTools {
 
     private static JsEngineWebView _jswv = null;
 
-    public WtfTools(Context ctx) {
+    private WtfTools(Context ctx) {
         this.androidContext = ctx;
 
 //        try {
@@ -130,8 +129,11 @@ public class WtfTools {
         getJSWV().evaluateJavascript(jsString);
     }
 
+    private static WtfTools _shareInstance;
+
     public static WtfTools shareInstance(Context ctx) {
-        return new WtfTools(ctx);
+        if (null == _shareInstance) _shareInstance = new WtfTools(ctx);
+        return _shareInstance;
     }
 
     public static Object getCacheFromMem(String key) {
@@ -233,14 +235,27 @@ public class WtfTools {
 
     //persistent save/load
     //NOTES:  because getSetting will cause mis-understanding
-    public static String getSavedSetting(Context mContext, String whichSp, String field) {
+    public static String loadUserConfig(Context mContext, String whichSp, String field) {
         SharedPreferences sp = mContext.getSharedPreferences(whichSp, Context.MODE_PRIVATE);
         String s = sp.getString(field, "");
         return s;
     }
 
-    public static void saveSetting(Context mContext, String whichSp, String field, String value) {
+    public static String loadUserConfig(String field) {
+        SharedPreferences sp = getAppContext().getSharedPreferences("DEFAULT", Context.MODE_PRIVATE);
+        String s = sp.getString(field, "");
+        return s;
+    }
+
+    public static void saveUserConfig(Context mContext, String whichSp, String field, String value) {
         SharedPreferences sp = (SharedPreferences) mContext.getSharedPreferences(whichSp, Context.MODE_PRIVATE);
+        if (null == value) value = "";//I want to store sth not null
+
+        sp.edit().putString(field, value).apply();
+    }
+
+    public static void saveUserConfig(String field, String value) {
+        SharedPreferences sp = (SharedPreferences) getAppContext().getSharedPreferences("DEFAULT", Context.MODE_PRIVATE);
         if (null == value) value = "";//I want to store sth not null
 
         sp.edit().putString(field, value).apply();
@@ -418,6 +433,13 @@ public class WtfTools {
         return time_s;
     }
 
+    public static void MemorySave(String k, String v) {
+        //TODO
+    }
+    public static String MemoryLoad(String k) {
+        //TODO
+        return "";
+    }
     private static String readAssetInStrWithoutComments(String s) {
         return readAssetInStrWithoutComments(getAppContext(), s);
     }
@@ -684,7 +706,7 @@ public class WtfTools {
     }
 
     //@ref http://stackoverflow.com/questions/10500775/parse-json-from-httpurlconnection-object
-    public static String stream2string(InputStream is) {
+    private static String stream2string(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
@@ -726,18 +748,18 @@ public class WtfTools {
     //StrictMode.ThreadPolicy was introduced since API Level 9 and the default thread policy had been changed since API Level 11,
     // which in short, does not allow network operation (eg: HttpClient and HttpUrlConnection)
     // get executed on UI thread. If you do this, you get NetworkOnMainThreadException.
-    public static void uiNeedNetworkPolicyHack() {
-        int _sdk_int = android.os.Build.VERSION.SDK_INT;
-        if (_sdk_int > 8) {
-            try {
-                Log.d(LOGTAG, "setThreadPolicy for api level " + _sdk_int);
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
-    }
+//    public static void uiNeedNetworkPolicyHack() {
+//        int _sdk_int = android.os.Build.VERSION.SDK_INT;
+//        if (_sdk_int > 8) {
+//            try {
+//                Log.d(LOGTAG, "setThreadPolicy for api level " + _sdk_int);
+//                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//                StrictMode.setThreadPolicy(policy);
+//            } catch (Throwable t) {
+//                t.printStackTrace();
+//            }
+//        }
+//    }
 
 //    public static void KillAppSelf() {
 //        android.os.Process.killProcess(android.os.Process.myPid());
@@ -807,7 +829,7 @@ public class WtfTools {
         return false;
     }
 
-    public static File getTempDirectoryPath() {
+    private static File getTempDirectoryPath() {
         return getAppContext().getCacheDir();
     }
 
@@ -847,7 +869,7 @@ public class WtfTools {
         return null;
     }
 
-    public native String stringFromJNI();
+    //public native String stringFromJNI();
 
     class nativewtf {
         private Context _context;

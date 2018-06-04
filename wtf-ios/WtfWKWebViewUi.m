@@ -411,8 +411,8 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     id rt = [[WKWebView alloc] initWithFrame:CGRectZero configuration:webConfig];
     
     //add scheme "local" ('coz WKWebView default don't support file)
-    [WtfTools call_c_do_m_1:[WtfTools atob:@"V0tCcm93c2luZ0NvbnRleHRDb250cm9sbGVy"]
-                           :[WtfTools atob:@"cmVnaXN0ZXJTY2hlbWVGb3JDdXN0b21Qcm90b2NvbDo="]
+    [WtfTools call_c_do_m:[WtfTools base64decode:@"V0tCcm93c2luZ0NvbnRleHRDb250cm9sbGVy"]
+                           :[WtfTools base64decode:@"cmVnaXN0ZXJTY2hlbWVGb3JDdXN0b21Qcm90b2NvbDo="]
                            :@"local"];
     
     [NSURLProtocol registerClass:[WtfResourceURLProtocol class]];

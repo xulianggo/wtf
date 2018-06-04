@@ -49,7 +49,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (JSO *) wholeAppConfig;
 + (JSO *) getAppConfig :(NSString *)key;
-+ (UIViewController *) findTopRootView;
+//+ (UIViewController *) findTopRootView;
 
 + (NSString *) fullPathOfAsset :(NSString *)filename;
 +(NSString *)readAssetInStr :(NSString *)filename;
@@ -67,7 +67,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 + (void) quickConfirmMsgMain:(NSString *)msg handlerYes:(HybridDialogCallback) handlerYes handlerNo:(HybridDialogCallback) handlerNo;
 
 + (void) suspendApp;
-+ (void) quitGracefully;
++ (void) KillAppSelf;
 
 /**
  * Return a array of "matches".
@@ -82,11 +82,10 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 + (NSInteger) os_compare:(Float32)tgt;
 + (BOOL) is_simulator;
 
-+ (void) call_c_do_m_1 :(NSString *)ccc :(NSString *)mmm :(NSString *) vvv;
-+ (NSString *) btoa:(NSString *)s;
++ (void) call_c_do_m :(NSString *)ccc :(NSString *)mmm :(NSString *) vvv;
+
 + (NSString *) base64encode:(NSString *)s;
 
-+ (NSString *) atob:(NSString *)s;
 + (NSString *) base64decode:(NSString *)s;
 
 + (NSString *) I18N:(NSString *)key;
@@ -99,6 +98,9 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (void) notifyPause;
 + (void) notifyResume;
+
++ (void) MemorySave :(NSString *)key :(NSString *)val;
++ (JSO *) MemoryLoad :(NSString *)key;
 
 //////////////////// quick event handling {
 @property (strong, nonatomic) NSMutableDictionary* eventHandlers;
