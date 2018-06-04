@@ -1,5 +1,5 @@
-#import "WtfHybridApi.h"
+#import "WtfApi.h"
 
-@interface ApiUiOpen : WtfHybridApi
+@interface ApiUiOpen : WtfApi
 
 @end

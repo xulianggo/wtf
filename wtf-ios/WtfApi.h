@@ -1,6 +1,6 @@
 #import "WtfUi.h"
 
-@interface WtfHybridApi : NSObject
+@interface WtfApi : NSObject
 
 //TODO from android setCallerUi()/getCallerUi()
 

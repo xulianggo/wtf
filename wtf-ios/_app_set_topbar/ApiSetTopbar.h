@@ -1,5 +1,5 @@
-#import "WtfHybridApi.h"
+#import "WtfApi.h"
 
-@interface ApiSetTopbar : WtfHybridApi
+@interface ApiSetTopbar : WtfApi
 
 @end

@@ -104,7 +104,7 @@ SINGLETON_shareInstance(WtfTools);
     return theWtfUi;
 }
 
-+ (WtfHybridApi *)getHybridApi:(NSString *)name{
++ (WtfApi *)getHybridApi:(NSString *)name{
     
     Class myApiClass = NSClassFromString(name);
     

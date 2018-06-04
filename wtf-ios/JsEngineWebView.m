@@ -500,7 +500,7 @@
     
     for (NSString *kkk in [api_mapping getChildKeys]) {
         NSString *apiname = [[api_mapping getChild:kkk] toString] ;
-        WtfHybridApi *api = [WtfTools getHybridApi:apiname];
+        WtfApi *api = [WtfTools getHybridApi:apiname];
         //api.currentUi = self;
         //self.uiApiHandlers[kkk] = [api getHandler];
     }

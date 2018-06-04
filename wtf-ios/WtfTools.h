@@ -11,7 +11,7 @@
 #import "JsEngineWebView.h"
 #import "WtfUi.h"
 
-#import "WtfHybridApi.h"
+#import "WtfApi.h"
 
 typedef void (^WtfUiCallback)(WtfUi ui);
 
@@ -36,7 +36,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (void) checkAppConfig;
 
-+ (WtfHybridApi *) getHybridApi:(NSString *)name;
++ (WtfApi *) getHybridApi:(NSString *)name;
 
 + (void) startUi :(NSString *)strUiName
          initData:(JSO *) initData

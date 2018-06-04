@@ -5,6 +5,16 @@
 
 #import <UIKit/UIKit.h>
 
+//TODO remove function point asap
+
+//@ref WtfCallback in Android
+//@protocol WtfCallback123
+////@property
+//@required
+//@optional
+//-(void) onCallback:(JSO*) responseData;
+//@end
+
 //TODO change to java-interface-alike stuff
 typedef void (^WtfCallback)(JSO* responseData);
 

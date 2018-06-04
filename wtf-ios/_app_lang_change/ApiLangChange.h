@@ -1,5 +1,5 @@
-#import "WtfHybridApi.h"
+#import "WtfApi.h"
 
-@interface ApiLangChange : WtfHybridApi
+@interface ApiLangChange : WtfApi
 
 @end

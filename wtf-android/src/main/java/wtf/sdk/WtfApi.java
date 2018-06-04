@@ -13,5 +13,6 @@ abstract public class WtfApi {
         __callerUi = callerUi;
     }
 
+    //@NOTES: diff with iOS, but have the same meaning
     abstract public void handler(JSO jso, WtfCallback cbFunc);
 }
