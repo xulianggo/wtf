@@ -46,9 +46,9 @@ SINGLETON_shareInstance(WtfTools);
         if( [@"WebView" isEqualToString:mode]){
             if([WtfTools os_compare:8.0]>=0)
             {
-                className=@"WtfHybridWKWebViewUi";//default to this now.
+                className=@"WtfWKWebViewUi";//default to this now.
             }else{
-                className=@"WtfHybridWebViewUi";//WARNING for <iOS8, using UIWebView, which slower and using private api
+                className=@"WtfWebViewUi";//WARNING for <iOS8, using UIWebView, which slower and using private api
             }
         }else{
             return nil;

@@ -1,7 +1,6 @@
 #import "WtfUi.h"
 
 @interface WtfUi_UIViewController : UIViewController <WtfUiProtocol>
-
 {
     //private ...
     

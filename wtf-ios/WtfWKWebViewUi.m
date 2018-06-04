@@ -1,4 +1,4 @@
-#import "WtfHybridWKWebViewUi.h"
+#import "WtfWKWebViewUi.h"
 
 #import "WtfTools.h"
 
@@ -230,7 +230,7 @@ NSString *PBResourceHost = @".resource.";
 
 @end
 
-@implementation WtfHybridWKWebViewUi
+@implementation WtfWKWebViewUi
 
 //TODO must make it as class private var, not global BOOL !!!!!!!!
 BOOL isFirstLoad=YES;
@@ -427,7 +427,7 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     //    if ([WtfTools isEmptyString:title]){
     //        title=@" - - - ";//TODO
     //    }
-    //    [self on:WtfHybridEventBeforeDisplay :^(NSString *eventName, JSO *extraData) {
+    //    [self on:WtfEventBeforeDisplay :^(NSString *eventName, JSO *extraData) {
     //
     //        NSLog(@"initUi() on eventName %@ ", eventName);
     //        [self resetTopBarStatus];
@@ -467,12 +467,12 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     }
     
     //[WtfTools callWebViewLoadUrl:_myWebView :address];
-    [WtfHybridWKWebViewUi callWebViewLoadUrl:_myWebView :address];
+    [WtfWKWebViewUi callWebViewLoadUrl:_myWebView :address];
 }
 
 - (void) resetTopBarBtn
 {
-    NSLog(@"resetTopBarBtn in WtfHybridWKWebViewUi....");
+    NSLog(@"resetTopBarBtn in WtfWKWebViewUi....");
     UIBarButtonItem *leftBar
     = [[UIBarButtonItem alloc]
        initWithImage:[UIImage imageNamed:@"btn_nav bar_left arrow"]//see Images.xcassets

@@ -383,10 +383,10 @@
 
 //-(instancetype) trigger :(NSString *)eventName :(JSO *) extraData
 //{
-//    if ([WtfHybridEventAppResume isEqualToString:eventName]){
+//    if ([WtfEventAppResume isEqualToString:eventName]){
 //        //NSLog(@" !!!! TODO _myWebView trigger resume to page ...");
 //        [self evalJs:@"try{$(document).trigger('postresume');}catch(ex){}"];
-//    }else if([WtfHybridEventAppPause isEqualToString:eventName]){
+//    }else if([WtfEventAppPause isEqualToString:eventName]){
 //        //NSLog(@" !!!! TODO _myWebView trigger pause to page ...");
 //        [self evalJs:@"try{$(document).trigger('pause');}catch(ex){}"];
 //    }
@@ -443,7 +443,7 @@
 //    //    if ([WtfTools isEmptyString:title]){
 //    //        title=@" - - - ";//TODO
 //    //    }
-//    //    [self on:WtfHybridEventBeforeDisplay :^(NSString *eventName, JSO *extraData) {
+//    //    [self on:WtfEventBeforeDisplay :^(NSString *eventName, JSO *extraData) {
 //    //
 //    //        NSLog(@"initUi() on eventName %@ ", eventName);
 //    //        [self resetTopBarStatus];
@@ -483,7 +483,7 @@
 //    }
 //
 //    //[WtfTools callWebViewLoadUrl:_myWebView :address];
-//    [WtfHybridWKWebViewUi callWebViewLoadUrl:_myWebView :address];
+//    [WtfWKWebViewUi callWebViewLoadUrl:_myWebView :address];
 //}
 
 
