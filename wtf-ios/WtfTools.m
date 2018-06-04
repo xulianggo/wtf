@@ -448,7 +448,7 @@ SINGLETON_shareInstance(WtfTools);
 {
     WtfTools *hybridManager = [self shareInstance];
     if(nil!=hybridManager.uiRoot){
-        [hybridManager.uiRoot trigger:WtfHybridEventAppPause];
+        [hybridManager.uiRoot trigger:WtfEventAppPause];
     }
 }
 
@@ -457,7 +457,7 @@ SINGLETON_shareInstance(WtfTools);
 {
     WtfTools *hybridManager = [self shareInstance];
     if(nil!=hybridManager.uiRoot){
-        [hybridManager.uiRoot trigger:WtfHybridEventAppResume];
+        [hybridManager.uiRoot trigger:WtfEventAppResume];
     }
 }
 
@@ -502,6 +502,7 @@ SINGLETON_shareInstance(WtfTools);
     return self;
 }
 
+//remove the link to the handler only....
 -(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler
 {
     if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
@@ -510,6 +511,7 @@ SINGLETON_shareInstance(WtfTools);
     [self.eventHandlers[eventName] removeObject:handler];
     return self;
 }
+//remove all handlers linked to the eventName
 -(instancetype) off :(NSString *)eventName
 {
     if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){

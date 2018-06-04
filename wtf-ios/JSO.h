@@ -24,6 +24,8 @@
 - (NSString *) toString :(BOOL)quote;
 - (NSString *) toString;
 - (void) fromString :(NSString *)s;
+- (NSNumber*) asNumber;
+- (NSInteger*) asInt;
 
 - (void) setChild :(NSString *)k JSO:(JSO *)o;
 - (JSO *) getChild :(NSString *)k;

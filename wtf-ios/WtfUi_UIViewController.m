@@ -71,7 +71,7 @@
     
     NSString *title = [[self.uiData getChild:@"title"] toString];
     
-    [self on:WtfHybridEventBeforeDisplay :^(NSString *eventName, JSO *extraData) {
+    [self on:WtfEventBeforeDisplay :^(NSString *eventName, JSO *extraData) {
         
         [self resetTopBarStatus];
         if(nil!=title){
@@ -108,12 +108,12 @@
             [self dismissViewControllerAnimated:YES completion:^{
                 NSLog(@"Current View dismissViewControllerAnimated");
             }];
-            [self trigger:WtfHybridEventWhenClose :self.responseData];
+            [self trigger:WtfEventWhenClose :self.responseData];
             return;
         }
     }
     
-    [self trigger:WtfHybridEventWhenClose :self.responseData];
+    [self trigger:WtfEventWhenClose :self.responseData];
     
 }
 
@@ -235,7 +235,7 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];    
-    [self trigger:WtfHybridEventBeforeDisplay];
+    [self trigger:WtfEventBeforeDisplay];
 }
 
 -(void) viewDidLoad

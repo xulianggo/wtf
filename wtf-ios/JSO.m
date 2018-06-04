@@ -74,6 +74,22 @@
     return _jv;
 }
 
+- (NSInteger) asInt
+{
+    //NSNumber jv = (NSNumber) _jv;
+    return [_jv intValue];
+}
+
+- (BOOL) asBoolean
+{
+    return _jv;
+}
+
+- (NSNumber*) asNumber
+{
+    return _jv;
+}
+
 - (NSString *) toString :(BOOL)quote
 {
     if(nil==_jv){

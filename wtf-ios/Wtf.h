@@ -5,25 +5,26 @@
 
 #import <UIKit/UIKit.h>
 
-//define WtfCallback:
+//TODO change to java-interface-alike stuff
 typedef void (^WtfCallback)(JSO* responseData);
 
-//define HybridHandler:  (NOTES, WtfApi.handler ?)
+//TODO change to java-interface-alike stuff
 typedef void (^HybridHandler)(JSO * jso, WtfCallback responseCallback);
 
 typedef void (^HybridDialogCallback)(UIAlertAction* action);
 
+//TODO change to java-interface-alike stuff
 typedef void (^HybridEventHandler)(NSString *eventName, JSO* extraData);
 
 typedef void (^WtfBlock)(void);
 
-#define WtfHybridEventBeforeDisplay @"BeforeDisplay"
-#define WtfHybridEventMemoryWarning @"MemoryWarning"
-#define WtfHybridEventWhenClose @"WhenClose"
-#define WtfHybridEventBeforeClose @"BeforeClose"
-#define WtfHybridEventInitDone @"InitDone"
-#define WtfHybridEventAppResume @"AppResume"
-#define WtfHybridEventAppPause @"AppPause"
+#define WtfEventBeforeDisplay @"BeforeDisplay"
+#define WtfEventMemoryWarning @"MemoryWarning"
+#define WtfEventWhenClose @"WhenClose"
+#define WtfEventBeforeClose @"BeforeClose"
+#define WtfEventInitDone @"InitDone"
+#define WtfEventAppResume @"AppResume"
+#define WtfEventAppPause @"AppPause"
 
 #define SINGLETON_shareInstance(classname) \
 + (classname *)shareInstance\

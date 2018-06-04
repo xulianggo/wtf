@@ -9,7 +9,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    [self trigger:WtfHybridEventMemoryWarning];
+    [self trigger:WtfEventMemoryWarning];
 
 //    // Dispose of any resources that can be recreated.
 //    [WtfTools quickShowMsgMain:@"Memory Warning" callback:^{
