@@ -420,7 +420,8 @@ SINGLETON_shareInstance(WtfTools);
 + (void)saveUserConfig :(NSString *)key :(JSO *)jso //:(BOOL)autosave
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:[jso toString] forKey:key];
+    if(nil==jso)[userDefaults removeObjectForKey:key];
+    else [userDefaults setObject:[jso toString] forKey:key];
     //if(autosave){
         [userDefaults synchronize];
     //}
@@ -438,6 +439,7 @@ SINGLETON_shareInstance(WtfTools);
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString * jso_s = [userDefaults objectForKey:key];
+    if(nil==jso_s)return nil;//patch
     return [JSO s2o:jso_s];
 }
 
