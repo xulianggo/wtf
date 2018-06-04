@@ -408,20 +408,37 @@ SINGLETON_shareInstance(WtfTools);
 //}
 
 //@ref use in app_cache_save
-+ (void)saveUserConfig :(NSString *)key :(NSString *)value_s :(BOOL)autosave
+//+ (void)saveUserConfig :(NSString *)key :(NSString *)value_s :(BOOL)autosave
+//{
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    [userDefaults setObject:value_s forKey:key];
+//    if(autosave){
+//        [userDefaults synchronize];
+//    }
+//}
+
++ (void)saveUserConfig :(NSString *)key :(JSO *)jso //:(BOOL)autosave
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:value_s forKey:key];
-    if(autosave){
+    [userDefaults setObject:[jso toString] forKey:key];
+    //if(autosave){
         [userDefaults synchronize];
-    }
+    //}
 }
 
 //@ref use in app_cache_load
-+ (nullable id)loadUserConfig :(NSString *)key
+//+ (nullable id)loadUserConfig :(NSString *)key
+//{
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    return [userDefaults objectForKey:key];
+//}
+
+//@ref use in app_cache_load
++ (JSO *)loadUserConfig :(NSString *)key
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    return [userDefaults objectForKey:key];
+    NSString * jso_s = [userDefaults objectForKey:key];
+    return [JSO s2o:jso_s];
 }
 
 + (NSString *) getBuildType

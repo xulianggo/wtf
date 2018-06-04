@@ -21,6 +21,7 @@
 + (NSString *) o2s:(JSO *)o;
 
 - (id) toId;
+- (NSString *) asString;
 - (NSString *) toString :(BOOL)quote;
 - (NSString *) toString;
 - (void) fromString :(NSString *)s;

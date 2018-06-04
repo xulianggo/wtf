@@ -107,6 +107,11 @@
     return [JSO id2s:_jv];
 }
 
+- (NSString *) asString
+{
+    return [self toString :FALSE];
+}
+
 - (NSString *) toString
 {
     return [self toString :FALSE];

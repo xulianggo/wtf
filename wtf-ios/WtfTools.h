@@ -91,16 +91,19 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 + (NSString *) I18N:(NSString *)key;
 //+ (void) setI18N:(NSString *)_i18n;
 
-+ (void)saveUserConfig :(NSString *)key :(NSString *)value_s :(BOOL)autosave;
-+ (id)loadUserConfig :(NSString *)key;
+//+ (void)saveUserConfig :(NSString *)key :(NSString *)value_s :(BOOL)autosave;
+//+ (id)loadUserConfig :(NSString *)key;
+
++ (void)saveUserConfig :(NSString *)key :(JSO *)jso;
++ (JSO *)loadUserConfig :(NSString *)key;
 
 + (NSString *) getBuildType;
 
 + (void) notifyPause;
 + (void) notifyResume;
 
-+ (void) MemorySave :(NSString *)key :(NSString *)val;
-+ (JSO *) MemoryLoad :(NSString *)key;
+//+ (void) MemorySave :(NSString *)key :(NSString *)val;
+//+ (JSO *) MemoryLoad :(NSString *)key;
 
 //////////////////// quick event handling {
 @property (strong, nonatomic) NSMutableDictionary* eventHandlers;
