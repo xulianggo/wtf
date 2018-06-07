@@ -81,40 +81,73 @@
     } :nil];
 }
 
-//do close
-- (void) closeUi
-{
-    BOOL flagIsLast=YES;
-    
-    id<UIApplicationDelegate> ddd = [UIApplication sharedApplication].delegate;
-    UINavigationController *nnn=self.navigationController;
-    if (nil!=nnn){
-        NSArray *vvv = nnn.viewControllers;
-        if(nil!=vvv){
-            if(vvv.count>1){
-                [self.navigationController popViewControllerAnimated:YES];
-                flagIsLast=NO;
+-(BOOL) finishUi
+    {
+        BOOL flagIsLast=YES;
+        id<UIApplicationDelegate> ddd = [UIApplication sharedApplication].delegate;
+        UINavigationController *nnn=self.navigationController;
+        if (nnn){
+            NSArray *vvv = nnn.viewControllers;
+            if(nil!=vvv){
+                if(vvv.count>1){
+                    [self.navigationController popViewControllerAnimated:YES];
+                    flagIsLast=NO;
+                }
             }
-        }
-        if(flagIsLast==YES){
-            NSLog(@" flagIsLast==YES for navigationController");
-        }
-    }else{
-        UIViewController *rootUi=ddd.window.rootViewController;
-        if (rootUi == self){
-            NSLog(@" flagIsLast==YES for rootViewController root = self");
-            flagIsLast=YES;
+            if(flagIsLast==YES){
+                NSLog(@" flagIsLast==YES for navigationController");
+            }
         }else{
+            UIViewController *rootUi=ddd.window.rootViewController;
+            if (rootUi == self){
+                NSLog(@" flagIsLast==YES for rootViewController root = self");
+                flagIsLast=YES;
+            }
             [self dismissViewControllerAnimated:YES completion:^{
                 NSLog(@"Current View dismissViewControllerAnimated");
             }];
-            [self trigger:WtfEventWhenClose :self.responseData];
-            return;
         }
+        return flagIsLast;
     }
-    
-    [self trigger:WtfEventWhenClose :self.responseData];
-    
+    - (void) closeUi :(JSO*)resultJSO
+    {
+        [self setResponseData:resultJSO];
+        [self closeUi];
+//[self trigger:WtfEventWhenClose :self.responseData];
+    }
+- (void) closeUi
+{
+//    BOOL flagIsLast=YES;
+//
+//    id<UIApplicationDelegate> ddd = [UIApplication sharedApplication].delegate;
+//    UINavigationController *nnn=self.navigationController;
+//    if (nil!=nnn){
+//        NSArray *vvv = nnn.viewControllers;
+//        if(nil!=vvv){
+//            if(vvv.count>1){
+//                [self.navigationController popViewControllerAnimated:YES];
+//                flagIsLast=NO;
+//            }
+//        }
+//        if(flagIsLast==YES){
+//            NSLog(@" flagIsLast==YES for navigationController");
+//        }
+//    }else{
+//        UIViewController *rootUi=ddd.window.rootViewController;
+//        if (rootUi == self){
+//            NSLog(@" flagIsLast==YES for rootViewController root = self");
+//            flagIsLast=YES;
+//        }else{
+//            [self dismissViewControllerAnimated:YES completion:^{
+//                NSLog(@"Current View dismissViewControllerAnimated");
+//            }];
+//            [self trigger:WtfEventWhenClose :self.responseData];
+//            return;
+//        }
+//    }
+//    //ERROR, should not trigger event here !! should using event => closeUi() action.
+//    [self trigger:WtfEventWhenClose :self.responseData];
+     [self trigger:WtfEventWhenClose :self.responseData];
 }
 
 

@@ -28,13 +28,13 @@ typedef void (^HybridEventHandler)(NSString *eventName, JSO* extraData);
 
 typedef void (^WtfBlock)(void);
 
-#define WtfEventBeforeDisplay @"BeforeDisplay"
-#define WtfEventMemoryWarning @"MemoryWarning"
-#define WtfEventWhenClose @"WhenClose"
-#define WtfEventBeforeClose @"BeforeClose"
-#define WtfEventInitDone @"InitDone"
-#define WtfEventAppResume @"AppResume"
-#define WtfEventAppPause @"AppPause"
+#define WtfEventBeforeDisplay @"WtfEventBeforeDisplay"
+#define WtfEventMemoryWarning @"WtfEventMemoryWarning"
+#define WtfEventWhenClose @"WtfEventWhenClose"
+#define WtfEventBeforeClose @"WtfEventBeforeClose"
+#define WtfEventInitDone @"WtfEventBeforeClose"
+#define WtfEventAppResume @"WtfEventAppResume"
+#define WtfEventAppPause @"WtfEventAppPause"
 
 #define SINGLETON_shareInstance(classname) \
 + (classname *)shareInstance\

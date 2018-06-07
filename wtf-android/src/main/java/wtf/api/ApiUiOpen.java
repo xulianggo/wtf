@@ -18,7 +18,8 @@ public class ApiUiOpen extends WtfApi {
             public void onCallBack(final WtfUi ui) {
 
                 //listen "close" event
-                ui.on("close", new WtfCallback() {
+								//TODO make it constant as WtfEventWhenClose
+                ui.on(WtfTools.WtfEventWhenClose, new WtfCallback() {
 
                     @Override
                     public void onCallBack(JSO jsoCallback) {

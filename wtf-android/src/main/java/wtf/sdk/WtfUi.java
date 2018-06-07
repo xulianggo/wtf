@@ -107,28 +107,31 @@ public class WtfUi extends Activity {
         }
     }
 
-    public boolean closeUi(JSO resultJSO) {
+    public closeUi(JSO resultJSO) {
         if (null != resultJSO) setResponseData(resultJSO);
-        return closeUi();
+        closeUi();
     }
 
-    public boolean closeUi() {
+		//do close
+		public void closeUi() {
 
-        JSO o = _responseData;
-        if (_responseData == null) {
-            //if not responseData default return {name: $name, address: adress} for caller reference only
-            o = new JSO();
-            o.setChild("name", getUiData("name"));
-            o.setChild("address", getUiData("address"));
-        }
-        if (false == trigger("close", o)) {
+			JSO o = _responseData;
+			if (_responseData == null) {
+				//if not responseData default return {name: $name, address: adress} for caller reference only
+				o = new JSO();
+				o.setChild("name", getUiData("name"));
+				o.setChild("address", getUiData("address"));
+			}
+			//NOTES 有问题，trigger()不应该是同步的，所以不应该用返回值来判断是否要finish啊
+			//if (false == trigger(WtfTools.WtfEventWhenClose, o)) {
 
-            //if no handler from trigger, i need to close by self.
-            finish();
-            return true;//real closed at this call
-        }
-        return false;//didn't real close at this call
-    }
+			//    //if no handler from trigger, i need to close by self.
+			//    finish();
+			//    return true;//real closed at this call
+			//}
+			//return false;//didn't real close at this call
+			finish();
+		}
 
     //TODO 暂时只支持一对一 on/trigger， 以后有需求再改一对多（类似jQuery）
     public void on(String eventName, WtfCallback cb) {

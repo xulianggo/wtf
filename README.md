@@ -68,3 +68,11 @@ config.js (see example)
 -(instancetype) trigger :(NSString *)eventName;
 ```
 
+
+# WtfUi
+```
+-(void) initUi;//do init
+-(void) closeUi;// trigger event close => finishUi
+-(void) closeUi :(JSO*)resultJSO;
+-(void) finishUi;//really finishUi
+```

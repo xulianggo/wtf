@@ -51,6 +51,7 @@ import java.util.regex.PatternSyntaxException;
 import wtf.h5.SimpleHybridWebViewUi;
 
 public class WtfTools {
+	public final static String WtfEventWhenClose = "WtfEventWhenClose";
     public final static String NETWORK_STATUS = "_network_status_";
     //    public final static String NETWORK_STATUS = "_network_status_";
 //    final static String ANDROID_APPLICATION = "_android_applicaton_";
@@ -572,6 +573,7 @@ public class WtfTools {
         startUi(name, overrideParam_s, caller, null);
     }
 
+		//NOTES: the WtfUiCallback is for hooking events, not for close event, please NOTE !!!
     public static void startUi(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
         checkAppConfig();
 

@@ -12,9 +12,12 @@ SINGLETON_shareInstance(WtfTools);
     if(nil==hybridManager._jAppConfig){
         //TODO [WtfTools stripComment:s]
         NSString *s =[self readAssetInStr:@"config.json" :YES];
-        hybridManager._jAppConfig = [JSO s2o:s];
-        hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
+        if(s){
+            hybridManager._jAppConfig = [JSO s2o:s];
+            hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
+        }
     }
+    //TODO if not ok, need to alert the program ...
 }
 
 + (void) startUi :(NSString *)strUiName
