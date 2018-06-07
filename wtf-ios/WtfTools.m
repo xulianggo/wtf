@@ -62,7 +62,7 @@ SINGLETON_shareInstance(WtfTools);
     WtfUi theWtfUi = [[uiClass alloc] init];
     
     if (nil==theWtfUi) {
-        [self quickShowMsgMain:[NSString stringWithFormat:@"Failed to start %@ %@", strUiName, className]];
+        [self quickShowMsgMain:[NSString stringWithFormat:@"Not found %@ %@ to startUi", strUiName, className]];
         return nil;
     }
     
@@ -278,6 +278,7 @@ SINGLETON_shareInstance(WtfTools);
 +(NSString *)readAssetInStr :(NSString *)filename :(BOOL)removeComments
 {
     NSString *rt=[self readAssetInStr:filename];
+    if(nil==rt)return nil;
     rt=[self quickRegExpReplace :@"^[ \t]*//.*$" :rt :@""];
     return rt;
 }
