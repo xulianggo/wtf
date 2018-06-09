@@ -13,6 +13,8 @@
 
 #import "WtfApi.h"
 
+#import "WtfCache.h"
+
 typedef void (^WtfUiCallback)(WtfUi ui);
 
 @interface WtfTools : NSObject
@@ -107,10 +109,12 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 //+ (JSO *) MemoryLoad :(NSString *)key;
 
 //////////////////// quick event handling {
-@property (strong, nonatomic) NSMutableDictionary* eventHandlers;
+@property (strong, nonatomic) WtfCache* eventHandlers;
+//@property (strong, nonatomic) NSMutableDictionary* eventHandlers;
 
 -(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
 -(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
+-(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
 -(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
 -(instancetype) off:(NSString*)eventName;
 

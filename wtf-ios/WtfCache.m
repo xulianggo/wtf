@@ -119,7 +119,7 @@
 - (BOOL) hasExpired: (NSString *) key
 {
     NSNumber * expiredObj = [self getExpireTime: key];
-    
+    if(nil==expiredObj)return NO;//patch wj
     NSDate * current = [NSDate date];
     
     NSDate * expireDate = [NSDate dateWithTimeIntervalSince1970: [expiredObj doubleValue]];

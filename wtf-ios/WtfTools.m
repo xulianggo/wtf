@@ -516,19 +516,47 @@ SINGLETON_shareInstance(WtfTools);
         return self;
     }
     if(nil==self.eventHandlers){
-        self.eventHandlers=[NSMutableDictionary dictionary];
+        self.eventHandlers=[[WtfCache new]init];
+        //[NSMutableDictionary dictionary];
     }
-    if(nil==self.eventHandlers[eventName]){
-        self.eventHandlers[eventName]=[NSMutableArray array];
+    if(nil==[self.eventHandlers objectForKey:eventName]){
+        [self.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
     }
-    [self.eventHandlers[eventName] addObject:handler];
+    [[self.eventHandlers objectForKey:eventName] addObject:handler];
+//    if(nil==self.eventHandlers[eventName]){
+//        self.eventHandlers[eventName]=[NSMutableArray array];
+//    }
+//    [self.eventHandlers[eventName] addObject:handler];
+    return self;
+}
+
+-(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire
+{
+    if(nil==handler){
+        return self;
+    }
+    if(nil==self.eventHandlers){
+        self.eventHandlers=[[WtfCache new]init];
+        //[NSMutableDictionary dictionary];
+    }
+    if(nil==[self.eventHandlers objectForKey:eventName]){
+        //[self.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
+        [self.eventHandlers setObject:[NSMutableArray array] forKey:eventName expire:expire];
+    }
+    NSMutableArray * dict = [self.eventHandlers objectForKey:eventName];
+    [dict addObject:handler];
+    //    if(nil==self.eventHandlers[eventName]){
+    //        self.eventHandlers[eventName]=[NSMutableArray array];
+    //    }
+    //    [self.eventHandlers[eventName] addObject:handler];
     return self;
 }
 
 -(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData
 {
     NSLog(@"trigger(%@) is called.", eventName);
-    NSArray * dict =self.eventHandlers[eventName];
+    //NSArray * dict =self.eventHandlers[eventName];
+    NSArray * dict = [self.eventHandlers objectForKey:eventName];
     if(nil!=dict){
         NSUInteger c =[dict count];
         for(int i=0; i<c; i++){
@@ -547,18 +575,24 @@ SINGLETON_shareInstance(WtfTools);
 -(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler
 {
     if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
-        self.eventHandlers=[NSMutableDictionary dictionary];
+        //self.eventHandlers=[NSMutableDictionary dictionary];
+        self.eventHandlers=[[WtfCache new]init];
     }
-    [self.eventHandlers[eventName] removeObject:handler];
+    //[self.eventHandlers[eventName] removeObject:handler];
+    [[self.eventHandlers objectForKey:eventName] removeObject:handler];
     return self;
 }
 //remove all handlers linked to the eventName
 -(instancetype) off :(NSString *)eventName
 {
+    //TODO: potentially memory leak, fix later (find a removeAll or free() stuffs!!
     if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
-        self.eventHandlers=[NSMutableDictionary dictionary];
+        //self.eventHandlers=[NSMutableDictionary dictionary];
+        self.eventHandlers=[[WtfCache new]init];
     }
-    self.eventHandlers[eventName]=[NSMutableArray array];
+    //self.eventHandlers[eventName]=[NSMutableArray array];
+    //[self eventHandlers ]
+    [self.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
     return self;
 }
 
