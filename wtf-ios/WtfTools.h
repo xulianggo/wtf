@@ -38,6 +38,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (WtfApi *) getHybridApi:(NSString *)name;
 
++ (void) finishRoot;
 + (void) startUi :(NSString *)strUiName
          initData:(JSO *) initData
         objCaller:(WtfUi )objCaller
@@ -64,7 +65,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (void) quickShowMsgMain :(NSString *)msg callback:(WtfBlock)callback;
 
-+ (void) quickConfirmMsgMain:(NSString *)msg handlerYes:(HybridDialogCallback) handlerYes handlerNo:(HybridDialogCallback) handlerNo;
++ (void) appConfirm:(NSString *)msg handlerYes:(HybridDialogCallback) handlerYes handlerNo:(HybridDialogCallback) handlerNo;
 
 + (void) suspendApp;
 + (void) KillAppSelf;

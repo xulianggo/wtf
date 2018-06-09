@@ -32,7 +32,8 @@ typedef void (^WtfBlock)(void);
 #define WtfEventMemoryWarning @"WtfEventMemoryWarning"
 #define WtfEventWhenClose @"WtfEventWhenClose"
 #define WtfEventBeforeClose @"WtfEventBeforeClose"
-#define WtfEventInitDone @"WtfEventBeforeClose"
+#define WtfEventAfterClose @"WtfEventAfterClose"
+#define WtfEventInitDone @"WtfEventInitDone"
 #define WtfEventAppResume @"WtfEventAppResume"
 #define WtfEventAppPause @"WtfEventAppPause"
 

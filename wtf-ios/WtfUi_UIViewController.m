@@ -92,6 +92,14 @@
                 if(vvv.count>1){
                     [self.navigationController popViewControllerAnimated:YES];
                     flagIsLast=NO;
+                }else{
+                    //[self.navigationController popViewControllerAnimated:YES];
+                    
+                    ddd.window.rootViewController = nil;
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        NSLog(@"Current View dismissViewControllerAnimated");
+                    }];
+                    [self trigger:WtfEventAfterClose :self.responseData];
                 }
             }
             if(flagIsLast==YES){

@@ -327,7 +327,7 @@ BOOL isFirstLoad=YES;
 
 - (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completionHandler
 {
-    [WtfTools quickConfirmMsgMain:message handlerYes:^(UIAlertAction *action) {
+    [WtfTools appConfirm:message handlerYes:^(UIAlertAction *action) {
         completionHandler(YES);
     } handlerNo:^(UIAlertAction *action) {
         completionHandler(NO);
@@ -478,7 +478,8 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
        initWithImage:[UIImage imageNamed:@"btn_nav bar_left arrow"]//see Images.xcassets
        style:UIBarButtonItemStylePlain
        target:self
-       action:@selector(closeUi) //on('click')=>close()
+       //action:@selector(closeUi) //on('click')=>close()
+       action:@selector(finishUi)
        ];
     leftBar.tintColor = [UIColor blueColor];
     self.navigationItem.leftBarButtonItem=leftBar;

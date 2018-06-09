@@ -197,7 +197,7 @@ SINGLETON_shareInstance(WtfTools);
 }
 
 //IOS 8 +
-+ (void)quickConfirmMsgMain:(NSString *)msg
++ (void)appConfirm:(NSString *)msg
                  handlerYes:(HybridDialogCallback) handlerYes
                   handlerNo:(HybridDialogCallback) handlerNo
 {
@@ -479,6 +479,18 @@ SINGLETON_shareInstance(WtfTools);
     WtfTools *hybridManager = [self shareInstance];
     if(nil!=hybridManager.uiRoot){
         [hybridManager.uiRoot trigger:WtfEventAppResume];
+    }
+}
+
+//close/dismiss the root ui
++ (void) finishRoot
+{
+    id<UIApplicationDelegate> ddd = [UIApplication sharedApplication].delegate;
+    if (ddd.window.rootViewController){
+        [ddd.window.rootViewController dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"WtfTool.finishRoot() => dismissViewControllerAnimated");
+        }];
+        ddd.window.rootViewController=nil;
     }
 }
 
