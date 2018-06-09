@@ -13,7 +13,7 @@
                    error:&error];
         
         if (error.description) {
-            NSLog(@"s2id(%@) err => %@", s, error.description);
+            //NSLog(@"s2id(%@) err => %@", s, error.description);
             idid=s;
         }else{
             return [idid objectAtIndex:0];
