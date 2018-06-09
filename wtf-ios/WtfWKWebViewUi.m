@@ -131,6 +131,7 @@
         
         @try {
             NSString* javascriptCommand = [NSString stringWithFormat:@"setTimeout(function(){WebViewJavascriptBridge._app2js(%@);},1);", rt_s];
+            //NOTES: very important to call back the js in the main q
             dispatch_async(dispatch_get_main_queue(), ^{
                 //[WtfTools callWebViewDoJs:webView :javascriptCommand];
                 [self callWebViewDoJs:webView :javascriptCommand];
@@ -141,7 +142,7 @@
         } @finally {
         }
     };
-
+    
     dispatch_after
     (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)),//async delay 0.01 second
      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -156,9 +157,9 @@
 
 @end
 
-//ref
+//@ref
 //https://github.com/jnjosh/PandoraBoy/
-NSString *PBResourceHost = @".resource.";
+NSString *PBResourceHost = @"WtfWKWebViewUi";
 
 @interface WtfResourceURLProtocol : NSURLProtocol {}
 
@@ -188,7 +189,10 @@ NSString *PBResourceHost = @".resource.";
 -(void)startLoading
 {
     NSBundle *thisBundle = [NSBundle bundleForClass:[self class]];
-    NSString *notifierPath = [[thisBundle resourcePath] stringByAppendingPathComponent:[[[self request] URL] path]];
+//    NSString *abs_path = [thisBundle resourcePath];
+//    abs_path = [abs_path stringByAppendingString:@"/web/"];
+    NSString *abs_path = [[thisBundle resourcePath] stringByAppendingString:@"/web/"];
+    NSString *notifierPath = [abs_path stringByAppendingPathComponent:[[[self request] URL] path]];
     NSError *err;
     NSData *data = [NSData dataWithContentsOfFile:notifierPath
                                           options:NSUncachedRead
@@ -246,8 +250,10 @@ BOOL isFirstLoad=YES;
             NSString *scheme_s=[address_url scheme];
             
             if( [ WtfTools isEmptyString:scheme_s ])
-            {//regard as local url
+            {
+                //regard as local url
                 ResourceURL *resource = [ResourceURL resourceURLWithPath:[@"/" stringByAppendingString:address]];
+                //ResourceURL *resource = [ResourceURL resourceURLWithPath:[@"/web/" stringByAppendingString:address]];//force to web/
                 [wv loadRequest:[NSURLRequest requestWithURL:resource]];
             }else{
                 //[self loadUrl:[address_url absoluteString]];
@@ -412,8 +418,8 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     
     //add scheme "local" ('coz WKWebView default don't support file)
     [WtfTools call_c_do_m:[WtfTools base64decode:@"V0tCcm93c2luZ0NvbnRleHRDb250cm9sbGVy"]
-                           :[WtfTools base64decode:@"cmVnaXN0ZXJTY2hlbWVGb3JDdXN0b21Qcm90b2NvbDo="]
-                           :@"local"];
+                         :[WtfTools base64decode:@"cmVnaXN0ZXJTY2hlbWVGb3JDdXN0b21Qcm90b2NvbDo="]
+                         :@"local"];
     
     [NSURLProtocol registerClass:[WtfResourceURLProtocol class]];
     return rt;

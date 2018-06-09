@@ -346,7 +346,7 @@
 //
 //- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completionHandler
 //{
-//    [WtfTools quickConfirmMsgMain:message handlerYes:^(UIAlertAction *action) {
+//    [WtfTools appConfirm:message handlerYes:^(UIAlertAction *action) {
 //        completionHandler(YES);
 //    } handlerNo:^(UIAlertAction *action) {
 //        completionHandler(NO);

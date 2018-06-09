@@ -34,7 +34,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 //Singleton Pattern:
 + (WtfTools *) shareInstance;
 
-+ (void) checkAppConfig;
+//+ (void) checkAppConfig;
 
 + (WtfApi *) getHybridApi:(NSString *)name;
 

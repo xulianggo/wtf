@@ -6,19 +6,19 @@
 
 SINGLETON_shareInstance(WtfTools);
 
-+ (void)checkAppConfig{
-    
-    WtfTools *hybridManager = [self shareInstance];
-    if(nil==hybridManager._jAppConfig){
-        //TODO [WtfTools stripComment:s]
-        NSString *s =[self readAssetInStr:@"config.json" :YES];
-        if(s){
-            hybridManager._jAppConfig = [JSO s2o:s];
-            hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
-        }
-    }
-    //TODO if not ok, need to alert the program ...
-}
+//+ (void)checkAppConfig{
+//
+//    WtfTools *hybridManager = [self shareInstance];
+//    if(nil==hybridManager._jAppConfig){
+//        //TODO [WtfTools stripComment:s]
+//        NSString *s =[self readAssetInStr:@"config.json" :YES];
+//        if(s){
+//            hybridManager._jAppConfig = [JSO s2o:s];
+//            hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
+//        }
+//    }
+//    //TODO if not ok, need to alert the program ...
+//}
 
 + (void) startUi :(NSString *)strUiName
          initData:(JSO *) initData
@@ -36,7 +36,7 @@ SINGLETON_shareInstance(WtfTools);
               initData:(JSO *) initData
              objCaller:(WtfUi)objCaller
 {
-    [self checkAppConfig];
+    //[self checkAppConfig];
     
     JSO *jso_uiMapping = [self getAppConfig:@"ui_mapping"];
     
@@ -127,6 +127,14 @@ SINGLETON_shareInstance(WtfTools);
 + (JSO *)wholeAppConfig{
     
     WtfTools *hybridManager = [self shareInstance];
+    if(nil==hybridManager._jAppConfig){
+        //TODO [WtfTools stripComment:s]
+        NSString *s =[self readAssetInStr:@"config.json" :YES];
+        if(s){
+            hybridManager._jAppConfig = [JSO s2o:s];
+            hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
+        }
+    }
     return hybridManager._jAppConfig;
 }
 
