@@ -108,6 +108,8 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 //+ (void) MemorySave :(NSString *)key :(NSString *)val;
 //+ (JSO *) MemoryLoad :(NSString *)key;
 
++ (NSString *) md5 :(NSString*) ipt;
+
 //////////////////// quick event handling {
 @property (strong, nonatomic) WtfCache* eventHandlers;
 //@property (strong, nonatomic) NSMutableDictionary* eventHandlers;

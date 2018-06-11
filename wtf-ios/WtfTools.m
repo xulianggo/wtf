@@ -2,6 +2,8 @@
 #import <sys/utsname.h>
 #import "WtfTools.h"
 
+#import <CommonCrypto/CommonDigest.h>
+
 @implementation WtfTools
 
 SINGLETON_shareInstance(WtfTools);
@@ -501,6 +503,21 @@ SINGLETON_shareInstance(WtfTools);
         ddd.window.rootViewController=nil;
     }
 }
+
++ (NSString *) md5 :(NSString*) ipt
+{
+    
+    const char * pointer = [ipt UTF8String];
+    unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
+    
+    CC_MD5(pointer, (CC_LONG)strlen(pointer), md5Buffer);
+    
+    NSMutableString *string = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [string appendFormat:@"%02x",md5Buffer[i]];
+    return string;
+}
+
 
 ////////////////////////
 
