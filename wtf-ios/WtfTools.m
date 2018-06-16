@@ -298,6 +298,17 @@ SINGLETON_shareInstance(WtfTools);
     return (nil==s || [@"" isEqualToString:s]);
 }
 
+//+(NSArray *) quickRegExpMatchLine :(NSString *)regex_s :(NSString *)txt
+//{
+//    NSError *error = NULL;
+//    NSRange range = NSMakeRange(0, [txt length]);
+//    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regex_s options:NSRegularExpressionAnchorsMatchLines error:&error];
+//    if(nil!=error){
+//        NSLog(@"error when quickRegExpMatch %@",error);
+//    }
+//    return [regex matchesInString:txt options:0 range:range];
+//}
+
 +(NSArray *) quickRegExpMatch :(NSString *)regex_s :(NSString *)txt
 {
     NSError *error = NULL;

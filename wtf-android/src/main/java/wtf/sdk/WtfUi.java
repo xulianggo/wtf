@@ -107,7 +107,7 @@ public class WtfUi extends Activity {
         }
     }
 
-    public closeUi(JSO resultJSO) {
+    public void closeUi(JSO resultJSO) {
         if (null != resultJSO) setResponseData(resultJSO);
         closeUi();
     }

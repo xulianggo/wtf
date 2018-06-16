@@ -20,15 +20,19 @@ apply plugin: 'com.android.library'
 //}
 
 android {
-	compileSdkVersion Integer.parseInt(ANDROID_BUILD_SDK_VERSION)
-
+	//compileSdkVersion Integer.parseInt(ANDROID_BUILD_SDK_VERSION)
+	compileSdkVersion rootProject.ext.compileSdkVersion
+	buildToolsVersion rootProject.ext.buildToolsVersion
 		defaultConfig {
+			minSdkVersion rootProject.ext.minSdkVersion
+			targetSdkVersion rootProject.ext.appTargetSdkVersion
+			versionCode rootProject.ext.versionCode
+			versionName rootProject.ext.versionName
 
-			minSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION)
-				targetSdkVersion Integer.parseInt(ANDROID_BUILD_TARGET_SDK_VERSION)
-
-				versionCode Integer.parseInt(ANDROID_BUILD_VERSION_CODE)
-				versionName ANDROID_BUILD_VERSION_NAME
+			//minSdkVersion Integer.parseInt(ANDROID_BUILD_MIN_SDK_VERSION)
+			//targetSdkVersion Integer.parseInt(ANDROID_BUILD_TARGET_SDK_VERSION)
+			//versionCode Integer.parseInt(ANDROID_BUILD_VERSION_CODE)
+			//versionName ANDROID_BUILD_VERSION_NAME
 		}
 	sourceSets {
 		main {
@@ -47,6 +51,9 @@ android {
 	//        }
 	//    }
 
+	lintOptions {
+		abortOnError false
+	}
 }
 allprojects {
 	tasks.withType(JavaCompile) {
