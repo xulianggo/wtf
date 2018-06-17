@@ -253,7 +253,7 @@ public class WtfTools {
     public static JSO loadUserConfig(String field) {
         SharedPreferences sp = getAppContext().getSharedPreferences("DEFAULT", Context.MODE_PRIVATE);
         String s = sp.getString(field, "");
-        if (s == null) return null;
+        if (s == null) return new JSO();
         return JSO.s2o(s);
     }
 

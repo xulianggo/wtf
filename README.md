@@ -1,63 +1,62 @@
 # wtf
-
 a tiny framework.  u can check wtf-tiny-app for reference and play ground
 
 # spec
-
-
 ```
-
-JSO
-
-config.js (see example)
+# JSO
+# config.js 
 
 # WtfTools
 ## WtfTools (Common)
 ```
-	(WtfTools) shareInstance()
-	checkAppConfig()
-	(JSO) wholeAppConfig() /* get config from config.js */
-	(JSO) getAppConfig(keyName)
-	(JSO) I18N(key)
-	jswv as JsEngineWebView
-	startUi(uiName) launch ui as defined in config.json
-	quickShowMsg() /* tool tip */
-	quickShowMsgMain() /* tool tip at global level */
-	appAlert()
-	appConfirm()
-	appPrompt()
-	KillAppSelf
-	readAssetInStr
-	(boolean)isEmptyString(s)
-	saveUserConfig
-	loadUserConfig
-	MemorySave(k,v)
-	(JSO) MemoryLoad(k)
++	(WtfTools) shareInstance()
++	checkAppConfig()
++	(JSO) wholeAppConfig() /* get config from config.js */
++	(JSO) getAppConfig(keyName)
++	(JSO) I18N(key)
++	jswv as JsEngineWebView
++	startUi(uiName) launch ui as defined in config.json
++	quickShowMsg() /* tool tip */
++	quickShowMsgMain() /* tool tip at global level */
++	appAlert()
++	appConfirm()
++	appPrompt()
++	KillAppSelf
++	readAssetInStr
++	(boolean)isEmptyString(s)
++	saveUserConfig
++	loadUserConfig
++	MemorySave(k,v)
++	(JSO) MemoryLoad(k)
+
+TODO on/off/trigger of android
 ```
+
 ## WtfTools	(Android)
 ```
-.readAssetInStrWithoutComments
-.isoDateTime
++ readAssetInStrWithoutComments
++ isoDateTime
 
 ```
+
 ## WtfTools	(iOS)
 ```
-	countDown
-	suspendApp
-	findTopRootView
-	fullPathOfAsset
-	+(NSString *)readAssetInStr :(NSString *)filename :(BOOL)removeComments;
-	quickRegExpMatch(regex_s, txt)
-	quickRegExpReplace(regex_s, src, tgt)
-	os_compare
-	is_simulator
-	call_c_do_m
-	base64encode
-	base64decode
-	I18N
-	(NSString) getBuildType
-	+ (void) notifyPause;
-	+ (void) notifyResume;
++	countDown
++	suspendApp
++	findTopRootView
++	fullPathOfAsset
++	+(NSString *)readAssetInStr :(NSString *)filename :(BOOL)removeComments;
++	quickRegExpMatch(regex_s, txt)
++	quickRegExpReplace(regex_s, src, tgt)
++	os_compare
++	is_simulator
++	call_c_do_m
++	base64encode
++	base64decode
++	I18N
++	(NSString) getBuildType
++ (void) notifyPause;
++ (void) notifyResume;
 
 -(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
 -(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
@@ -67,7 +66,6 @@ config.js (see example)
 -(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
 -(instancetype) trigger :(NSString *)eventName;
 ```
-
 
 # WtfUi
 ```

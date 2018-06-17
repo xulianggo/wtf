@@ -6,7 +6,7 @@ public abstract class WtfDialogCallback implements android.app.AlertDialog.OnCli
 
     public abstract void onCall(DialogInterface dialog, int which);
 
-//    //@Override
+    //@Override
     public void onClick(DialogInterface dialog, int which) {
         this.onCall(dialog, which);
     }
