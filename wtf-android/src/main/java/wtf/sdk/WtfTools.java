@@ -434,13 +434,13 @@ public class WtfTools {
         return time_s;
     }
 
-    public static void MemorySave(String k, String v) {
-        //TODO
-    }
-    public static String MemoryLoad(String k) {
-        //TODO
-        return "";
-    }
+//    public static void MemorySave(String k, String v) {
+//        //TODO
+//    }
+//    public static String MemoryLoad(String k) {
+//        //TODO
+//        return "";
+//    }
     private static String readAssetInStrWithoutComments(String s) {
         return readAssetInStrWithoutComments(getAppContext(), s);
     }
