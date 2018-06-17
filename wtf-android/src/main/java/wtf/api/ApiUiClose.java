@@ -1,14 +1,25 @@
 package wtf.api;
 
-import wtf.sdk.*;
+import wtf.sdk.JSO;
+import wtf.sdk.WtfApi;
+import wtf.sdk.WtfCallback;
+import wtf.sdk.WtfHandler;
+import wtf.sdk.WtfUi;
 
 public class ApiUiClose extends WtfApi {
+
     @Override
-    public void handler(JSO jso, WtfCallback cbFunc) {
-        WtfUi ui = getCallerUi();
+    public WtfHandler getHandler() {
+        return new WtfHandler() {
 
-        ui.closeUi(jso);
+            @Override
+            public void onCall(JSO jso, final WtfCallback responseCallback) {
+                WtfUi ui = getCallerUi();
 
-        if (null != cbFunc) cbFunc.onCallBack(jso);
+                ui.closeUi(jso);
+
+                if (null != responseCallback) responseCallback.onCallBack(jso);
+            }
+        };
     }
 }

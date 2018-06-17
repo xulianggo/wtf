@@ -7,7 +7,7 @@
 
 @implementation ApiUiTitle
 
-- (HybridHandler) getHandler
+- (WtfHandler) getHandler
 {
     return ^(JSO * jso, WtfCallback responseCallback) {
         

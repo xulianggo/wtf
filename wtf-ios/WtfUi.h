@@ -27,9 +27,9 @@
 -(void) closeUi :(JSO*)resultJSO;
 -(BOOL) finishUi;//action finish/close
 
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler;
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler;
     //for some case, some initData is sent and use when trigger
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData;
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData;
 -(instancetype) off:(NSString *)eventName;
     
 -(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;

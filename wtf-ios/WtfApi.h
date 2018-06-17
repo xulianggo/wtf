@@ -8,7 +8,7 @@
 @property (nonatomic, weak) WtfUi currentUi;
 
 //TODO see if merge with android handler()
-- (HybridHandler) getHandler;
+- (WtfHandler) getHandler;
 //e.g.
 //{
 //    return ^(JSO *ddd, WtfCallback responseCallback) {

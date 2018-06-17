@@ -3,7 +3,7 @@
 
 @implementation ApiUiClose
 
-- (HybridHandler) getHandler{
+- (WtfHandler) getHandler{
     return ^(JSO *jso, WtfCallback responseCallback) {
         dispatch_async(dispatch_get_main_queue(), ^{
             

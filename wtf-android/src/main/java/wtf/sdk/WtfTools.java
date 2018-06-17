@@ -22,7 +22,6 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.util.Log;
 import android.view.Gravity;
-import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import java.io.BufferedInputStream;
@@ -36,8 +35,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,7 +53,7 @@ import java.util.regex.PatternSyntaxException;
 import wtf.h5.SimpleHybridWebViewUi;
 
 public class WtfTools {
-	public final static String WtfEventWhenClose = "WtfEventWhenClose";
+    public final static String WtfEventWhenClose = "WtfEventWhenClose";
     public final static String NETWORK_STATUS = "_network_status_";
     //    public final static String NETWORK_STATUS = "_network_status_";
 //    final static String ANDROID_APPLICATION = "_android_applicaton_";
@@ -242,10 +244,17 @@ public class WtfTools {
         return s;
     }
 
-    public static String loadUserConfig(String field) {
+//    public static String loadUserConfig(String field) {
+//        SharedPreferences sp = getAppContext().getSharedPreferences("DEFAULT", Context.MODE_PRIVATE);
+//        String s = sp.getString(field, "");
+//        return s;
+//    }
+
+    public static JSO loadUserConfig(String field) {
         SharedPreferences sp = getAppContext().getSharedPreferences("DEFAULT", Context.MODE_PRIVATE);
         String s = sp.getString(field, "");
-        return s;
+        if (s == null) return null;
+        return JSO.s2o(s);
     }
 
     public static void saveUserConfig(Context mContext, String whichSp, String field, String value) {
@@ -255,11 +264,15 @@ public class WtfTools {
         sp.edit().putString(field, value).apply();
     }
 
-    public static void saveUserConfig(String field, String value) {
+    public static void saveUserConfig_s(String field, String value) {
         SharedPreferences sp = (SharedPreferences) getAppContext().getSharedPreferences("DEFAULT", Context.MODE_PRIVATE);
         if (null == value) value = "";//I want to store sth not null
 
         sp.edit().putString(field, value).apply();
+    }
+
+    public static void saveUserConfig(String field, JSO value) {
+        saveUserConfig_s(field, value == null ? "null" : value.toString());
     }
 
     public static String webPost(String uu, String post_s) {
@@ -434,7 +447,7 @@ public class WtfTools {
         return time_s;
     }
 
-//    public static void MemorySave(String k, String v) {
+    //    public static void MemorySave(String k, String v) {
 //        //TODO
 //    }
 //    public static String MemoryLoad(String k) {
@@ -525,7 +538,7 @@ public class WtfTools {
         return rt;
     }
 
-    public static void appAlert(Context ctx, String msg, AlertDialog.OnClickListener clickListener) {
+    public static void appAlert(Context ctx, String msg, WtfDialogCallback clickListener) {
         AlertDialog.Builder b2;
         b2 = new AlertDialog.Builder(ctx);
         b2.setMessage(msg).setPositiveButton("Close", clickListener);
@@ -536,12 +549,12 @@ public class WtfTools {
 
     public static void appConfirm(
             Context ctx, String msg,
-            AlertDialog.OnClickListener okListener,
-            AlertDialog.OnClickListener cancelListener) {
+            WtfDialogCallback okListener,
+            WtfDialogCallback cancelListener) {
         if (null == cancelListener) {
-            cancelListener = new AlertDialog.OnClickListener() {
+            cancelListener = new WtfDialogCallback() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onCall(DialogInterface dialog, int which) {
                     //dialog.cancel();
                     //Log.v(LOGTAG, ".appConfirm().click()");
                 }
@@ -573,7 +586,7 @@ public class WtfTools {
         startUi(name, overrideParam_s, caller, null);
     }
 
-		//NOTES: the WtfUiCallback is for hooking events, not for close event, please NOTE !!!
+    //NOTES: the WtfUiCallback is for hooking events, not for close event, please NOTE !!!
     public static void startUi(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
         checkAppConfig();
 
@@ -871,32 +884,74 @@ public class WtfTools {
         return null;
     }
 
+    public static String md5(String str) {
+        String rt = null;
+        try {
+            // 生成一个MD5加密计算摘要
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            // 计算md5函数
+            md.update(str.getBytes());
+            // digest()最后确定返回md5 hash值，返回值为8为字符串。因为md5 hash值是16位的hex值，实际上就是8位的字符
+            // BigInteger函数则将8位的字符串转换成16位hex值，用字符串来表示；得到字符串形式的hash值
+            rt = new BigInteger(1, md.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return rt;
+    }
+
+    //简易全局事件机制，自动支持 TTL
+
+    //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
+    public void on(String eventName, WtfEventCallback handler, JSO extraData, int ttl) {
+        Log.v(LOGTAG, " on(ttl)" + ttl);
+    }
+
+    public void on(String eventName) {
+        //TODO
+        Log.v(LOGTAG, " on()" + eventName);
+    }
+
+    public void off(String eventName) {
+        //off(eventName, null);
+    }
+
+    public void off(String eventName, WtfCallback cb) {
+        //TODO
+        Log.v(LOGTAG, " off()" + eventName);
+    }
+
+    public void trigger(String eventName, JSO extraData) {
+        //TODO
+        Log.v(LOGTAG, " trigger()" + eventName);
+    }
+
     //public native String stringFromJNI();
 
-    class nativewtf {
-        private Context _context;
-
-        public nativewtf(Context context) {
-            _context = context;
-        }
-
-        @JavascriptInterface
-        public String getVersion() {
-            //Log.v(LOGTAG, " getVersion()");
-            return "20161216";
-        }
-
-//        @JavascriptInterface
-//        public String testJNI() {
-//            //Log.v(LOGTAG, " testJNI()");
-//            return stringFromJNI();//see .cpp
+//    class nativewtf {
+//        private Context _context;
+//
+//        public nativewtf(Context context) {
+//            _context = context;
 //        }
-
-        @JavascriptInterface
-        public void quickShowMsgMain(String s) {
-            WtfTools.quickShowMsgMain(s);
-        }
-    }
+//
+//        @JavascriptInterface
+//        public String getVersion() {
+//            //Log.v(LOGTAG, " getVersion()");
+//            return "20161216";
+//        }
+//
+////        @JavascriptInterface
+////        public String testJNI() {
+////            //Log.v(LOGTAG, " testJNI()");
+////            return stringFromJNI();//see .cpp
+////        }
+//
+//        @JavascriptInterface
+//        public void quickShowMsgMain(String s) {
+//            WtfTools.quickShowMsgMain(s);
+//        }
+//    }
 }
 
 //stub

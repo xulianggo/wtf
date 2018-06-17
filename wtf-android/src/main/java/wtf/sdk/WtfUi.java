@@ -27,6 +27,7 @@ public class WtfUi extends Activity {
     public static WtfUiCallback tmpUiCallback = null;
     private JSO _uiData;
     private JSO _responseData;
+    //private
     private Map<String, WtfCallback> _cba = new HashMap<String, WtfCallback>();
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -133,11 +134,21 @@ public class WtfUi extends Activity {
 			finish();
 		}
 
-    //TODO 暂时只支持一对一 on/trigger， 以后有需求再改一对多（类似jQuery）
+    //TODO 暂快做一对多!!!
     public void on(String eventName, WtfCallback cb) {
         Log.v(LOGTAG, "Hybrid.on( " + eventName + ")");
         _cba.remove(eventName);
         _cba.put(eventName, cb);
+    }
+
+//TODO fix it
+    public void off(String eventName, WtfCallback cb){
+        _cba.remove(eventName);
+    }
+
+    //TODO fix it
+    public void off(String eventName){
+        _cba.remove(eventName);
     }
 
     public boolean trigger(String eventName, JSO o) {

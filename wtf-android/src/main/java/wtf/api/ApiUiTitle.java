@@ -4,17 +4,24 @@ package wtf.api;
 
 import java.util.Date;
 
-import wtf.sdk.*;
+import wtf.sdk.JSO;
+import wtf.sdk.WtfApi;
+import wtf.sdk.WtfCallback;
+import wtf.sdk.WtfHandler;
 
 public class ApiUiTitle extends WtfApi {
-    //    final private static String LOGTAG = (((new Throwable()).getStackTrace())[0]).getClassName();
+    final private static String LOGTAG = (((new Throwable()).getStackTrace())[0]).getClassName();
+
     @Override
-    public void handler(JSO jso, WtfCallback apiCallback) {
-
-        jso.setChild("STS", JSO.s2o("TODO"));
-        jso.setChild("pong", JSO.s2o("" + (new Date()).getTime()));
-        apiCallback.onCallBack(jso);
-        //handler(JSO.o2s(jso), cbFunc);
+    public WtfHandler getHandler() {
+        return new WtfHandler() {
+            @Override
+            public void onCall(JSO jso, WtfCallback responseCallback) {
+                jso.setChild("STS", JSO.s2o("TODO"));
+                jso.setChild("pong", JSO.s2o("" + (new Date()).getTime()));
+                responseCallback.onCallBack(jso);
+                //handler(JSO.o2s(jso), cbFunc);
+            }
+        };
     }
-
 }

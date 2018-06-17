@@ -117,7 +117,7 @@
         return;
     }
     
-    HybridHandler handler = caller.uiApiHandlers[handlerName_s];
+    WtfHandler handler = caller.uiApiHandlers[handlerName_s];
     
     if (nil==handler) {
         NSLog(@" !!! found no handler for %@", handlerName_s);

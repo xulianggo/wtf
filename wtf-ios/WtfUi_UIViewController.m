@@ -12,13 +12,13 @@
 //@dynamic uiEventHandlers;
 //:}
 
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
 {
     [self on:eventName :handler :nil];
     return self;
 }
 
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData
 {
     if(nil==handler){
         return self;
@@ -40,7 +40,7 @@
     if(nil!=dict){
         NSUInteger c =[dict count];
         for(int i=0; i<c; i++){
-            HybridEventHandler hdl=[dict objectAtIndex:i];
+            WtfEventHandler hdl=[dict objectAtIndex:i];
             if(nil!=hdl){
                 if(nil==triggerData) triggerData=[JSO id2o:@{}];
                 NSLog(@"with triggerData %@", [triggerData toString]);

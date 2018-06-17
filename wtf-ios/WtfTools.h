@@ -67,7 +67,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 + (void) quickShowMsgMain :(NSString *)msg callback:(WtfBlock)callback;
 
-+ (void) appConfirm:(NSString *)msg handlerYes:(HybridDialogCallback) handlerYes handlerNo:(HybridDialogCallback) handlerNo;
++ (void) appConfirm:(NSString *)msg handlerYes:(WtfDialogCallback) handlerYes handlerNo:(WtfDialogCallback) handlerNo;
 
 + (void) suspendApp;
 + (void) KillAppSelf;
@@ -115,10 +115,10 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 @property (strong, nonatomic) WtfCache* eventHandlers;
 //@property (strong, nonatomic) NSMutableDictionary* eventHandlers;
 
--(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
--(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
--(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
+-(instancetype) on:(NSString*)eventName :(WtfEventHandler) handler;
+-(instancetype) on:(NSString*)eventName :(WtfEventHandler) handler :(JSO *)initData;
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
+-(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler;
 -(instancetype) off:(NSString*)eventName;
 
 -(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;

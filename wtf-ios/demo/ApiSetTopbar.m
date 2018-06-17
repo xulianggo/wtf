@@ -4,7 +4,7 @@
 
 @implementation ApiSetTopbar
 
-- (HybridHandler) getHandler
+- (WtfHandler) getHandler
 {
     return ^(JSO * jso, WtfCallback responseCallback) {
         

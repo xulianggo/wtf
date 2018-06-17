@@ -19,12 +19,13 @@
 typedef void (^WtfCallback)(JSO* responseData);
 
 //TODO change to java-interface-alike stuff
-typedef void (^HybridHandler)(JSO * jso, WtfCallback responseCallback);
+typedef void (^WtfHandler)(JSO * jso, WtfCallback responseCallback);
 
-typedef void (^HybridDialogCallback)(UIAlertAction* action);
+//sync android WtfDialogCallback
+typedef void (^WtfDialogCallback)(UIAlertAction* action);
 
 //TODO change to java-interface-alike stuff
-typedef void (^HybridEventHandler)(NSString *eventName, JSO* extraData);
+typedef void (^WtfEventHandler)(NSString *eventName, JSO* extraData);
 
 typedef void (^WtfBlock)(void);
 

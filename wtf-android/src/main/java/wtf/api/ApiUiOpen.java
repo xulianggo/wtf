@@ -2,37 +2,49 @@ package wtf.api;
 
 //@doc https://szu-bdi.gitbooks.io/app-hybrid/content/
 
-import wtf.sdk.*;
+import wtf.sdk.JSO;
+import wtf.sdk.WtfApi;
+import wtf.sdk.WtfCallback;
+import wtf.sdk.WtfHandler;
+import wtf.sdk.WtfTools;
+import wtf.sdk.WtfUi;
+import wtf.sdk.WtfUiCallback;
 
 public class ApiUiOpen extends WtfApi {
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
 
     @Override
-    public void handler(JSO jso, final WtfCallback apiCallback) {
+    public WtfHandler getHandler() {
+        return new WtfHandler() {
 
-        String t = jso.getChild("name").toString();
-        String uiName = (!WtfTools.isEmptyString(t)) ? t : "UiContent";//default to UiContent
-
-        WtfTools.startUi(uiName, jso.toString(true), getCallerUi(), new WtfUiCallback() {
             @Override
-            public void onCallBack(final WtfUi ui) {
+            public void onCall(JSO jso, final WtfCallback responseCallback) {
 
-                //listen "close" event
-								//TODO make it constant as WtfEventWhenClose
-                ui.on(WtfTools.WtfEventWhenClose, new WtfCallback() {
+                String t = jso.getChild("name").toString();
+                String uiName = (!WtfTools.isEmptyString(t)) ? t : "UiContent";//default to UiContent
 
+                WtfTools.startUi(uiName, jso.toString(true), getCallerUi(), new WtfUiCallback() {
                     @Override
-                    public void onCallBack(JSO jsoCallback) {
+                    public void onCallBack(final WtfUi ui) {
 
-                        //manually close it
-                        ui.finish();
+                        //listen "close" event
+                        //TODO make it constant as WtfEventWhenClose
+                        ui.on(WtfTools.WtfEventWhenClose, new WtfCallback() {
 
-                        //api callback
-                        if (null != apiCallback)
-                            apiCallback.onCallBack(jsoCallback);
+                            @Override
+                            public void onCallBack(JSO jsoCallback) {
+
+                                //manually close it
+                                ui.finish();
+
+                                //api callback
+                                if (null != responseCallback)
+                                    responseCallback.onCallBack(jsoCallback);
+                            }
+                        });
                     }
                 });
             }
-        });
+        };
     }
 }

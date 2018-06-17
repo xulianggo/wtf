@@ -1,7 +1,7 @@
 #import "ApiDefaultInit.h"
 #import "WtfTools.h"
 @implementation ApiDefaultInit
-- (HybridHandler) getHandler{
+- (WtfHandler) getHandler{
     return ^(JSO *ddd, WtfCallback responseCallback) {
         //dispatch_async(dispatch_get_main_queue(), ^{
         

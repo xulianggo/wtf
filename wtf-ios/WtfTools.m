@@ -208,8 +208,8 @@ SINGLETON_shareInstance(WtfTools);
 
 //IOS 8 +
 + (void)appConfirm:(NSString *)msg
-                 handlerYes:(HybridDialogCallback) handlerYes
-                  handlerNo:(HybridDialogCallback) handlerNo
+                 handlerYes:(WtfDialogCallback) handlerYes
+                  handlerNo:(WtfDialogCallback) handlerNo
 {
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:msg message:@"" preferredStyle:UIAlertControllerStyleAlert];
@@ -532,13 +532,13 @@ SINGLETON_shareInstance(WtfTools);
 
 ////////////////////////
 
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
 {
     [self on:eventName :handler :nil];
     return self;
 }
 
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData
 {
     if(nil==handler){
         return self;
@@ -558,7 +558,7 @@ SINGLETON_shareInstance(WtfTools);
     return self;
 }
 
--(instancetype) on:(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire
+-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire
 {
     if(nil==handler){
         return self;
@@ -588,7 +588,7 @@ SINGLETON_shareInstance(WtfTools);
     if(nil!=dict){
         NSUInteger c =[dict count];
         for(int i=0; i<c; i++){
-            HybridEventHandler hdl=[dict objectAtIndex:i];
+            WtfEventHandler hdl=[dict objectAtIndex:i];
             if(nil!=hdl){
                 if(nil==triggerData) triggerData=[JSO id2o:@{}];
                 NSLog(@"with triggerData %@", [triggerData toString]);
@@ -600,7 +600,7 @@ SINGLETON_shareInstance(WtfTools);
 }
 
 //remove the link to the handler only....
--(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler
+-(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler
 {
     if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];

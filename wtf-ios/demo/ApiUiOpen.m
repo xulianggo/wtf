@@ -4,7 +4,7 @@
 
 @implementation ApiUiOpen
 
-- (HybridHandler) getHandler{
+- (WtfHandler) getHandler{
     return ^(JSO *data, WtfCallback responseCallback) {
         WtfUi caller=self.currentUi;
         

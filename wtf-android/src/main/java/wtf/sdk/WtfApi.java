@@ -14,5 +14,6 @@ abstract public class WtfApi {
     }
 
     //@NOTES: diff with iOS, but have the same meaning
-    abstract public void handler(JSO jso, WtfCallback cbFunc);
+    //abstract public void handler(JSO jso, WtfCallback cbFunc);
+    abstract public WtfHandler getHandler();
 }

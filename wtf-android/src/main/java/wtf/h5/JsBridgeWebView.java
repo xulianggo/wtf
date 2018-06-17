@@ -2,7 +2,6 @@ package wtf.h5;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -28,6 +27,7 @@ import java.util.Map;
 import wtf.sdk.JSO;
 import wtf.sdk.WtfApi;
 import wtf.sdk.WtfCallback;
+import wtf.sdk.WtfDialogCallback;
 import wtf.sdk.WtfTools;
 import wtf.sdk.WtfUi;
 
@@ -189,14 +189,15 @@ public class JsBridgeWebView extends WebView {
                 }
 
             };
-            final WtfApi handler = messageHandlers.get(handlerName);
+            final WtfApi api = messageHandlers.get(handlerName);
 
-            if (handler != null) {
+            if (api != null) {
                 (new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        handler.handler(JSO.s2o(param_s), responseFunction);
+                        //handler.onCall(JSO.s2o(param_s), responseFunction);
+                        api.getHandler().onCall(JSO.s2o(param_s), responseFunction);
                     }
                 })).start();
             } else {
@@ -220,9 +221,9 @@ public class JsBridgeWebView extends WebView {
         @Override
         public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
             try {
-                WtfTools.appAlert(_ctx, message, new AlertDialog.OnClickListener() {
+                WtfTools.appAlert(_ctx, message, new WtfDialogCallback() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onCall(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         result.confirm();
                     }
@@ -236,14 +237,14 @@ public class JsBridgeWebView extends WebView {
 
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult jsrst) {
-            WtfTools.appConfirm(_ctx, message, new AlertDialog.OnClickListener() {
+            WtfTools.appConfirm(_ctx, message, new WtfDialogCallback() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onCall(DialogInterface dialog, int which) {
                     jsrst.confirm();
                 }
-            }, new AlertDialog.OnClickListener() {
+            }, new WtfDialogCallback() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onCall(DialogInterface dialog, int which) {
                     jsrst.cancel();
                 }
             });
