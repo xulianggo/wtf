@@ -375,7 +375,7 @@ public class WtfTools {
                 //progressUploadListener((int) ((length * 100) / mTtotalSize));
                 int i = ((int) ((length * 100) / mTtotalSize));
                 if (null != progressUploadListener)
-                    progressUploadListener.onCallBack(JSO.s2o("{\"i\":" + i + "}"));
+                    progressUploadListener.onCall(JSO.s2o("{\"i\":" + i + "}"));
                 Log.v(LOGTAG, "fileUpload ... " + i);
 
                 mbytesAvailable = fileInputStream.available();
@@ -387,7 +387,7 @@ public class WtfTools {
             outputStream.writeBytes(mLineEnd);
             outputStream.writeBytes(mTwoHyphens + boundary + mTwoHyphens + mLineEnd);
             if (null != progressUploadListener)
-                progressUploadListener.onCallBack(JSO.s2o("{\"i\":" + 100 + "}"));
+                progressUploadListener.onCall(JSO.s2o("{\"i\":" + 100 + "}"));
             Log.v(LOGTAG, "fileUpload ... " + (100));
 
             // Responses from the server (code and message)
@@ -903,7 +903,7 @@ public class WtfTools {
     //简易全局事件机制，自动支持 TTL
 
     //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
-    public void on(String eventName, WtfEventCallback handler, JSO extraData, int ttl) {
+    public void on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
         Log.v(LOGTAG, " on(ttl)" + ttl);
     }
 

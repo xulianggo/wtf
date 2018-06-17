@@ -28,11 +28,11 @@ public class ApiWebRequest extends WtfApi {
                     rt.setChild("STS", "OK");
                     rt.setChild("len", "HybridTools.getStrLen(rt_s)");
                     rt.setChild("s", rt_s);
-                    responseCallback.onCallBack(rt);
+                    responseCallback.onCall(rt);
                     return;
                 } else {
                     rt.setChild("STS", "KO");
-                    responseCallback.onCallBack(rt);
+                    responseCallback.onCall(rt);
                 }
             }
         };

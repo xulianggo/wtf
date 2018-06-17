@@ -53,7 +53,7 @@ public class WtfUi extends Activity {
         //for the open new UI.
         if (tmpUiCallback != null) {
             try {
-                tmpUiCallback.onCallBack(this);
+                tmpUiCallback.onCall(this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -157,7 +157,7 @@ public class WtfUi extends Activity {
             Log.v(LOGTAG, "trigger() found no handler for " + eventName);
             return false;//have no handler
         } else {
-            cb.onCallBack(o);
+            cb.onCall(o);
             return true;//have handler...
         }
     }

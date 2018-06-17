@@ -18,7 +18,7 @@ public class ApiPingPong extends WtfApi {
 
                 jso.setChild("STS", JSO.s2o("TODO"));
                 jso.setChild("pong", JSO.s2o("" + (new Date()).getTime()));
-                responseCallback.onCallBack(jso);
+                responseCallback.onCall(jso);
             }
 
         };

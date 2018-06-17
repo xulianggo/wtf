@@ -162,7 +162,7 @@ public class JsBridgeWebView extends WebView {
             final WtfCallback responseFunction = new WtfCallback() {
 
                 @Override
-                public void onCallBack(final JSO jso) {
+                public void onCall(final JSO jso) {
                     //这里 runOnUiThread 是经验，要在它的主线程上面来 evaluateJavascript、loadUrl
                     ((Activity) _context).runOnUiThread(new Runnable() {
                         //@TargetApi(Build.VERSION_CODES.KITKAT)

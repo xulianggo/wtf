@@ -53,7 +53,7 @@ public class ApiDefaultInit extends WtfApi {
                 rt.setChild("myapp_s", myapp_s);
 
                 //callerUi
-                responseCallback.onCallBack(rt);
+                responseCallback.onCall(rt);
             }
         };
 

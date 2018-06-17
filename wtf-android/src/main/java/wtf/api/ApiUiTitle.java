@@ -19,7 +19,7 @@ public class ApiUiTitle extends WtfApi {
             public void onCall(JSO jso, WtfCallback responseCallback) {
                 jso.setChild("STS", JSO.s2o("TODO"));
                 jso.setChild("pong", JSO.s2o("" + (new Date()).getTime()));
-                responseCallback.onCallBack(jso);
+                responseCallback.onCall(jso);
                 //handler(JSO.o2s(jso), cbFunc);
             }
         };

@@ -18,7 +18,7 @@ public class ApiUiClose extends WtfApi {
 
                 ui.closeUi(jso);
 
-                if (null != responseCallback) responseCallback.onCallBack(jso);
+                if (null != responseCallback) responseCallback.onCall(jso);
             }
         };
     }

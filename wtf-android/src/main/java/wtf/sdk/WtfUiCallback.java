@@ -2,5 +2,5 @@ package wtf.sdk;
 
 
 public interface WtfUiCallback {
-    public void onCallBack(WtfUi ui);
+    public void onCall(WtfUi ui);
 }
