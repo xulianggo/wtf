@@ -112,13 +112,18 @@
         NSLog(@" !!! handler %@ is not in auth list %@", handlerName_s, keys);
         return;
     }
-    if(nil==caller.uiApiHandlers) {
+    if(nil==caller.apiMap) {
         NSLog(@" !!! caller.myApiHandlers is nil !!! %@", caller.uiData);
         return;
     }
     
-    WtfHandler handler = caller.uiApiHandlers[handlerName_s];
-    
+    //WtfHandler handler = caller.apiMap[handlerName_s];
+    WtfApi* api = caller.apiMap[handlerName_s];
+    if (nil==api) {
+        NSLog(@" !!! found no api for %@", handlerName_s);
+        return;
+    }
+    WtfHandler handler = [api getHandler];
     if (nil==handler) {
         NSLog(@" !!! found no handler for %@", handlerName_s);
         return;
@@ -148,6 +153,7 @@
      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
      ^{
          @try {
+             //like WtfHandler.onCall()
              handler([JSO s2o:[param toString]], callback);
          } @catch (NSException *exception) {
              callback([JSO id2o:@{@"STS":@"KO",@"errmsg":[exception reason]}]);
@@ -505,7 +511,7 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
 //register will cache the handler inside the memory for speeding up.  so it's important
 - (void)registerHandlerApi{
     
-    self.uiApiHandlers = [NSMutableDictionary dictionary];
+    self.apiMap = [NSMutableDictionary dictionary];
     
     // get the appConfig:
     JSO *appConfig = [WtfTools wholeAppConfig];
@@ -516,7 +522,8 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
         NSString *apiname = [[api_mapping getChild:kkk] toString] ;
         WtfApi *api = [WtfTools getHybridApi:apiname];
         api.currentUi = self;
-        self.uiApiHandlers[kkk] = [api getHandler];//TODO see android registerHandler()
+        //self.apiMap[kkk] = [api getHandler];//TODO see android registerHandler()
+        self.apiMap[kkk] = api;
     }
 }
 

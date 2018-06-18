@@ -62,7 +62,6 @@ TODO on/off/trigger of android
 +(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
 +(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
 +(instancetype) off:(NSString*)eventName;
-
 +(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
 +(instancetype) trigger :(NSString *)eventName;
 ```

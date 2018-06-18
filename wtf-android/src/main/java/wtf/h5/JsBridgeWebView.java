@@ -35,7 +35,7 @@ import wtf.sdk.WtfUi;
 public class JsBridgeWebView extends WebView {
     final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
 
-    Map<String, WtfApi> messageHandlers = new HashMap<String, WtfApi>();
+    Map<String, WtfApi> apiMap = new HashMap<String, WtfApi>();
     private nativejsb _nativejsb = null;
 
     public JsBridgeWebView(Context context, AttributeSet attrs) {
@@ -137,7 +137,7 @@ public class JsBridgeWebView extends WebView {
 
     public void registerHandler(String handlerName, WtfApi handler) {
         if (handler != null) {
-            messageHandlers.put(handlerName, handler);
+            apiMap.put(handlerName, handler);
         }
     }
 
@@ -189,7 +189,7 @@ public class JsBridgeWebView extends WebView {
                 }
 
             };
-            final WtfApi api = messageHandlers.get(handlerName);
+            final WtfApi api = apiMap.get(handlerName);
 
             if (api != null) {
                 (new Thread(new Runnable() {

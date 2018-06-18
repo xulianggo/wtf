@@ -9,14 +9,10 @@
 @protocol WtfUiProtocol <NSObject>
 
 @property (strong, nonatomic) JSO *uiData;
-
 @property (strong, nonatomic) NSString *uiName;
-
 @property (strong, nonatomic) JSO *responseData;
-
-@property (strong, nonatomic) NSMutableDictionary* uiApiHandlers;
-
-@property (strong, nonatomic) NSMutableDictionary* uiEventHandlers;
+@property (strong, nonatomic) NSMutableDictionary* apiMap;
+@property (strong, nonatomic) NSMutableDictionary* eventMap;
 
 @required
 

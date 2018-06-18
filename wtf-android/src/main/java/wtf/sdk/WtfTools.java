@@ -113,12 +113,15 @@ public class WtfTools {
         getJSWV().evaluateJavascript(jsString);
     }
 
+    //private static WtfTools _shareInstance = new WtfTools();
+//    private static Object _shareInstanceLock = new Object();
     private static WtfTools _shareInstance;
 
-    //尽量在本类中用，放外部用只是很少的情况...
     public static WtfTools shareInstance() {
-        synchronized (_shareInstance) {
-            if (null == _shareInstance) _shareInstance = new WtfTools();
+        //return _shareInstance;
+        if (_shareInstance != null) return _shareInstance;
+        synchronized (WtfTools.class) {
+            _shareInstance = new WtfTools();
         }
         return _shareInstance;
     }

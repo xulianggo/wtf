@@ -4,14 +4,6 @@
 
 @implementation WtfUi_UIViewController
 
-//xcode 9+ fix some warning when building:{
-//@dynamic responseData;
-//@dynamic uiName;
-//@dynamic uiData;
-//@dynamic uiApiHandlers;
-//@dynamic uiEventHandlers;
-//:}
-
 -(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
 {
     [self on:eventName :handler :nil];
@@ -23,20 +15,20 @@
     if(nil==handler){
         return self;
     }
-    if(nil==self.uiEventHandlers){
-        self.uiEventHandlers=[NSMutableDictionary dictionary];
+    if(nil==self.eventMap){
+        self.eventMap=[NSMutableDictionary dictionary];
     }
-    if(nil==self.uiEventHandlers[eventName]){
-        self.uiEventHandlers[eventName]=[NSMutableArray array];
+    if(nil==self.eventMap[eventName]){
+        self.eventMap[eventName]=[NSMutableArray array];
     }
-    [self.uiEventHandlers[eventName] addObject:handler];
+    [self.eventMap[eventName] addObject:handler];
     return self;
 }
 
 -(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData
 {
     NSLog(@"trigger(%@) is called.", eventName);
-    NSArray * dict =self.uiEventHandlers[eventName];
+    NSArray * dict =self.eventMap[eventName];
     if(nil!=dict){
         NSUInteger c =[dict count];
         for(int i=0; i<c; i++){
@@ -53,10 +45,10 @@
 
 -(instancetype) off :(NSString *)eventName
 {
-    if(nil==self.uiEventHandlers){
-        self.uiEventHandlers=[NSMutableDictionary dictionary];
+    if(nil==self.eventMap){
+        self.eventMap=[NSMutableDictionary dictionary];
     }
-    self.uiEventHandlers[eventName]=[NSMutableArray array];
+    self.eventMap[eventName]=[NSMutableArray array];
     return self;
 }
 
