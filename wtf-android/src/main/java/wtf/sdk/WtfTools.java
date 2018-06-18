@@ -70,37 +70,18 @@ public class WtfTools {
 
     private static Map<String, Object> _memStore = new HashMap<String, Object>();
     //    private static Map<String, Object> _memStore = new HashMap<String, Object>();
-    private static JSO _jAppConfig = null;//new info.cmptech.JSO();
+    //private static JSO _jAppConfig = null;//new info.cmptech.JSO();
+    private JSO _jAppConfig;
+    private JSO _i18n;
     private static String _localWebRoot = "";
-    private Context androidContext;
+
+//    private Context androidContext;
 
     private static JsEngineWebView _jswv = null;
 
-    private WtfTools(Context ctx) {
-        this.androidContext = ctx;
-
-//        try {
-//            jswv = new JsEngineWebView(this.androidContext);
-//
-//            //inject the native object for WtfTools.js only !!!
-//            jswv.addJavascriptInterface(new nativewtf(this.androidContext), "native");
-//
-//            //TODO 错了，不要在这里运行，应该另外弄....
-//            //init with the WtfTools.js
-//            jswv.evaluateJavascript(readAssetInStr("platform.js", true), new ValueCallback<String>() {
-//                @Override
-//                public void onReceiveValue(String json_string) {
-//                    Log.v(LOGTAG, " WtfTools.js => " + json_string);
-//                }
-//            });
-//
-//        } catch (Throwable t) {
-//            t.printStackTrace();
-//            String sWarning = t.getMessage();
-//            quickShowMsgMain(sWarning);
-//            //wtf.KillAppSelf();
-//        }
-    }
+//    private WtfTools(Context ctx) {
+//        this.androidContext = ctx;
+//    }
 
 
     //default Root JSWV....
@@ -134,8 +115,11 @@ public class WtfTools {
 
     private static WtfTools _shareInstance;
 
-    public static WtfTools shareInstance(Context ctx) {
-        if (null == _shareInstance) _shareInstance = new WtfTools(ctx);
+    //尽量在本类中用，放外部用只是很少的情况...
+    public static WtfTools shareInstance() {
+        synchronized (_shareInstance) {
+            if (null == _shareInstance) _shareInstance = new WtfTools();
+        }
         return _shareInstance;
     }
 
@@ -467,6 +451,7 @@ public class WtfTools {
             StringBuilder sb = new StringBuilder();
             do {
                 line = bufferedReader.readLine();
+                //TMP SOLUTION REMOVE COMMENTS OF LEADING //
                 if (line != null && !line.matches("^\\s*\\/\\/.*")) {
                     sb.append(line);
                 }
@@ -490,29 +475,32 @@ public class WtfTools {
         return null;
     }
 
-    //init (replace the app config)
-    public static void initAppConfig(JSO o) {
-        _jAppConfig = o;
-    }
-
     public static JSO wholeAppConfig() {
-        return _jAppConfig;
-    }
-
-    public static void setAppConfig(String K, JSO V) {
-        _jAppConfig.setChild(K, V);
-    }
-
-    public static void checkAppConfig() {
-        if (_jAppConfig == null || _jAppConfig.isNull()) {
+        WtfTools theWtfTool = shareInstance();
+        if (theWtfTool._jAppConfig == null) {
             final String sJsonConf = readAssetInStrWithoutComments("config.json");
             final JSO o = JSO.s2o(sJsonConf);
-            initAppConfig(o);
+            theWtfTool._jAppConfig = o;
+            theWtfTool._i18n = o.getChild("I18N");
         }
+        return theWtfTool._jAppConfig;
     }
 
+//    public static void setAppConfig(String K, JSO V) {
+//        _jAppConfig.setChild(K, V);
+//    }
+
+//    public static void checkAppConfig() {
+//        if (_jAppConfig == null || _jAppConfig.isNull()) {
+//            final String sJsonConf = readAssetInStrWithoutComments("config.json");
+//            final JSO o = JSO.s2o(sJsonConf);
+//            //initAppConfig(o);
+//            _jAppConfig = o
+//        }
+//    }
+
     public static JSO getAppConfig(String k) {
-        return _jAppConfig.getChild(k);
+        return wholeAppConfig().getChild(k);
     }
 
     public static boolean isEmptyString(String s) {
@@ -576,7 +564,7 @@ public class WtfTools {
     }
 
     public static void startJs(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
-        checkAppConfig();
+        //checkAppConfig();
         //TODO 抄 startUi()
         String js_str = readAssetInStr(name);
         evalJs(js_str);
@@ -588,7 +576,7 @@ public class WtfTools {
 
     //NOTES: the WtfUiCallback is for hooking events, not for close event, please NOTE !!!
     public static void startUi(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
-        checkAppConfig();
+        //checkAppConfig();
 
         JSO uia = getAppConfig(UI_MAPPING);
         if (uia == null || uia.isNull()) {
@@ -900,28 +888,30 @@ public class WtfTools {
         return rt;
     }
 
-    //简易全局事件机制，自动支持 TTL
+    //简易全局事件机制，支持 TTL
+
+    private Map<String, WtfCallback> eventHandlers = new WtfCache();
 
     //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
     public void on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
         Log.v(LOGTAG, " on(ttl)" + ttl);
     }
 
-    public void on(String eventName, WtfEventHandler handler) {
+    public static void on(String eventName, WtfEventHandler handler) {
         //TODO
         Log.v(LOGTAG, " on()" + eventName);
     }
 
-    public void off(String eventName) {
+    public static void off(String eventName) {
         //off(eventName, null);
     }
 
-    public void off(String eventName, WtfCallback cb) {
+    public static void off(String eventName, WtfCallback cb) {
         //TODO
         Log.v(LOGTAG, " off()" + eventName);
     }
 
-    public void trigger(String eventName, JSO extraData) {
+    public static void trigger(String eventName, JSO extraData) {
         //TODO
         Log.v(LOGTAG, " trigger()" + eventName);
     }

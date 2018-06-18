@@ -7,37 +7,37 @@
 
 //NOTES, in ObjC, protocol = interface, interface = class, yes, WTF !
 @protocol WtfUiProtocol <NSObject>
-    
-    @property (strong, nonatomic) JSO *uiData;
-    
-    @property (strong, nonatomic) NSString *uiName;
-    
-    @property (strong, nonatomic) JSO *responseData;
-    
-    @property (strong, nonatomic) NSMutableDictionary* uiApiHandlers;
-    
-    @property (strong, nonatomic) NSMutableDictionary* uiEventHandlers;
-    
-    @required
-    
-    @optional
-    
+
+@property (strong, nonatomic) JSO *uiData;
+
+@property (strong, nonatomic) NSString *uiName;
+
+@property (strong, nonatomic) JSO *responseData;
+
+@property (strong, nonatomic) NSMutableDictionary* uiApiHandlers;
+
+@property (strong, nonatomic) NSMutableDictionary* uiEventHandlers;
+
+@required
+
+@optional
+
 -(void) initUi;//do init
 -(void) closeUi;// trigger event close => finishUi
 -(void) closeUi :(JSO*)resultJSO;
 -(BOOL) finishUi;//action finish/close
 
 -(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler;
-    //for some case, some initData is sent and use when trigger
+//for some case, some initData is sent and use when trigger
 -(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData;
 -(instancetype) off:(NSString *)eventName;
-    
+
 -(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
 -(instancetype) trigger :(NSString *)eventName;
-    
-    //for top bar buttons:
+
+//for top bar buttons:
 -(void) resetTopBarBtn;
-    
+
 -(void) resetTopBar :(NSString *)mode;
 -(void) resetTopBarStatus;
 -(void) hideTopStatusBar;
@@ -45,9 +45,9 @@
 -(void) hideTopBar;
 -(void) showTopBar;
 - (void)setTopBarTitle:(NSString *)title;
-    
+
 - (void) evalJs :(NSString *)js_s;
-    
-    @end
+
+@end
 
 #endif /* WtfUi_h */

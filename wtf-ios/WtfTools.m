@@ -12,24 +12,11 @@ SINGLETON_shareInstance(WtfTools);
 {
     [WtfTools shareInstance].lang=lang;
 }
-//+ (void)checkAppConfig{
-//
-//    WtfTools *theWtfTool = [self shareInstance];
-//    if(nil==theWtfTool._jAppConfig){
-//        //TODO [WtfTools stripComment:s]
-//        NSString *s =[self readAssetInStr:@"config.json" :YES];
-//        if(s){
-//            theWtfTool._jAppConfig = [JSO s2o:s];
-//            theWtfTool._i18n =[theWtfTool._jAppConfig getChild:@"I18N"];
-//        }
-//    }
-//    //TODO if not ok, need to alert the program ...
-//}
 
 + (void) startUi :(NSString *)strUiName
          initData:(JSO *) initData
         objCaller:(WtfUi )objCaller
-         //callback:(void (^)(WtfUi ui))callback
+//callback:(void (^)(WtfUi ui))callback
          callback:(WtfUiCallback)callback
 {
     WtfUi  ui = [self startUi:strUiName initData:initData objCaller:objCaller];
@@ -39,8 +26,8 @@ SINGLETON_shareInstance(WtfTools);
 }
 
 + (WtfUi ) startUi :(NSString *)strUiName
-              initData:(JSO *) initData
-             objCaller:(WtfUi)objCaller
+           initData:(JSO *) initData
+          objCaller:(WtfUi)objCaller
 {
     //[self checkAppConfig];
     
@@ -134,7 +121,6 @@ SINGLETON_shareInstance(WtfTools);
     
     WtfTools *theWtfTool = [self shareInstance];
     if(nil==theWtfTool._jAppConfig){
-        //TODO [WtfTools stripComment:s]
         NSString *s =[self readAssetInStr:@"config.json" :YES];
         if(s){
             theWtfTool._jAppConfig = [JSO s2o:s];
@@ -175,7 +161,7 @@ SINGLETON_shareInstance(WtfTools);
 
 //TODO make it as a hint ... as what android did???!!!
 + (void)quickShowMsgMain:(NSString *)msg{
-
+    
     [self quickShowMsgMain:msg callback:^(){
         NSLog(@" completion after quickShowMsgMain()");
     }];
@@ -212,8 +198,8 @@ SINGLETON_shareInstance(WtfTools);
 
 //IOS 8 +
 + (void)appConfirm:(NSString *)msg
-                 handlerYes:(WtfDialogCallback) handlerYes
-                  handlerNo:(WtfDialogCallback) handlerNo
+        handlerYes:(WtfDialogCallback) handlerYes
+         handlerNo:(WtfDialogCallback) handlerNo
 {
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:msg message:@"" preferredStyle:UIAlertControllerStyleAlert];
@@ -452,7 +438,7 @@ SINGLETON_shareInstance(WtfTools);
     if(nil==jso)[userDefaults removeObjectForKey:key];
     else [userDefaults setObject:[jso toString] forKey:key];
     //if(autosave){
-        [userDefaults synchronize];
+    [userDefaults synchronize];
     //}
 }
 
