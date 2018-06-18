@@ -155,7 +155,7 @@ public class WtfUi extends Activity {
     }
 
     //TODO fix it
-    public void off(String eventName, WtfCallback cb) {
+    public void off(String eventName, WtfEventHandler cb) {
         eventMap.remove(eventName);
     }
 

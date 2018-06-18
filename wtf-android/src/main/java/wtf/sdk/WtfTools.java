@@ -893,74 +893,50 @@ public class WtfTools {
 
     //简易全局事件机制，支持 TTL
 
-    private Map<String, WtfEventHandler> eventMap = new WtfCache<String, WtfEventHandler>();// new HashMap<>();//new WtfCache<String, WtfCallback>();
+    //TODO 跟 iOS 同步...
+    private Map<String, WtfEventHandler> eventMap = new WtfCache<>();// new HashMap<>();//new WtfCache<String, WtfCallback>();
 
     //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
     public static void on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
         //eventMap.put(eventName,)
         Log.v(LOGTAG, " on(ttl)" + ttl);
+        WtfTools theWtfTool = WtfTools.shareInstance();
+        theWtfTool.eventMap.remove(eventName);
+        theWtfTool.eventMap.put(eventName, handler);
     }
 
     public static void on(String eventName, WtfEventHandler handler) {
-        //TODO
         Log.v(LOGTAG, " on()" + eventName);
+        WtfTools theWtfTool = WtfTools.shareInstance();
+        theWtfTool.eventMap.remove(eventName);
+        theWtfTool.eventMap.put(eventName, handler);
     }
 
     public static void off(String eventName) {
-        //off(eventName, null);
+        Log.v(LOGTAG, " off()" + eventName);
+        WtfTools theWtfTool = WtfTools.shareInstance();
+        theWtfTool.eventMap.remove(eventName);
     }
 
-    public static void off(String eventName, WtfCallback cb) {
-        //TODO
+    //TODO just remove the noted cb....
+    public static void off(String eventName, WtfEventHandler cb) {
         Log.v(LOGTAG, " off()" + eventName);
+        WtfTools theWtfTool = WtfTools.shareInstance();
+        theWtfTool.eventMap.remove(eventName);
     }
 
     public static void trigger(String eventName, JSO extraData) {
         //TODO
         Log.v(LOGTAG, " trigger()" + eventName);
+        WtfTools theWtfTool = WtfTools.shareInstance();
+        WtfEventHandler cb = theWtfTool.eventMap.get(eventName);
+        if (cb != null) {
+            cb.onCall(eventName, extraData);
+            //return true;
+        }
+        //return false;
     }
 
     //public native String stringFromJNI();
 
-//    class nativewtf {
-//        private Context _context;
-//
-//        public nativewtf(Context context) {
-//            _context = context;
-//        }
-//
-//        @JavascriptInterface
-//        public String getVersion() {
-//            //Log.v(LOGTAG, " getVersion()");
-//            return "20161216";
-//        }
-//
-////        @JavascriptInterface
-////        public String testJNI() {
-////            //Log.v(LOGTAG, " testJNI()");
-////            return stringFromJNI();//see .cpp
-////        }
-//
-//        @JavascriptInterface
-//        public void quickShowMsgMain(String s) {
-//            WtfTools.quickShowMsgMain(s);
-//        }
-//    }
 }
-
-//stub
-//            jswv.evaluateJavascript("nativewtf.getVersion()", new ValueCallback<String>() {
-//                @Override
-//                public void onReceiveValue(String json_string) {
-//                    Log.v(LOGTAG, " DEBUG " + json_string);
-//                }
-//            });
-//            jswv.evaluateJavascript("({screen_width:screen.width,screen_height:screen.height,testJNI:nativewtf.testJNI()})", new ValueCallback<String>() {
-//                @Override
-//                public void onReceiveValue(String json_string) {
-//                    Log.v(LOGTAG, " DEBUG " + json_string);
-//                }
-//            });
-//TODO 先测试 基本，再以后动态....
-//            String platform_js = readAssetInStr("WtfTools.js", true);
-//            Log.v(LOGTAG, platform_js);

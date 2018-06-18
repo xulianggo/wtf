@@ -15,16 +15,15 @@
 //-(void) onCallback:(JSO*) responseData;
 //@end
 
-//TODO change to java-interface-alike stuff
 typedef void (^WtfCallback)(JSO* responseData);
 
-//TODO change to java-interface-alike stuff
+//@ref (WtfHandler) ApiWtf.getHandler;
 typedef void (^WtfHandler)(JSO * jso, WtfCallback responseCallback);
 
 //sync android WtfDialogCallback
 typedef void (^WtfDialogCallback)(UIAlertAction* action);
 
-//TODO change to java-interface-alike stuff
+//@ref sounds like "WtfEventCallback", but for now, we can merge with WtfCallback yet, so maybe in far future?
 typedef void (^WtfEventHandler)(NSString *eventName, JSO* extraData);
 
 typedef void (^WtfBlock)(void);

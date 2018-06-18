@@ -116,8 +116,7 @@
         NSLog(@" !!! caller.myApiHandlers is nil !!! %@", caller.uiData);
         return;
     }
-    
-    //WtfHandler handler = caller.apiMap[handlerName_s];
+
     WtfApi* api = caller.apiMap[handlerName_s];
     if (nil==api) {
         NSLog(@" !!! found no api for %@", handlerName_s);
