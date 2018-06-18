@@ -114,7 +114,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 + (NSString *) md5 :(NSString*) ipt;
 
 //////////////////// quick event handling {
-@property (strong, nonatomic) WtfCache* eventHandlers;
+@property (strong, nonatomic) WtfCache* eventMap;
 //@property (strong, nonatomic) NSMutableDictionary* eventHandlers;
 
 +(instancetype) on:(NSString*)eventName :(WtfEventHandler) handler;

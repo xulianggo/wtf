@@ -535,13 +535,13 @@ SINGLETON_shareInstance(WtfTools);
     if(nil==handler){
         return theWtfTool;
     }
-    if(nil==theWtfTool.eventHandlers){
-        theWtfTool.eventHandlers=[[WtfCache new]init];
+    if(nil==theWtfTool.eventMap){
+        theWtfTool.eventMap=[[WtfCache new]init];
     }
-    if(nil==[theWtfTool.eventHandlers objectForKey:eventName]){
-        [theWtfTool.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
+    if(nil==[theWtfTool.eventMap objectForKey:eventName]){
+        [theWtfTool.eventMap setObject:[NSMutableArray array] forKey:eventName];
     }
-    [[theWtfTool.eventHandlers objectForKey:eventName] addObject:handler];
+    [[theWtfTool.eventMap objectForKey:eventName] addObject:handler];
     return theWtfTool;
 }
 
@@ -551,13 +551,13 @@ SINGLETON_shareInstance(WtfTools);
     if(nil==handler){
         return theWtfTool;
     }
-    if(nil==theWtfTool.eventHandlers){
-        theWtfTool.eventHandlers=[[WtfCache new]init];
+    if(nil==theWtfTool.eventMap){
+        theWtfTool.eventMap=[[WtfCache new]init];
     }
-    if(nil==[theWtfTool.eventHandlers objectForKey:eventName]){
-        [theWtfTool.eventHandlers setObject:[NSMutableArray array] forKey:eventName expire:expire];
+    if(nil==[theWtfTool.eventMap objectForKey:eventName]){
+        [theWtfTool.eventMap setObject:[NSMutableArray array] forKey:eventName expire:expire];
     }
-    NSMutableArray * dict = [theWtfTool.eventHandlers objectForKey:eventName];
+    NSMutableArray * dict = [theWtfTool.eventMap objectForKey:eventName];
     [dict addObject:handler];
     return theWtfTool;
 }
@@ -566,7 +566,7 @@ SINGLETON_shareInstance(WtfTools);
 {
     NSLog(@"trigger(%@) is called.", eventName);
     WtfTools *theWtfTool = [WtfTools shareInstance];
-    NSArray * dict = [theWtfTool.eventHandlers objectForKey:eventName];
+    NSArray * dict = [theWtfTool.eventMap objectForKey:eventName];
     if(nil!=dict){
         NSUInteger c =[dict count];
         for(int i=0; i<c; i++){
@@ -585,12 +585,12 @@ SINGLETON_shareInstance(WtfTools);
 +(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler
 {
     WtfTools *theWtfTool = [WtfTools shareInstance];
-    if(nil==theWtfTool.eventHandlers || [@"*" isEqualToString:eventName]){
+    if(nil==theWtfTool.eventMap || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];
-        theWtfTool.eventHandlers=[[WtfCache new]init];
+        theWtfTool.eventMap=[[WtfCache new]init];
     }
     //[self.eventHandlers[eventName] removeObject:handler];
-    [[theWtfTool.eventHandlers objectForKey:eventName] removeObject:handler];
+    [[theWtfTool.eventMap objectForKey:eventName] removeObject:handler];
     return theWtfTool;
 }
 //remove all handlers linked to the eventName
@@ -598,11 +598,11 @@ SINGLETON_shareInstance(WtfTools);
 {
     WtfTools *theWtfTool = [WtfTools shareInstance];
     //TODO: potentially memory leak, fix later (find a removeAll or free() stuffs!!
-    if(nil==theWtfTool.eventHandlers || [@"*" isEqualToString:eventName]){
+    if(nil==theWtfTool.eventMap || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];
-        theWtfTool.eventHandlers=[[WtfCache new]init];
+        theWtfTool.eventMap=[[WtfCache new]init];
     }
-    [theWtfTool.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
+    [theWtfTool.eventMap setObject:[NSMutableArray array] forKey:eventName];
     return theWtfTool;
 }
 

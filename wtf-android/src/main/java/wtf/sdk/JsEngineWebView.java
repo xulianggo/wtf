@@ -33,28 +33,21 @@ public class JsEngineWebView {
         _init(ctx, "default");
     }
 
-    //稍后再 未经KITKAT?
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void _init(Context context, String name) throws Throwable {
 
         int chk = Build.VERSION_CODES.KITKAT;
         int now = Build.VERSION.SDK_INT;
         if (now < chk) {
-            String sWarning = "This App needs android API " + chk + " above";
+            String sWarning = "This App needs android API " + chk + "+";
             throw new Throwable(sWarning);
         }
 
         mWebView = new WebView(context);
 
-        //mWebView.willNotDraw();
         mWebView.setWillNotDraw(true);//for performance
 
         mWebView.getSettings().setJavaScriptEnabled(true);
-
-        //@NOTES: Important here, that some must be done to let come JavascriptInterface
-        //this._loadJavaScript("console.log('loaded JsEngineWebView " + name + "')");
-
-        //mWebView.evaluateJavascript("console.log('loaded JsEngineWebView " + name + "')",null);
     }
 
     @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
@@ -65,14 +58,19 @@ public class JsEngineWebView {
         mWebView.addJavascriptInterface(obj, name);
     }
 
-    //TODO ValueCallback<String> => WtfJsCallback ?
-    //@NOTES: the evaluateJavascript() has bug for those js with comments....
+    //@NOTES: WARING the evaluateJavascript() has problem for those js with comments....
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public void evaluateJavascript(String js, ValueCallback<String> resultCallback) {
+    public void evaluateJavascript(String js, final WtfCallback cb) {
 
-        mWebView.evaluateJavascript(js, resultCallback);
+        mWebView.evaluateJavascript(js, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                if (null != cb) cb.onCall(JSO.s2o(value));
+            }
+        });
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void evaluateJavascript(String js) {
         //mWebView.evaluateJavascript("setTimeout(function(){"+js+"},11)", null);
         mWebView.evaluateJavascript(js, null);
