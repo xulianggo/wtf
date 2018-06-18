@@ -28,7 +28,7 @@ public class WtfUi extends Activity {
     private JSO _uiData;
     private JSO _responseData;
     //private
-    private Map<String, WtfCallback> _cba = new HashMap<String, WtfCallback>();
+    private Map<String, WtfEventHandler> eventMap = new HashMap<String, WtfEventHandler>();
     public Map<String, WtfApi> apiMap = new HashMap<String, WtfApi>();
 
     //see JSBridge callHandler()
@@ -121,53 +121,57 @@ public class WtfUi extends Activity {
         closeUi();
     }
 
-		//do close
-		public void closeUi() {
+    //do close
+    public void closeUi() {
 
-			JSO o = _responseData;
-			if (_responseData == null) {
-				//if not responseData default return {name: $name, address: adress} for caller reference only
-				o = new JSO();
-				o.setChild("name", getUiData("name"));
-				o.setChild("address", getUiData("address"));
-			}
-			//NOTES 有问题，trigger()不应该是同步的，所以不应该用返回值来判断是否要finish啊
-			//if (false == trigger(WtfTools.WtfEventWhenClose, o)) {
+        JSO o = _responseData;
+        if (_responseData == null) {
+            //if not responseData default return {name: $name, address: adress} for caller reference only
+            o = new JSO();
+            o.setChild("name", getUiData("name"));
+            o.setChild("address", getUiData("address"));
+        }
+        //NOTES 有问题，trigger()不应该是同步的，所以不应该用返回值来判断是否要finish啊
+        //if (false == trigger(WtfTools.WtfEventWhenClose, o)) {
 
-			//    //if no handler from trigger, i need to close by self.
-			//    finish();
-			//    return true;//real closed at this call
-			//}
-			//return false;//didn't real close at this call
-			finish();
-		}
-
-    //TODO 暂快做一对多!!!
-    public void on(String eventName, WtfCallback cb) {
-        Log.v(LOGTAG, "Hybrid.on( " + eventName + ")");
-        _cba.remove(eventName);
-        _cba.put(eventName, cb);
+        //    //if no handler from trigger, i need to close by self.
+        //    finish();
+        //    return true;//real closed at this call
+        //}
+        //return false;//didn't real close at this call
+        finish();
     }
 
-//TODO fix it
-    public void off(String eventName, WtfCallback cb){
-        _cba.remove(eventName);
+    //TODO 尽快做一对多!!!!!!!!!!!!!!!!!!!!!!!
+//    public void on(String eventName, WtfCallback cb) {
+//        Log.v(LOGTAG, "Hybrid.on( " + eventName + ")");
+//        eventMap.remove(eventName);
+//        eventMap.put(eventName, cb);
+//    }
+    public void on(String eventName, WtfEventHandler cb) {
+        Log.v(LOGTAG, "Hybrid.on( " + eventName + ")");
+        eventMap.remove(eventName);
+        eventMap.put(eventName, cb);
     }
 
     //TODO fix it
-    public void off(String eventName){
-        _cba.remove(eventName);
+    public void off(String eventName, WtfCallback cb) {
+        eventMap.remove(eventName);
     }
 
-    public boolean trigger(String eventName, JSO o) {
-        WtfCallback cb = _cba.get(eventName);
-        if (cb == null) {
-            Log.v(LOGTAG, "trigger() found no handler for " + eventName);
-            return false;//have no handler
-        } else {
-            cb.onCall(o);
-            return true;//have handler...
+    //TODO fix it
+    public void off(String eventName) {
+        eventMap.remove(eventName);
+    }
+
+    //TODO how about return sth else
+    public void trigger(String eventName, JSO o) {
+        WtfEventHandler cb = eventMap.get(eventName);
+        if (cb != null) {
+            cb.onCall(eventName, o);
+            //return true;
         }
+        //return false;
     }
 
     //NOTES: when user click the left-upper button on the top bar, then regard as closeUi...

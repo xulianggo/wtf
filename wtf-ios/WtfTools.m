@@ -545,6 +545,7 @@ SINGLETON_shareInstance(WtfTools);
     return theWtfTool;
 }
 
+//special.... when expire(TTL) the v will be gone
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire
 {
     WtfTools *theWtfTool = [WtfTools shareInstance];

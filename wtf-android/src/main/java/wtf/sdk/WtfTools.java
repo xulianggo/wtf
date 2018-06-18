@@ -893,10 +893,11 @@ public class WtfTools {
 
     //简易全局事件机制，支持 TTL
 
-    private Map<String, WtfCallback> eventMap = new WtfCache<String, WtfCallback>();// new HashMap<>();//new WtfCache<String, WtfCallback>();
+    private Map<String, WtfEventHandler> eventMap = new WtfCache<String, WtfEventHandler>();// new HashMap<>();//new WtfCache<String, WtfCallback>();
 
     //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
-    public void on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
+    public static void on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
+        //eventMap.put(eventName,)
         Log.v(LOGTAG, " on(ttl)" + ttl);
     }
 

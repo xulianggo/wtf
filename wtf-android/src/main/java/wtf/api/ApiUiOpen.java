@@ -5,6 +5,7 @@ package wtf.api;
 import wtf.sdk.JSO;
 import wtf.sdk.WtfApi;
 import wtf.sdk.WtfCallback;
+import wtf.sdk.WtfEventHandler;
 import wtf.sdk.WtfHandler;
 import wtf.sdk.WtfTools;
 import wtf.sdk.WtfUi;
@@ -29,10 +30,10 @@ public class ApiUiOpen extends WtfApi {
 
                         //listen "close" event
                         //TODO make it constant as WtfEventWhenClose
-                        ui.on(WtfTools.WtfEventWhenClose, new WtfCallback() {
+                        ui.on(WtfTools.WtfEventWhenClose, new WtfEventHandler() {
 
                             @Override
-                            public void onCall(JSO jsoCallback) {
+                            public void onCall(String eventName, JSO jsoCallback) {
 
                                 //manually close it
                                 ui.finish();
