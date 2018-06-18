@@ -907,7 +907,7 @@ public class WtfTools {
         Log.v(LOGTAG, " on(ttl)" + ttl);
     }
 
-    public void on(String eventName) {
+    public void on(String eventName, WtfEventHandler handler) {
         //TODO
         Log.v(LOGTAG, " on()" + eventName);
     }

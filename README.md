@@ -58,14 +58,15 @@ TODO on/off/trigger of android
 + (void) notifyPause;
 + (void) notifyResume;
 
--(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
--(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
--(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
--(instancetype) off:(NSString*)eventName;
++(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
++(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
++(instancetype) off :(NSString *)eventName :(HybridEventHandler) handler;
++(instancetype) off:(NSString*)eventName;
 
--(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
--(instancetype) trigger :(NSString *)eventName;
++(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
++(instancetype) trigger :(NSString *)eventName;
 ```
+
 
 # WtfUi
 ```
@@ -74,3 +75,8 @@ TODO on/off/trigger of android
 -(void) closeUi :(JSO*)resultJSO;
 -(void) finishUi;//really finishUi
 ```
+
+
+## NOTES TODO
+
+android shareInstance use as iOS...

@@ -8,15 +8,19 @@
 
 SINGLETON_shareInstance(WtfTools);
 
++(void) setLang :(NSString *)lang
+{
+    [WtfTools shareInstance].lang=lang;
+}
 //+ (void)checkAppConfig{
 //
-//    WtfTools *hybridManager = [self shareInstance];
-//    if(nil==hybridManager._jAppConfig){
+//    WtfTools *theWtfTool = [self shareInstance];
+//    if(nil==theWtfTool._jAppConfig){
 //        //TODO [WtfTools stripComment:s]
 //        NSString *s =[self readAssetInStr:@"config.json" :YES];
 //        if(s){
-//            hybridManager._jAppConfig = [JSO s2o:s];
-//            hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
+//            theWtfTool._jAppConfig = [JSO s2o:s];
+//            theWtfTool._i18n =[theWtfTool._jAppConfig getChild:@"I18N"];
 //        }
 //    }
 //    //TODO if not ok, need to alert the program ...
@@ -128,16 +132,16 @@ SINGLETON_shareInstance(WtfTools);
 
 + (JSO *)wholeAppConfig{
     
-    WtfTools *hybridManager = [self shareInstance];
-    if(nil==hybridManager._jAppConfig){
+    WtfTools *theWtfTool = [self shareInstance];
+    if(nil==theWtfTool._jAppConfig){
         //TODO [WtfTools stripComment:s]
         NSString *s =[self readAssetInStr:@"config.json" :YES];
         if(s){
-            hybridManager._jAppConfig = [JSO s2o:s];
-            hybridManager._i18n =[hybridManager._jAppConfig getChild:@"I18N"];
+            theWtfTool._jAppConfig = [JSO s2o:s];
+            theWtfTool._i18n =[theWtfTool._jAppConfig getChild:@"I18N"];
         }
     }
-    return hybridManager._jAppConfig;
+    return theWtfTool._jAppConfig;
 }
 
 + (JSO *) getAppConfig :(NSString *)key
@@ -360,12 +364,12 @@ SINGLETON_shareInstance(WtfTools);
 {
     //JSO *_i18n=[self getAppConfig:@"I18N"];
     //    JSO *_i18n = [self wholeAppConfig]._i18n;
-    WtfTools *hybridManager = [self shareInstance];
-    JSO *_i18n =hybridManager._i18n;
+    WtfTools *theWtfTool = [self shareInstance];
+    JSO *_i18n =theWtfTool._i18n;
     
     JSO *value_a=[_i18n getChild:key];
     //NSString *cached_lang=[self loadAppConfig:@"lang"];
-    NSString *lang=hybridManager.lang;
+    NSString *lang=theWtfTool.lang;
     if([self isEmptyString:lang]){
         lang=@"en";
     }
@@ -410,8 +414,8 @@ SINGLETON_shareInstance(WtfTools);
 //+ (void)saveAppConfig
 //{
 //
-//    WtfTools *hybridManager = [self shareInstance];
-//    NSString *jsonString = [JSO o2s:hybridManager.jso];
+//    WtfTools *theWtfTool = [self shareInstance];
+//    NSString *jsonString = [JSO o2s:theWtfTool.jso];
 //
 ////    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 ////    [userDefaults setObject:jsonString forKey:@"appConfig"];
@@ -488,18 +492,18 @@ SINGLETON_shareInstance(WtfTools);
 //forward event(Pause) to uiRoot to handle
 + (void) notifyPause
 {
-    WtfTools *hybridManager = [self shareInstance];
-    if(nil!=hybridManager.uiRoot){
-        [hybridManager.uiRoot trigger:WtfEventAppPause];
+    WtfTools *theWtfTool = [self shareInstance];
+    if(nil!=theWtfTool.uiRoot){
+        [theWtfTool.uiRoot trigger:WtfEventAppPause];
     }
 }
 
 //forward event(Resume) to uiRoot to handle
 + (void) notifyResume
 {
-    WtfTools *hybridManager = [self shareInstance];
-    if(nil!=hybridManager.uiRoot){
-        [hybridManager.uiRoot trigger:WtfEventAppResume];
+    WtfTools *theWtfTool = [self shareInstance];
+    if(nil!=theWtfTool.uiRoot){
+        [theWtfTool.uiRoot trigger:WtfEventAppResume];
     }
 }
 
@@ -532,59 +536,51 @@ SINGLETON_shareInstance(WtfTools);
 
 ////////////////////////
 
--(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
++(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
 {
-    [self on:eventName :handler :nil];
-    return self;
+    WtfTools *theWtfTool = [WtfTools shareInstance];
+    [WtfTools on:eventName :handler :nil];
+    return theWtfTool;
 }
 
--(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData
++(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData
 {
+    WtfTools *theWtfTool = [WtfTools shareInstance];
     if(nil==handler){
-        return self;
+        return theWtfTool;
     }
-    if(nil==self.eventHandlers){
-        self.eventHandlers=[[WtfCache new]init];
-        //[NSMutableDictionary dictionary];
+    if(nil==theWtfTool.eventHandlers){
+        theWtfTool.eventHandlers=[[WtfCache new]init];
     }
-    if(nil==[self.eventHandlers objectForKey:eventName]){
-        [self.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
+    if(nil==[theWtfTool.eventHandlers objectForKey:eventName]){
+        [theWtfTool.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
     }
-    [[self.eventHandlers objectForKey:eventName] addObject:handler];
-//    if(nil==self.eventHandlers[eventName]){
-//        self.eventHandlers[eventName]=[NSMutableArray array];
-//    }
-//    [self.eventHandlers[eventName] addObject:handler];
-    return self;
+    [[theWtfTool.eventHandlers objectForKey:eventName] addObject:handler];
+    return theWtfTool;
 }
 
--(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire
++(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire
 {
+    WtfTools *theWtfTool = [WtfTools shareInstance];
     if(nil==handler){
-        return self;
+        return theWtfTool;
     }
-    if(nil==self.eventHandlers){
-        self.eventHandlers=[[WtfCache new]init];
-        //[NSMutableDictionary dictionary];
+    if(nil==theWtfTool.eventHandlers){
+        theWtfTool.eventHandlers=[[WtfCache new]init];
     }
-    if(nil==[self.eventHandlers objectForKey:eventName]){
-        //[self.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
-        [self.eventHandlers setObject:[NSMutableArray array] forKey:eventName expire:expire];
+    if(nil==[theWtfTool.eventHandlers objectForKey:eventName]){
+        [theWtfTool.eventHandlers setObject:[NSMutableArray array] forKey:eventName expire:expire];
     }
-    NSMutableArray * dict = [self.eventHandlers objectForKey:eventName];
+    NSMutableArray * dict = [theWtfTool.eventHandlers objectForKey:eventName];
     [dict addObject:handler];
-    //    if(nil==self.eventHandlers[eventName]){
-    //        self.eventHandlers[eventName]=[NSMutableArray array];
-    //    }
-    //    [self.eventHandlers[eventName] addObject:handler];
-    return self;
+    return theWtfTool;
 }
 
--(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData
++(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData
 {
     NSLog(@"trigger(%@) is called.", eventName);
-    //NSArray * dict =self.eventHandlers[eventName];
-    NSArray * dict = [self.eventHandlers objectForKey:eventName];
+    WtfTools *theWtfTool = [WtfTools shareInstance];
+    NSArray * dict = [theWtfTool.eventHandlers objectForKey:eventName];
     if(nil!=dict){
         NSUInteger c =[dict count];
         for(int i=0; i<c; i++){
@@ -596,36 +592,36 @@ SINGLETON_shareInstance(WtfTools);
             }
         }
     }
-    return self;
+    return theWtfTool;
 }
 
 //remove the link to the handler only....
--(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler
++(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler
 {
-    if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
+    WtfTools *theWtfTool = [WtfTools shareInstance];
+    if(nil==theWtfTool.eventHandlers || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];
-        self.eventHandlers=[[WtfCache new]init];
+        theWtfTool.eventHandlers=[[WtfCache new]init];
     }
     //[self.eventHandlers[eventName] removeObject:handler];
-    [[self.eventHandlers objectForKey:eventName] removeObject:handler];
-    return self;
+    [[theWtfTool.eventHandlers objectForKey:eventName] removeObject:handler];
+    return theWtfTool;
 }
 //remove all handlers linked to the eventName
--(instancetype) off :(NSString *)eventName
++(instancetype) off :(NSString *)eventName
 {
+    WtfTools *theWtfTool = [WtfTools shareInstance];
     //TODO: potentially memory leak, fix later (find a removeAll or free() stuffs!!
-    if(nil==self.eventHandlers || [@"*" isEqualToString:eventName]){
+    if(nil==theWtfTool.eventHandlers || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];
-        self.eventHandlers=[[WtfCache new]init];
+        theWtfTool.eventHandlers=[[WtfCache new]init];
     }
-    //self.eventHandlers[eventName]=[NSMutableArray array];
-    //[self eventHandlers ]
-    [self.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
-    return self;
+    [theWtfTool.eventHandlers setObject:[NSMutableArray array] forKey:eventName];
+    return theWtfTool;
 }
 
--(instancetype) trigger :(NSString *)eventName
++(instancetype) trigger :(NSString *)eventName
 {
-    return [self trigger:eventName :nil];
+    return [WtfTools trigger:eventName :nil];
 }
 @end
