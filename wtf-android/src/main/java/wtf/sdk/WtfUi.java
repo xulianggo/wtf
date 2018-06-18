@@ -29,6 +29,14 @@ public class WtfUi extends Activity {
     private JSO _responseData;
     //private
     private Map<String, WtfCallback> _cba = new HashMap<String, WtfCallback>();
+    public Map<String, WtfApi> apiMap = new HashMap<String, WtfApi>();
+
+    //see JSBridge callHandler()
+    public void registerHandler(String handlerName, WtfApi handler) {
+        if (handler != null) {
+            apiMap.put(handlerName, handler);
+        }
+    }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override

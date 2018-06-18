@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.util.Base64;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 
@@ -58,18 +57,6 @@ public class JsEngineWebView {
         //mWebView.evaluateJavascript("console.log('loaded JsEngineWebView " + name + "')",null);
     }
 
-//    private void _loadJavaScript(String jsstr) {
-//        byte[] data;
-//        try {
-//            jsstr = "<script>" + jsstr + "</script>";
-//            data = jsstr.getBytes("UTF-8");
-//            final String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-//            mWebView.loadUrl("data:text/html;charset=utf-8;base64," + base64);
-//        } catch (final Throwable t) {
-//            t.printStackTrace();
-//        }
-//    }
-
     @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
     public void addJavascriptInterface(Object obj, String name) {
 
@@ -114,37 +101,4 @@ public class JsEngineWebView {
             mWebView = null;
         }
     }
-
-//    public WebView getWebView() {
-//        return mWebView;
-//    }
 }
-
-//stub TODO
-//    private static final String[] mFilterMethods = {"getClass", "hashCode", "notify", "notifyAll", "equals", "toString", "wait",};
-//
-//    private boolean filterMethods(String methodName) {
-//        for (String method : mFilterMethods) {
-//            if (method.equals(methodName)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//stub
-//e.g.
-//    evaluateJavascript("WebViewJavascriptBridge._app2js(" + s + ");", new ValueCallback<String>() {
-//        @Override
-//        public void onReceiveValue(String value) {
-//            Log.v(LOGTAG, " onReceiveValue " + value);
-//        }
-//    });
-
-//NOTES: for ui need runOnUiThread()....
-//        ((Activity) _context).runOnUiThread(new Runnable() {
-//                                                //@TargetApi(Build.VERSION_CODES.KITKAT)
-//                                                @Override
-//                                                public void run() {
-//                                                }
-//                                            }
