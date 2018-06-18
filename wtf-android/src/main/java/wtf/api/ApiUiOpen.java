@@ -35,8 +35,8 @@ public class ApiUiOpen extends WtfApi {
                             @Override
                             public void onCall(String eventName, JSO jsoCallback) {
 
-                                //manually close it
-                                ui.finish();
+                                //manually close
+                                //ui.finish();
 
                                 //api callback
                                 if (null != responseCallback)

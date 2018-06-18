@@ -19,8 +19,6 @@
 @optional
 
 -(void) initUi;//do init
--(void) closeUi;// trigger event close => finishUi
--(void) closeUi :(JSO*)resultJSO;
 -(BOOL) finishUi;//action finish/close
 
 -(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler;

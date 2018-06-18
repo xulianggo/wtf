@@ -16,7 +16,8 @@ public class ApiUiClose extends WtfApi {
             public void onCall(JSO jso, final WtfCallback responseCallback) {
                 WtfUi ui = getCallerUi();
 
-                ui.closeUi(jso);
+                ui.setResponseData(jso);
+                ui.finishUi();
 
                 if (null != responseCallback) responseCallback.onCall(jso);
             }

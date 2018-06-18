@@ -5,7 +5,6 @@
     return ^(JSO *ddd, WtfCallback responseCallback) {
         //dispatch_async(dispatch_get_main_queue(), ^{
         
-        //[self.currentUi closeUi];
         //TODO from ddd => real printer
         JSO *rt=[[JSO alloc] init];
         NSString *myapp_s = [WtfTools readAssetInStr:@"web/app/myapp.js" :YES];

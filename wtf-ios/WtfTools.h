@@ -122,9 +122,16 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
 +(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler;
 +(instancetype) off:(NSString*)eventName;
-
 +(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
 +(instancetype) trigger :(NSString *)eventName;
+
+//-(instancetype) on:(NSString*)eventName :(WtfEventHandler) handler;
+//-(instancetype) on:(NSString*)eventName :(WtfEventHandler) handler :(JSO *)initData;
+//-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
+//-(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler;
+//-(instancetype) off:(NSString*)eventName;
+//-(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
+//-(instancetype) trigger :(NSString *)eventName;
 //////////////////// quick event handling }
 
 @end

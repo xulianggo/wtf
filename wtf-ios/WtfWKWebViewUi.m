@@ -314,7 +314,7 @@ BOOL isFirstLoad=YES;
     if(_myWebView==webView){
         
         if(isFirstLoad)
-            [self closeUi];
+            [self finishUi];
         else
             [self spinnerOff];
     }
@@ -472,7 +472,7 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     
     if ( [WtfTools isEmptyString:address] ){
         [WtfTools quickShowMsgMain:@"no address?" callback:^{
-            [self closeUi];
+            [self finishUi];
         }];
         return;
     }
@@ -489,7 +489,6 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
        initWithImage:[UIImage imageNamed:@"btn_nav bar_left arrow"]//see Images.xcassets
        style:UIBarButtonItemStylePlain
        target:self
-       //action:@selector(closeUi) //on('click')=>close()
        action:@selector(finishUi)
        ];
     leftBar.tintColor = [UIColor blueColor];
@@ -499,7 +498,7 @@ completionHandler:(void (^)(NSString * _Nullable))completionHandler
     //    = [[UIBarButtonItem alloc]
     //       initWithBarButtonSystemItem:UIBarButtonSystemItemReply
     //       target:self
-    //       action:@selector(closeUi)];
+    //       action:@selector(finishUi)];
     
     //    UIBarButtonItem *rightBtn
     //    = [[UIBarButtonItem alloc]

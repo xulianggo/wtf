@@ -54,6 +54,7 @@ import wtf.h5.SimpleHybridWebViewUi;
 
 public class WtfTools {
     public final static String WtfEventWhenClose = "WtfEventWhenClose";
+
     public final static String NETWORK_STATUS = "_network_status_";
     //    public final static String NETWORK_STATUS = "_network_status_";
 //    final static String ANDROID_APPLICATION = "_android_applicaton_";

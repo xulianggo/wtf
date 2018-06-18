@@ -18,21 +18,21 @@
             return;
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            WtfUi ui=[WtfTools startUi:name_s initData:data objCaller:caller];
-            if(ui!=nil){
-                [ui on:WtfEventInitDone :^(NSString *eventName, JSO * extraData){
-                    NSLog(@" init done!!!");
-                }];
-                
-                [ui on:WtfEventWhenClose :^(NSString *eventName, JSO * extraData){
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [caller resetTopBarStatus];
-                        responseCallback(extraData);
-                    });
-                }];
-            }
-        });
+        //dispatch_async(dispatch_get_main_queue(), ^{
+        WtfUi ui=[WtfTools startUi:name_s initData:data objCaller:caller];
+        if(ui!=nil){
+            [ui on:WtfEventInitDone :^(NSString *eventName, JSO * extraData){
+                NSLog(@" init done!!!");
+            }];
+            
+            [ui on:WtfEventWhenClose :^(NSString *eventName, JSO * extraData){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [caller resetTopBarStatus];
+                    responseCallback(extraData);
+                });
+            }];
+        }
+        //});
     };
 }
 

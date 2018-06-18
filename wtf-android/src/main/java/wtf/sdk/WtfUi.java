@@ -116,30 +116,16 @@ public class WtfUi extends Activity {
         }
     }
 
-    public void closeUi(JSO resultJSO) {
-        if (null != resultJSO) setResponseData(resultJSO);
-        closeUi();
-    }
-
-    //do close
-    public void closeUi() {
-
+    public boolean finishUi() {
         JSO o = _responseData;
         if (_responseData == null) {
-            //if not responseData default return {name: $name, address: adress} for caller reference only
             o = new JSO();
             o.setChild("name", getUiData("name"));
             o.setChild("address", getUiData("address"));
         }
-        //NOTES 有问题，trigger()不应该是同步的，所以不应该用返回值来判断是否要finish啊
-        //if (false == trigger(WtfTools.WtfEventWhenClose, o)) {
-
-        //    //if no handler from trigger, i need to close by self.
-        //    finish();
-        //    return true;//real closed at this call
-        //}
-        //return false;//didn't real close at this call
         finish();
+        trigger(WtfTools.WtfEventWhenClose, _responseData);
+        return true;//TODO how to judge flagIsLast ?
     }
 
     //TODO 尽快做一对多!!!!!!!!!!!!!!!!!!!!!!!
@@ -180,7 +166,7 @@ public class WtfUi extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.closeUi();
+                this.finishUi();
                 break;
         }
         return true;
@@ -189,7 +175,7 @@ public class WtfUi extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            this.closeUi();
+            this.finishUi();
             //return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -225,7 +211,7 @@ public class WtfUi extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.closeUi();
+        this.finishUi();
     }
 
 }

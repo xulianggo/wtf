@@ -40,23 +40,11 @@
        initWithImage:[UIImage imageNamed:@"btn_nav bar_left arrow"] //@see Images.xcassets
        style:UIBarButtonItemStylePlain
        target:self
-       action:@selector(closeUi) //on('click')=>close()
+       action:@selector(finishUi)
        ];
     leftBar.tintColor = [UIColor blueColor];
     
     self.navigationItem.leftBarButtonItem=leftBar;
-    
-    //    self.navigationItem.leftBarButtonItem
-    //    = [[UIBarButtonItem alloc]
-    //       initWithBarButtonSystemItem:UIBarButtonSystemItemReply
-    //       target:self
-    //       action:@selector(closeUi)];
-    //
-    //    UIBarButtonItem *rightBtn
-    //    = [[UIBarButtonItem alloc]
-    //       initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:nil];
-    //    self.navigationItem.rightBarButtonItem = rightBtn;
-    //[super resetTopBarBtn];
 }
 
 //call by viewDidLoad(), child can override!

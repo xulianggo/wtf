@@ -19,7 +19,7 @@ SINGLETON_shareInstance(WtfTools);
 //callback:(void (^)(WtfUi ui))callback
          callback:(WtfUiCallback)callback
 {
-    WtfUi  ui = [self startUi:strUiName initData:initData objCaller:objCaller];
+    WtfUi ui = [self startUi:strUiName initData:initData objCaller:objCaller];
     if(nil!=callback){
         callback(ui);
     }
@@ -524,10 +524,16 @@ SINGLETON_shareInstance(WtfTools);
 
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
 {
-    WtfTools *theWtfTool = [WtfTools shareInstance];
-    [WtfTools on:eventName :handler :nil];
-    return theWtfTool;
+    return [WtfTools on:eventName :handler :nil];
+    //    WtfTools *theWtfTool = [WtfTools shareInstance];
+    //    [theWtfTool on:eventName :handler :nil];
+    //    return theWtfTool;
 }
+
+//-(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
+//{
+//    return [self on:eventName :handler :nil];
+//}
 
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData
 {
