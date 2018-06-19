@@ -666,8 +666,10 @@ public class WtfTools {
     public static boolean quickRegExpMatch(String pattern_str, String str) {
         Pattern p = Pattern.compile(pattern_str);
         Matcher m = p.matcher(str);
-        if (!m.matches()) return false;
-        return (m.toMatchResult().groupCount() > 0);
+        if(m.matches())return true;
+        return false;
+//        if (!m.matches()) return false;
+//        return (m.toMatchResult().groupCount() > 0);
     }
 
     public static boolean copyAssetFolder(AssetManager assetManager,
