@@ -82,8 +82,8 @@
             [found_a removeObjectsInArray:idjj];
             [found_a addObjectsFromArray:idjj];
         }
-        NSArray * matches = [WtfTools quickRegExpMatch :kkk :fullurl];
-        if ([matches count] > 0){
+        
+        if ([WtfTools quickRegExpMatch :kkk :fullurl]){
             flagFoundMatch=YES;
             //found_a= [api_auth_a getChild:kkk];
             //break;

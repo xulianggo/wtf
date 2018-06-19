@@ -299,7 +299,7 @@ SINGLETON_shareInstance(WtfTools);
 //    return [regex matchesInString:txt options:0 range:range];
 //}
 
-+(NSArray *) quickRegExpMatch :(NSString *)regex_s :(NSString *)txt
++(BOOL) quickRegExpMatch :(NSString *)regex_s :(NSString *)txt
 {
     NSError *error = NULL;
     NSRange range = NSMakeRange(0, [txt length]);
@@ -310,7 +310,7 @@ SINGLETON_shareInstance(WtfTools);
     if(nil!=error){
         NSLog(@"error when quickRegExpMatch %@",error);
     }
-    return [regex matchesInString:txt options:0 range:range];
+    return ([[regex matchesInString:txt options:0 range:range] count]>0);
 }
 
 +(NSString *) quickRegExpReplace :(NSString *)regex_s :(NSString *)src :(NSString *)tgt

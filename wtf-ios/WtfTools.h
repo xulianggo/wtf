@@ -77,10 +77,10 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 /**
  * Return a array of "matches".
  * Usage
- *   if ([quickRegExpMatch:@"reg" :@"txt" count] > 0) ...
+ *   if ([quickRegExpMatch:@"reg" :@"txt"]) ...
  */
 //+(NSArray *) quickRegExpMatchLine :(NSString *)regex_s :(NSString *)txt;//single line
-+(NSArray *) quickRegExpMatch :(NSString *)regex_s :(NSString *)txt;//multi line
++(BOOL) quickRegExpMatch :(NSString *)regex_s :(NSString *)txt;//multi line
 +(NSString *) quickRegExpReplace :(NSString *)regex_s :(NSString *)src :(NSString *)tgt;
 
 + (void) countDown:(double)interval initTime:(double)initTime block:(BOOL (^)(NSTimer *tm))block;

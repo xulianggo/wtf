@@ -47,12 +47,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import wtf.h5.SimpleHybridWebViewUi;
 
 public class WtfTools {
+    final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
+
     public final static String WtfEventWhenClose = "WtfEventWhenClose";
 
     public final static String NETWORK_STATUS = "_network_status_";
@@ -67,7 +70,7 @@ public class WtfTools {
     //        //native
     //        System.loadLibrary("wtf-lib");
     //    }
-    final private static String LOGTAG = new Throwable().getStackTrace()[0].getClassName();
+
 
     private static Map<String, Object> _memStore = new HashMap<String, Object>();
     //    private static Map<String, Object> _memStore = new HashMap<String, Object>();
@@ -660,6 +663,13 @@ public class WtfTools {
         return _found;
     }
 
+    public static boolean quickRegExpMatch(String pattern_str, String str) {
+        Pattern p = Pattern.compile(pattern_str);
+        Matcher m = p.matcher(str);
+        if (!m.matches()) return false;
+        return (m.toMatchResult().groupCount() > 0);
+    }
+
     public static boolean copyAssetFolder(AssetManager assetManager,
                                           String fromAssetPath, String toPath) {
         try {
@@ -936,6 +946,12 @@ public class WtfTools {
             //return true;
         }
         //return false;
+    }
+
+    public static String quickRegExpReplace(String pattern_str, String str, String replacement) {
+        Pattern p = Pattern.compile(pattern_str);
+        Matcher m = p.matcher(str);
+        return m.replaceAll(replacement);
     }
 
     //public native String stringFromJNI();
