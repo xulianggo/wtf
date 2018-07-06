@@ -116,7 +116,7 @@
         NSLog(@" !!! caller.myApiHandlers is nil !!! %@", caller.uiData);
         return;
     }
-
+    
     WtfApi* api = caller.apiMap[handlerName_s];
     if (nil==api) {
         NSLog(@" !!! found no api for %@", handlerName_s);
@@ -194,8 +194,8 @@ NSString *PBResourceHost = @"WtfWKWebViewUi";
 -(void)startLoading
 {
     NSBundle *thisBundle = [NSBundle bundleForClass:[self class]];
-//    NSString *abs_path = [thisBundle resourcePath];
-//    abs_path = [abs_path stringByAppendingString:@"/web/"];
+    //    NSString *abs_path = [thisBundle resourcePath];
+    //    abs_path = [abs_path stringByAppendingString:@"/web/"];
     NSString *abs_path = [[thisBundle resourcePath] stringByAppendingString:@"/web/"];
     NSString *notifierPath = [abs_path stringByAppendingPathComponent:[[[self request] URL] path]];
     NSError *err;
@@ -332,16 +332,28 @@ BOOL isFirstLoad=YES;
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler
 {
     [WtfTools quickShowMsgMain:message callback:^{
-        completionHandler();
+        @try{
+            completionHandler();
+        } @catch (NSException *exception) {
+            NSLog(@" error quickShowMsgMain %@", [exception reason]);
+        }
     }];
 }
 
 - (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completionHandler
 {
     [WtfTools appConfirm:message handlerYes:^(UIAlertAction *action) {
-        completionHandler(YES);
+        @try{
+            completionHandler(YES);
+        } @catch (NSException *exception) {
+            NSLog(@" error quickShowMsgMain YES %@", [exception reason]);
+        }
     } handlerNo:^(UIAlertAction *action) {
-        completionHandler(NO);
+        @try{
+            completionHandler(NO);
+        } @catch (NSException *exception) {
+            NSLog(@" error quickShowMsgMain NO %@", [exception reason]);
+        }
     }];
 }
 
