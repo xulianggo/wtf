@@ -333,6 +333,7 @@ BOOL isFirstLoad=YES;
 {
     [WtfTools quickShowMsgMain:message callback:^{
         @try{
+            if(completionHandler!=nil)
             completionHandler();
         } @catch (NSException *exception) {
             NSLog(@" error quickShowMsgMain %@", [exception reason]);
@@ -344,12 +345,14 @@ BOOL isFirstLoad=YES;
 {
     [WtfTools appConfirm:message handlerYes:^(UIAlertAction *action) {
         @try{
+            if(completionHandler!=nil)
             completionHandler(YES);
         } @catch (NSException *exception) {
             NSLog(@" error quickShowMsgMain YES %@", [exception reason]);
         }
     } handlerNo:^(UIAlertAction *action) {
         @try{
+            if(completionHandler!=nil)
             completionHandler(NO);
         } @catch (NSException *exception) {
             NSLog(@" error quickShowMsgMain NO %@", [exception reason]);
