@@ -47,6 +47,8 @@ public class ApiDefaultInit extends WtfApi {
                 //Log.v(LOGTAG, "network_status=" + network_status);
                 //rt.setChild("network_status", network_status);
 
+                rt.setChild("network_ok", JSO.valueOf("true"));
+
                 String myapp_s = WtfTools.readAssetInStr("web/app/myapp.js");
 
                 //Log.v(LOGTAG, "myapp_s=" + myapp_s);
