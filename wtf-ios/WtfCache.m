@@ -3,42 +3,20 @@
 @implementation WtfCache
 
 {
-    NSMutableArray * expireKeys;
+    NSMutableDictionary * data;
+    NSMutableDictionary * expireKeys;
 }
-
-
-//+ (WtfCache *) sharedInstance
-//{
-//    static dispatch_once_t predicate = 0;
-//    __strong static id sharedObject = nil;
-//    dispatch_once(&predicate, ^{
-//        sharedObject = [[self alloc] init];
-//    });
-//
-//    return sharedObject;
-//}
 
 - (id) init
 {
-    if ( self = [super init])
-    {
-        expireKeys = [[NSMutableArray alloc] init];
-    }
-    
+    expireKeys = [[NSMutableDictionary alloc] init];
+    data = [[NSMutableDictionary alloc] init];
     return self;
 }
 
-/**
- * Get Object
- *
- * @param NSString * key
- * @return id obj
- *
- **/
-
 - (id) objectForKey: (NSString *) key
 {
-    id obj = [super objectForKey: key];
+    id obj = [data objectForKey:key];
     
     if( obj == nil)
     {
@@ -49,73 +27,59 @@
     
     if( expired)
     {
-        [super removeObjectForKey: key];
+        [data removeObjectForKey:key];
         return nil;
     }
     
     return obj;
 }
 
-/**
- * Set Object
- *
- * @param id obj
- * @param NSString * key
- * @param NSInteger seconds
- *
- */
 - (void) setObject: (id) obj
             forKey: (NSString *) key
             expire: (NSInteger) seconds
 {
-    [super setObject: obj forKey: key];
+    
+    [data setObject:obj forKey:key];
     
     [self updateExpireKey: key expire: seconds];
 }
 
+- (void) setObject:(id) obj forKey:(NSString *) key
+{
+    [data setObject:obj forKey:key];
+}
 
-/**
- * Update Expire Time for Key and Seconds to Expire
- *
- * @param NSString * key
- * @param NSInteger seconds
- *
- **/
 - (void) updateExpireKey: (NSString *) key
                   expire: (NSInteger) seconds
 {
-    __block NSInteger index = -1;
-    
-    [expireKeys enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj[@"key"] isEqualToString: key])
-        {
-            index = idx;
-            *stop = YES;
-            return;
-        }
-    }];
-    
-    NSNumber * expires = [NSNumber numberWithFloat: ([[NSDate date] timeIntervalSince1970] + seconds)];
-    
-    if( index > -1)
-    {
-        [[expireKeys objectAtIndex: index] setObject: expires forKey: key];
-    }
-    else
-    {
-        NSMutableDictionary * element = [[NSMutableDictionary alloc] init];
-        [element setObject: key forKey: @"key"];
-        [element setObject: expires forKey: @"expire"];
-        
-        [expireKeys addObject: element];
-    }
-    
+    //    __block NSInteger index = -1;
+    //
+    //    [expireKeys enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+    //        if([obj[@"key"] isEqualToString: key])
+    //        {
+    //            index = idx;
+    //            *stop = YES;
+    //            return;
+    //        }
+    //    }];
+    //
+    //    NSNumber * expires = [NSNumber numberWithFloat: ([[NSDate date] timeIntervalSince1970] + seconds)];
+    //
+    //    if( index > -1)
+    //    {
+    //        [[expireKeys objectAtIndex: index] setObject: expires forKey: key];
+    //    }
+    //    else
+    //    {
+    //        NSMutableDictionary * element = [[NSMutableDictionary alloc] init];
+    //        [element setObject: key forKey: @"key"];
+    //        [element setObject: expires forKey: @"expire"];
+    //
+    //        [expireKeys addObject: element];
+    //    }
+    [expireKeys setObject:[NSNumber numberWithFloat: ([[NSDate date] timeIntervalSince1970] + seconds)] forKey:key];
 }
 
-/**
- * Has Expired for Key
- *
- **/
 - (BOOL) hasExpired: (NSString *) key
 {
     NSNumber * expiredObj = [self getExpireTime: key];
@@ -127,29 +91,22 @@
     return [current compare: expireDate] == NSOrderedDescending;
 }
 
-/**
- * Get Expire Time
- *
- * @param NSString * key
- * @param NSInteger
- *
- **/
 
 - (NSNumber *) getExpireTime: (NSString *) key
 {
-    __block NSNumber * expire = nil;
+    //    __block NSNumber * expire = nil;
+    //
+    //    [expireKeys enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+    //        if([obj[@"key"] isEqualToString: key])
+    //        {
+    //            expire = obj[@"expire"];
+    //            *stop = YES;
+    //            return;
+    //        }
+    //    }];
+    //     return expire;
+    return [expireKeys objectForKey:key];
     
-    [expireKeys enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj[@"key"] isEqualToString: key])
-        {
-            expire = obj[@"expire"];
-            *stop = YES;
-            return;
-        }
-    }];
-    
-    return expire;
 }
-
 
 @end
