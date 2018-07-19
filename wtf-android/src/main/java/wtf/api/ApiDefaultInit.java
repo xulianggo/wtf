@@ -31,7 +31,7 @@ public class ApiDefaultInit extends WtfApi {
                 //如果缓存为空，先使用随包的，然后异步后台去抓取最新的（提交正确的参数？）然后覆盖写进缓存
                 //如果缓存不为空，就使用缓存的，然后也异步查看有没有更新
 
-                String build_type = "D";//WtfTools.getAppConfig("build_type").asString();//TODO
+                String build_type = WtfTools.getAppConfig("build_type").asString();//TODO
 
                 //build_type = "L";//uncomment for TMP test live...
 
