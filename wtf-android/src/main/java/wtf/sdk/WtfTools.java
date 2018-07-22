@@ -78,6 +78,11 @@ public class WtfTools {
     //private static JSO _jAppConfig = null;//new info.cmptech.JSO();
     private JSO _jAppConfig;
     private JSO _i18n;
+    private String _lang;//TODO
+    //TODO need
+//    public  static JSO I18N(String key){
+//        return shareInstance()._i18n.getChild(key);
+//    }
     private static String _localWebRoot = "";
 
 //    private Context androidContext;
@@ -440,54 +445,55 @@ public class WtfTools {
         return rt;
     }
 
-    public static String isoDateTime() {
-        //String time_s = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("en_US"));
-        String time_s = df.format(new Date());
-        return time_s;
-    }
+//    public static String isoDateTime() {
+//        //String time_s = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
+//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("en_US"));
+//        String time_s = df.format(new Date());
+//        return time_s;
+//    }
 
-    private static String readAssetInStrWithoutComments(String s) {
-        return readAssetInStrWithoutComments(getAppContext(), s);
-    }
-
-    private static String readAssetInStrWithoutComments(Context c, String urlStr) {
-        InputStream in = null;
-        try {
-            in = c.getAssets().open(urlStr);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-            String line = null;
-            StringBuilder sb = new StringBuilder();
-            do {
-                line = bufferedReader.readLine();
-                //TMP SOLUTION REMOVE COMMENTS OF LEADING //
-                if (line != null && !line.matches("^\\s*\\/\\/.*")) {
-                    sb.append(line);
-                }
-            } while (line != null);
-
-            bufferedReader.close();
-            in.close();
-
-            return sb.toString();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                }
-                //in = null;
-            }
-        }
-        return null;
-    }
+    //@deprecated and removed.
+//    private static String readAssetInStrWithoutComments(String s) {
+//        return readAssetInStrWithoutComments(getAppContext(), s);
+//    }
+//
+//    private static String readAssetInStrWithoutComments(Context c, String urlStr) {
+//        InputStream in = null;
+//        try {
+//            in = c.getAssets().open(urlStr);
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+//            String line = null;
+//            StringBuilder sb = new StringBuilder();
+//            do {
+//                line = bufferedReader.readLine();
+//                //TMP SOLUTION REMOVE COMMENTS OF LEADING //
+//                if (line != null && !line.matches("^\\s*\\/\\/.*")) {
+//                    sb.append(line);
+//                }
+//            } while (line != null);
+//
+//            bufferedReader.close();
+//            in.close();
+//
+//            return sb.toString();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        } finally {
+//            if (in != null) {
+//                try {
+//                    in.close();
+//                } catch (IOException e) {
+//                }
+//                //in = null;
+//            }
+//        }
+//        return null;
+//    }
 
     public static JSO wholeAppConfig() {
         WtfTools theWtfTool = shareInstance();
         if (theWtfTool._jAppConfig == null) {
-            final String sJsonConf = readAssetInStrWithoutComments("config.json");
+            final String sJsonConf = readAssetInStr("config.json",true);
             final JSO o = JSO.s2o(sJsonConf);
             theWtfTool._jAppConfig = o;
             theWtfTool._i18n = o.getChild("I18N");
@@ -497,15 +503,6 @@ public class WtfTools {
 
 //    public static void setAppConfig(String K, JSO V) {
 //        _jAppConfig.setChild(K, V);
-//    }
-
-//    public static void checkAppConfig() {
-//        if (_jAppConfig == null || _jAppConfig.isNull()) {
-//            final String sJsonConf = readAssetInStrWithoutComments("config.json");
-//            final JSO o = JSO.s2o(sJsonConf);
-//            //initAppConfig(o);
-//            _jAppConfig = o
-//        }
 //    }
 
     public static JSO getAppConfig(String k) {
@@ -573,8 +570,6 @@ public class WtfTools {
     }
 
     public static void startJs(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
-        //checkAppConfig();
-        //TODO 抄 startUi()
         String js_str = readAssetInStr(name);
         evalJs(js_str);
     }
@@ -585,7 +580,6 @@ public class WtfTools {
 
     //NOTES: the WtfUiCallback is for hooking events, not for close event, please NOTE !!!
     public static void startUi(String name, String overrideParam_s, Activity caller, WtfUiCallback cb) {
-        //checkAppConfig();
 
         JSO uia = getAppConfig(UI_MAPPING);
         if (uia == null || uia.isNull()) {
@@ -912,35 +906,39 @@ public class WtfTools {
     private Map<String, WtfEventHandler> eventMap = new WtfCache<>();// new HashMap<>();//new WtfCache<String, WtfCallback>();
 
     //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
-    public static void on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
+    public static WtfTools on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
         //eventMap.put(eventName,)
         Log.v(LOGTAG, " on(ttl)" + ttl);
         WtfTools theWtfTool = WtfTools.shareInstance();
         theWtfTool.eventMap.remove(eventName);
         theWtfTool.eventMap.put(eventName, handler);
+        return theWtfTool;
     }
 
-    public static void on(String eventName, WtfEventHandler handler) {
+    public static WtfTools on(String eventName, WtfEventHandler handler) {
         Log.v(LOGTAG, " on()" + eventName);
         WtfTools theWtfTool = WtfTools.shareInstance();
         theWtfTool.eventMap.remove(eventName);
         theWtfTool.eventMap.put(eventName, handler);
+        return theWtfTool;
     }
 
-    public static void off(String eventName) {
+    public static WtfTools off(String eventName) {
         Log.v(LOGTAG, " off()" + eventName);
         WtfTools theWtfTool = WtfTools.shareInstance();
         theWtfTool.eventMap.remove(eventName);
+        return theWtfTool;
     }
 
     //TODO just remove the noted cb....
-    public static void off(String eventName, WtfEventHandler cb) {
+    public static WtfTools off(String eventName, WtfEventHandler cb) {
         Log.v(LOGTAG, " off()" + eventName);
         WtfTools theWtfTool = WtfTools.shareInstance();
         theWtfTool.eventMap.remove(eventName);
+        return theWtfTool;
     }
 
-    public static void trigger(String eventName, JSO extraData) {
+    public static WtfTools trigger(String eventName, JSO extraData) {
         //TODO
         Log.v(LOGTAG, " trigger()" + eventName);
         WtfTools theWtfTool = WtfTools.shareInstance();
@@ -950,6 +948,7 @@ public class WtfTools {
             //return true;
         }
         //return false;
+        return theWtfTool;
     }
 
     public static String quickRegExpReplace(String pattern_str, String str, String replacement) {

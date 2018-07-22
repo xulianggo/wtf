@@ -29,7 +29,6 @@ SINGLETON_shareInstance(WtfTools);
            initData:(JSO *) initData
           objCaller:(WtfUi)objCaller
 {
-    //[self checkAppConfig];
     
     JSO *jso_uiMapping = [self getAppConfig:@"ui_mapping"];
     
@@ -346,6 +345,7 @@ SINGLETON_shareInstance(WtfTools);
     }] selector:@selector(main) userInfo:nil repeats:YES];
 }
 
+//TODO
 + (NSString *) I18N:(NSString *)key
 {
     //JSO *_i18n=[self getAppConfig:@"I18N"];

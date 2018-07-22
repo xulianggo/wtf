@@ -42,7 +42,6 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 +(void) setLang :(NSString *)lang;
 
-//+ (void) checkAppConfig;
 
 + (WtfApi *) getHybridApi:(NSString *)name;
 
@@ -60,7 +59,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 + (JSO *) getAppConfig :(NSString *)key;
 //+ (UIViewController *) findTopRootView;
 
-+ (NSString *) fullPathOfAsset :(NSString *)filename;
+//+ (NSString *) fullPathOfAsset :(NSString *)filename;
 +(NSString *)readAssetInStr :(NSString *)filename;
 +(NSString *)readAssetInStr :(NSString *)filename :(BOOL)removeComments;
 

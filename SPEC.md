@@ -3,54 +3,24 @@
 ## WtfTools (Common)
 ```
 +	(WtfTools) shareInstance()
-+	checkAppConfig()
 +	(JSO) wholeAppConfig() /* get config from config.js */
 +	(JSO) getAppConfig(keyName)
-+	(JSO) I18N(key)
++	(JSO) I18N(key) //TODO not finish yet.
 +	jswv as JsEngineWebView
-+	startUi(uiName) launch ui as defined in config.json
++	startUi(uiName) //launch ui as defined in config.json
 +	quickShowMsg() /* tool tip */
 +	quickShowMsgMain() /* tool tip at global level */
 +	appAlert()
 +	appConfirm()
-+	appPrompt()
++	appPrompt() // TODO
 +	KillAppSelf
 +	readAssetInStr
 +	(boolean)isEmptyString(s) //regard ""/null/nil as empty string.
 +	saveUserConfig
 +	loadUserConfig
-
-- (void) MemorySave(key,val);
-- (id) MemoryLoad(key);
-
-TODO on/off/trigger of android
-```
-
-## WtfTools	(Android)
-```
-+ readAssetInStrWithoutComments
-+ isoDateTime
-
-```
-
-## WtfTools	(iOS)
-```
-+	countDown
-+	suspendApp
-+	findTopRootView
-+	fullPathOfAsset
-+	+(NSString *)readAssetInStr :(NSString *)filename :(BOOL)removeComments;
 +	quickRegExpMatch(regex_s, txt)
 +	quickRegExpReplace(regex_s, src, tgt)
-+	os_compare
-+	is_simulator
-+	call_c_do_m
-+	base64encode
-+	base64decode
-+	I18N
-+	(NSString) getBuildType
-+ (void) notifyPause;
-+ (void) notifyResume;
++ md5(s)
 
 +(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler;
 +(instancetype) on:(NSString*)eventName :(HybridEventHandler)handler :(JSO *)initData;
@@ -58,6 +28,29 @@ TODO on/off/trigger of android
 +(instancetype) off:(NSString*)eventName;
 +(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData;
 +(instancetype) trigger :(NSString *)eventName;
+
+- (void) MemorySave(key,val);
+- (id) MemoryLoad(key);
+
++webPost //TODO iOS not yet start...
+
+- on/off/trigger //TODO timeout structure not yet done
+```
+
+## WtfTools	(iOS Special)
+```
++	countDown
++	suspendApp
++	findTopRootView
++	os_compare
++	is_simulator
++	call_c_do_m
++	base64encode //TODO need port to android later
++	base64decode //TODO to port to android
++	(NSString) getBuildType //TODO android needs BuildConfig after built, not yet merge logic
++ (void) notifyPause;
++ (void) notifyResume;
+
 ```
 
 ```

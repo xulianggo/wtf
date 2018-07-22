@@ -184,7 +184,7 @@ public class WtfUi extends Activity {
     public void initUiData(JSO o) {
         if (o == null) return;
         _uiData = o;
-        this.setUiData("_init_time_", JSO.s2o(WtfTools.isoDateTime()));
+        //this.setUiData("_init_time_", JSO.s2o(WtfTools.isoDateTime()));
     }
 
     public JSO wholeUiData() {
