@@ -19,6 +19,10 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 @interface WtfTools : NSObject
 
+//internally mem store for object which be kept until instance destroyed:
+@property (strong) NSMutableDictionary * _memStore;
+
+//an internal JS Engine utilize System WebView:
 @property (strong) JsEngineWebView *jswv;
 
 //inner data store, hold until destroy.
@@ -108,8 +112,14 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 + (void) notifyPause;
 + (void) notifyResume;
 
-//+ (void) MemorySave :(NSString *)key :(NSString *)val;
-//+ (JSO *) MemoryLoad :(NSString *)key;
+//////////////////// mem store {
+//@ref ._memStore
+- (void) MemorySave :(NSString *)key :(id)val;
+- (id) MemoryLoad :(NSString *)key;
+//+ (void) MemorySave :(NSString *)key :(NSString *)val
+//;+ (id) MemoryLoad :(NSString *)key
+//;
+//////////////////// mem store }
 
 + (NSString *) md5 :(NSString*) ipt;
 

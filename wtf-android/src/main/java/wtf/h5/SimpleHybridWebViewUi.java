@@ -228,7 +228,7 @@ public class SimpleHybridWebViewUi extends WtfUi {
 
             //NOTES: for native object injected into the webview, the parameters must be primitive.
             @JavascriptInterface
-            public String js2app(final String callBackId, String handlerName, final String param_s) {
+            public String js2app(final String callbackId, String handlerName, final String param_s) {
 
                 final WtfUi theWtfUi = (WtfUi) _context;
                 final String uiName = theWtfUi.getUiData("name").toString();
@@ -243,7 +243,7 @@ public class SimpleHybridWebViewUi extends WtfUi {
                             @Override
                             public void run() {
                                 JSO msg = new JSO();
-                                msg.setChild("responseId", callBackId);
+                                msg.setChild("responseId", callbackId);
                                 msg.setChild("responseData", jso);
                                 String s = msg.toString(true);
                                 if ("".equals(s) || s == null) s = "null";

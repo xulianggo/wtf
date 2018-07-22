@@ -72,7 +72,8 @@ public class WtfTools {
     //    }
 
 
-    private static Map<String, Object> _memStore = new HashMap<String, Object>();
+    private Map<String, Object> _memStore = new HashMap<String, Object>();
+
     //    private static Map<String, Object> _memStore = new HashMap<String, Object>();
     //private static JSO _jAppConfig = null;//new info.cmptech.JSO();
     private JSO _jAppConfig;
@@ -130,25 +131,33 @@ public class WtfTools {
         return _shareInstance;
     }
 
-    public static Object getCacheFromMem(String key) {
+    public Object MemoryLoad(String key) {
         return _memStore.get(key);
     }
 
-    public static Object setCacheToMem(String key, Object val) {
+    public Object MemorySave(String key, Object val) {
         return _memStore.put(key, val);
     }
+
+//    public static Object MemoryLoad(String key) {
+//        return shareInstance().MemoryLoad(key);
+//    }
+//
+//    public static Object MemorySave(String key, Object val) {
+//        return shareInstance().MemorySave(key, val);
+//    }
 
     //need to call setApplication before invoke....
     public static Application getApplication() {
         Application _thisApp = null;
         try {
-            _thisApp = (Application) getCacheFromMem(ANDROID_APPLICATION);
+            _thisApp = (Application) shareInstance().MemoryLoad(ANDROID_APPLICATION);
             if (null == _thisApp) {
                 try {
                     _thisApp = (Application) Class.forName("android.app.ActivityThread")
                             .getMethod("currentApplication").invoke(null, (Object[]) null);
                     if (null != _thisApp) {
-                        setCacheToMem(ANDROID_APPLICATION, _thisApp);
+                        shareInstance().MemorySave(ANDROID_APPLICATION, _thisApp);
                     }
                 } catch (Throwable t) {
                     t.printStackTrace();
@@ -167,7 +176,7 @@ public class WtfTools {
 
     public static void setApplication(Application _thisApp) {
         if (null != _thisApp) {
-            setCacheToMem(ANDROID_APPLICATION, _thisApp);
+            shareInstance().MemorySave(ANDROID_APPLICATION, _thisApp);
         }
     }
 
@@ -438,13 +447,6 @@ public class WtfTools {
         return time_s;
     }
 
-    //    public static void MemorySave(String k, String v) {
-//        //TODO
-//    }
-//    public static String MemoryLoad(String k) {
-//        //TODO
-//        return "";
-//    }
     private static String readAssetInStrWithoutComments(String s) {
         return readAssetInStrWithoutComments(getAppContext(), s);
     }
@@ -666,7 +668,7 @@ public class WtfTools {
     public static boolean quickRegExpMatch(String pattern_str, String str) {
         Pattern p = Pattern.compile(pattern_str);
         Matcher m = p.matcher(str);
-        if(m.matches())return true;
+        if (m.matches()) return true;
         return false;
 //        if (!m.matches()) return false;
 //        return (m.toMatchResult().groupCount() > 0);

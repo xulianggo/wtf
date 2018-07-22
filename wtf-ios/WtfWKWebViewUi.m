@@ -43,7 +43,7 @@
         NSLog(@"Unknow Message from WKWebview: %@", message.body);
         return;
     }
-    __block NSString * callBackId_s =[[msg getChild:@"callbackId"] toString];
+    __block NSString * callbackId_s =[[msg getChild:@"callbackId"] toString];
     JSO * param =[msg getChild:@"data"];
     WKWebView *webView=message.webView;
     
@@ -128,10 +128,8 @@
         return;
     }
     
-    //NSString *callBackId_s=[callBackId toString];
     WtfCallback callback=^(JSO *responseData){
-        //NSLog(@"WtfCallback responseData %@", [responseData toString]);
-        NSString *rt_s=[JSO id2s:@{@"responseId":callBackId_s,@"responseData":[responseData toId]}];
+        NSString *rt_s=[JSO id2s:@{@"responseId":callbackId_s,@"responseData":[responseData toId]}];
         
         @try {
             NSString* javascriptCommand = [NSString stringWithFormat:@"setTimeout(function(){WebViewJavascriptBridge._app2js(%@);},1);", rt_s];

@@ -617,4 +617,31 @@ SINGLETON_shareInstance(WtfTools);
 {
     return [WtfTools trigger:eventName :nil];
 }
+
+//////////////////// mem store {
+/*
+ 1, setObject：forkey：中value是不能够为nil的，不然会报错。
+ 
+ setValue：forKey：中value能够为nil，但是当value为nil的时候，会自动调用removeObject：forKey方法
+ 
+ 2, setValue：forKey：中key的参数只能够是NSString类型，而setObject：forKey：的可以是任何类型
+ */
+- (void) MemorySave :(NSString *)key :(id)val
+{
+    [self._memStore setValue:val forKey:key];
+}
+- (id) MemoryLoad :(NSString *)key
+{
+    return [__memStore valueForKey:key];
+}
+
+//+ (void) MemorySave :(NSString *)key :(NSString *)val
+//{
+//    [[WtfTools shareInstance] MemorySave :key :val];
+//}
+//+ (id) MemoryLoad :(NSString *)key
+//{
+//    return [[WtfTools shareInstance] MemoryLoad :key];
+//}
+//////////////////// mem store }
 @end
