@@ -38,7 +38,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 
 //Singleton Pattern (for internal use):
-+ (WtfTools *) shareInstance;
++ (WtfTools *) sharedInstance;
 
 +(void) setLang :(NSString *)lang;
 

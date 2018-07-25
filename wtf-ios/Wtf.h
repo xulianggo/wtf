@@ -35,8 +35,8 @@ typedef void (^WtfBlock)(void);
 #define WtfEventAppResume @"WtfEventAppResume"
 #define WtfEventAppPause @"WtfEventAppPause"
 
-#define SINGLETON_shareInstance(classname) \
-+ (classname *)shareInstance\
+#define SINGLETON_sharedInstance(classname) \
++ (classname *)sharedInstance\
 {\
 static classname *_sharedInstance = nil;\
 static dispatch_once_t onceToken;\

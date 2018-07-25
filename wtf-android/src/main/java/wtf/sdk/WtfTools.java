@@ -81,7 +81,7 @@ public class WtfTools {
     private String _lang;//TODO
     //TODO need
 //    public  static JSO I18N(String key){
-//        return shareInstance()._i18n.getChild(key);
+//        return sharedInstance()._i18n.getChild(key);
 //    }
     private static String _localWebRoot = "";
 
@@ -123,14 +123,14 @@ public class WtfTools {
         getJSWV().evaluateJavascript(jsString);
     }
 
-    private static WtfTools _shareInstance;
+    private static WtfTools _sharedInstance;
 
-    public static WtfTools shareInstance() {
-        if (_shareInstance != null) return _shareInstance;
+    public static WtfTools sharedInstance() {
+        if (_sharedInstance != null) return _sharedInstance;
         synchronized (WtfTools.class) {
-            _shareInstance = new WtfTools();
+            _sharedInstance = new WtfTools();
         }
-        return _shareInstance;
+        return _sharedInstance;
     }
 
     public Object MemoryLoad(String key) {
@@ -142,24 +142,24 @@ public class WtfTools {
     }
 
 //    public static Object MemoryLoad(String key) {
-//        return shareInstance().MemoryLoad(key);
+//        return sharedInstance().MemoryLoad(key);
 //    }
 //
 //    public static Object MemorySave(String key, Object val) {
-//        return shareInstance().MemorySave(key, val);
+//        return sharedInstance().MemorySave(key, val);
 //    }
 
     //need to call setApplication before invoke....
     public static Application getApplication() {
         Application _thisApp = null;
         try {
-            _thisApp = (Application) shareInstance().MemoryLoad(ANDROID_APPLICATION);
+            _thisApp = (Application) sharedInstance().MemoryLoad(ANDROID_APPLICATION);
             if (null == _thisApp) {
                 try {
                     _thisApp = (Application) Class.forName("android.app.ActivityThread")
                             .getMethod("currentApplication").invoke(null, (Object[]) null);
                     if (null != _thisApp) {
-                        shareInstance().MemorySave(ANDROID_APPLICATION, _thisApp);
+                        sharedInstance().MemorySave(ANDROID_APPLICATION, _thisApp);
                     }
                 } catch (Throwable t) {
                     t.printStackTrace();
@@ -178,7 +178,7 @@ public class WtfTools {
 
     public static void setApplication(Application _thisApp) {
         if (null != _thisApp) {
-            shareInstance().MemorySave(ANDROID_APPLICATION, _thisApp);
+            sharedInstance().MemorySave(ANDROID_APPLICATION, _thisApp);
         }
     }
 
@@ -488,7 +488,7 @@ public class WtfTools {
 //    }
 
     public static JSO wholeAppConfig() {
-        WtfTools theWtfTool = shareInstance();
+        WtfTools theWtfTool = sharedInstance();
         if (theWtfTool._jAppConfig == null) {
             final String sJsonConf = readAssetInStr("config.json", true);
             final JSO o = JSO.s2o(sJsonConf);
@@ -874,7 +874,7 @@ public class WtfTools {
     public static WtfTools on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
         //eventMap.put(eventName,)
         Log.v(LOGTAG, " on(ttl)" + ttl);
-        WtfTools theWtfTool = WtfTools.shareInstance();
+        WtfTools theWtfTool = WtfTools.sharedInstance();
         theWtfTool.eventMap.remove(eventName);
         theWtfTool.eventMap.put(eventName, handler);
         return theWtfTool;
@@ -882,7 +882,7 @@ public class WtfTools {
 
     public static WtfTools on(String eventName, WtfEventHandler handler) {
         Log.v(LOGTAG, " on()" + eventName);
-        WtfTools theWtfTool = WtfTools.shareInstance();
+        WtfTools theWtfTool = WtfTools.sharedInstance();
         theWtfTool.eventMap.remove(eventName);
         theWtfTool.eventMap.put(eventName, handler);
         return theWtfTool;
@@ -890,7 +890,7 @@ public class WtfTools {
 
     public static WtfTools off(String eventName) {
         Log.v(LOGTAG, " off()" + eventName);
-        WtfTools theWtfTool = WtfTools.shareInstance();
+        WtfTools theWtfTool = WtfTools.sharedInstance();
         theWtfTool.eventMap.remove(eventName);
         return theWtfTool;
     }
@@ -898,7 +898,7 @@ public class WtfTools {
     //TODO just remove the noted cb....
     public static WtfTools off(String eventName, WtfEventHandler cb) {
         Log.v(LOGTAG, " off()" + eventName);
-        WtfTools theWtfTool = WtfTools.shareInstance();
+        WtfTools theWtfTool = WtfTools.sharedInstance();
         theWtfTool.eventMap.remove(eventName);
         return theWtfTool;
     }
@@ -906,7 +906,7 @@ public class WtfTools {
     public static WtfTools trigger(String eventName, JSO extraData) {
         //TODO
         Log.v(LOGTAG, " trigger()" + eventName);
-        WtfTools theWtfTool = WtfTools.shareInstance();
+        WtfTools theWtfTool = WtfTools.sharedInstance();
         WtfEventHandler cb = theWtfTool.eventMap.get(eventName);
         if (cb != null) {
             cb.onCall(eventName, extraData);

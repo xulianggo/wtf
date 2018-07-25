@@ -6,11 +6,11 @@
 
 @implementation WtfTools
 
-SINGLETON_shareInstance(WtfTools);
+SINGLETON_sharedInstance(WtfTools);
 
 +(void) setLang :(NSString *)lang
 {
-    [WtfTools shareInstance].lang=lang;
+    [WtfTools sharedInstance].lang=lang;
 }
 
 + (void) startUi :(NSString *)strUiName
@@ -118,7 +118,7 @@ SINGLETON_shareInstance(WtfTools);
 
 + (JSO *)wholeAppConfig{
     
-    WtfTools *theWtfTool = [self shareInstance];
+    WtfTools *theWtfTool = [self sharedInstance];
     if(nil==theWtfTool._jAppConfig){
         NSString *s =[self readAssetInStr:@"config.json" :YES];
         if(s){
@@ -350,7 +350,7 @@ SINGLETON_shareInstance(WtfTools);
 {
     //JSO *_i18n=[self getAppConfig:@"I18N"];
     //    JSO *_i18n = [self wholeAppConfig]._i18n;
-    WtfTools *theWtfTool = [self shareInstance];
+    WtfTools *theWtfTool = [self sharedInstance];
     JSO *_i18n =theWtfTool._i18n;
     
     JSO *value_a=[_i18n getChild:key];
@@ -400,7 +400,7 @@ SINGLETON_shareInstance(WtfTools);
 //+ (void)saveAppConfig
 //{
 //
-//    WtfTools *theWtfTool = [self shareInstance];
+//    WtfTools *theWtfTool = [self sharedInstance];
 //    NSString *jsonString = [JSO o2s:theWtfTool.jso];
 //
 ////    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -478,7 +478,7 @@ SINGLETON_shareInstance(WtfTools);
 //forward event(Pause) to uiRoot to handle
 + (void) notifyPause
 {
-    WtfTools *theWtfTool = [self shareInstance];
+    WtfTools *theWtfTool = [self sharedInstance];
     if(nil!=theWtfTool.uiRoot){
         [theWtfTool.uiRoot trigger:WtfEventAppPause];
     }
@@ -487,7 +487,7 @@ SINGLETON_shareInstance(WtfTools);
 //forward event(Resume) to uiRoot to handle
 + (void) notifyResume
 {
-    WtfTools *theWtfTool = [self shareInstance];
+    WtfTools *theWtfTool = [self sharedInstance];
     if(nil!=theWtfTool.uiRoot){
         [theWtfTool.uiRoot trigger:WtfEventAppResume];
     }
@@ -525,7 +525,7 @@ SINGLETON_shareInstance(WtfTools);
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler
 {
     return [WtfTools on:eventName :handler :nil];
-    //    WtfTools *theWtfTool = [WtfTools shareInstance];
+    //    WtfTools *theWtfTool = [WtfTools sharedInstance];
     //    [theWtfTool on:eventName :handler :nil];
     //    return theWtfTool;
 }
@@ -537,7 +537,7 @@ SINGLETON_shareInstance(WtfTools);
 
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData
 {
-    WtfTools *theWtfTool = [WtfTools shareInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     if(nil==handler){
         return theWtfTool;
     }
@@ -554,7 +554,7 @@ SINGLETON_shareInstance(WtfTools);
 //special.... when expire(TTL) the v will be gone
 +(instancetype) on:(NSString *)eventName :(WtfEventHandler) handler :(JSO *)initData :(NSInteger)expire
 {
-    WtfTools *theWtfTool = [WtfTools shareInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     if(nil==handler){
         return theWtfTool;
     }
@@ -572,7 +572,7 @@ SINGLETON_shareInstance(WtfTools);
 +(instancetype) trigger :(NSString *)eventName :(JSO *)triggerData
 {
     NSLog(@"trigger(%@) is called.", eventName);
-    WtfTools *theWtfTool = [WtfTools shareInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     NSArray * dict = [theWtfTool.eventMap objectForKey:eventName];
     if(nil!=dict){
         NSUInteger c =[dict count];
@@ -591,7 +591,7 @@ SINGLETON_shareInstance(WtfTools);
 //remove the link to the handler only....
 +(instancetype) off :(NSString *)eventName :(WtfEventHandler) handler
 {
-    WtfTools *theWtfTool = [WtfTools shareInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     if(nil==theWtfTool.eventMap || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];
         theWtfTool.eventMap=[[WtfCache new]init];
@@ -603,7 +603,7 @@ SINGLETON_shareInstance(WtfTools);
 //remove all handlers linked to the eventName
 +(instancetype) off :(NSString *)eventName
 {
-    WtfTools *theWtfTool = [WtfTools shareInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     //TODO: potentially memory leak, fix later (find a removeAll or free() stuffs!!
     if(nil==theWtfTool.eventMap || [@"*" isEqualToString:eventName]){
         //self.eventHandlers=[NSMutableDictionary dictionary];
@@ -637,11 +637,11 @@ SINGLETON_shareInstance(WtfTools);
 
 //+ (void) MemorySave :(NSString *)key :(NSString *)val
 //{
-//    [[WtfTools shareInstance] MemorySave :key :val];
+//    [[WtfTools sharedInstance] MemorySave :key :val];
 //}
 //+ (id) MemoryLoad :(NSString *)key
 //{
-//    return [[WtfTools shareInstance] MemoryLoad :key];
+//    return [[WtfTools sharedInstance] MemoryLoad :key];
 //}
 //////////////////// mem store }
 @end
