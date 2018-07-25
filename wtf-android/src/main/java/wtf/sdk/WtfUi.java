@@ -65,7 +65,7 @@ public class WtfUi extends Activity {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            WtfUi.tmpUiCallback = null;
+            //WtfUi.tmpUiCallback = null;
         }
     }
 

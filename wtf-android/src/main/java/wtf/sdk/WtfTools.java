@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.util.Log;
@@ -40,7 +41,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -123,16 +123,13 @@ public class WtfTools {
         getJSWV().evaluateJavascript(jsString);
     }
 
-    //private static WtfTools _shareInstance = new WtfTools();
-//    private static Object _shareInstanceLock = new Object();
-    private static WtfTools _shareInstance;
+    private static WtfTools _shareInstance = new WtfTools();
 
     public static WtfTools shareInstance() {
-        //return _shareInstance;
-        if (_shareInstance != null) return _shareInstance;
-        synchronized (WtfTools.class) {
-            _shareInstance = new WtfTools();
-        }
+//        if (_shareInstance != null) return _shareInstance;
+//        synchronized (WtfTools.class) {
+//            _shareInstance = new WtfTools();
+//        }
         return _shareInstance;
     }
 
@@ -493,7 +490,7 @@ public class WtfTools {
     public static JSO wholeAppConfig() {
         WtfTools theWtfTool = shareInstance();
         if (theWtfTool._jAppConfig == null) {
-            final String sJsonConf = readAssetInStr("config.json",true);
+            final String sJsonConf = readAssetInStr("config.json", true);
             final JSO o = JSO.s2o(sJsonConf);
             theWtfTool._jAppConfig = o;
             theWtfTool._i18n = o.getChild("I18N");
@@ -614,7 +611,11 @@ public class WtfTools {
         //caller, calleeClass, uiDataJSO, cb
         Intent intent = null;
         try {
-            intent = new Intent(caller, Class.forName(clsName));
+            if (caller == null) {
+                intent = new Intent(getAppContext(), Class.forName(clsName));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            } else
+                intent = new Intent(caller, Class.forName(clsName));
         } catch (Exception ex) {
             quickShowMsgMain("not found " + clsName);
             return;
@@ -630,8 +631,9 @@ public class WtfTools {
 
         try {
             final Intent tmpIntent = intent;
-            final Activity tmpCaller = caller;
+            final Context tmpCaller = (caller == null) ? getAppContext() : caller;
 
+            //TODO 这里是不应该用静态变量勾上去，而应该用 extra ???
             WtfUi.tmpUiCallback = cb;//tmp ugly working solution, improve in future...
 
             tmpCaller.startActivity(tmpIntent);
@@ -959,4 +961,15 @@ public class WtfTools {
 
     //public native String stringFromJNI();
 
+
+    public static PackageInfo getPackageInfo() {
+        PackageInfo pinfo = null;
+        try {
+            Context _appContext = getAppContext();
+            pinfo = _appContext.getPackageManager().getPackageInfo(_appContext.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pinfo;
+    }
 }
