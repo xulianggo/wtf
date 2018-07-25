@@ -633,7 +633,11 @@ public class WtfTools {
             final Intent tmpIntent = intent;
             final Context tmpCaller = (caller == null) ? getAppContext() : caller;
 
-            //TODO 这里是不应该用静态变量勾上去，而应该用 extra ???
+            //NOTES: 跟iOS那里做法有所不同，原因是 iOS 呼唤了UI之后能马上拿到句柄，所以能操作 cb，
+            // 安卓这里本来要弄到 extra 或者 放在某个能延迟堆栈的地方，暂时没时间弄，
+            // 所以先弄一个类静态变量顶一下，但其实不科学有BUG的
+
+//TODO
             WtfUi.tmpUiCallback = cb;//tmp ugly working solution, improve in future...
 
             tmpCaller.startActivity(tmpIntent);
@@ -778,50 +782,9 @@ public class WtfTools {
 //        }
 //    }
 
-//    public static void KillAppSelf() {
-//        android.os.Process.killProcess(android.os.Process.myPid());
-//        System.exit(0);
-//    }
-
     public static String readAssetInStr(String file_s) {
         return readAssetInStr(file_s, false);//default original
     }
-
-//    public static String readAssetInStr(String file_s, boolean filterRowComments) {
-//        InputStream in = null;
-//        try {
-//            in = getAppContext().getAssets().open(file_s);
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-//            String line = null;
-//            StringBuilder sb = new StringBuilder();
-//            do {
-//                line = bufferedReader.readLine();
-//                if (filterRowComments) {
-//                    if (line != null && !line.matches("^\\s*\\/\\/.*")) {
-//                        sb.append(line + "\n");
-//                    }
-//                } else {
-//                    sb.append(line + "\n");
-//                }
-//            } while (line != null);
-//
-//            bufferedReader.close();
-//            in.close();
-//
-//            return sb.toString();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            if (in != null) {
-//                try {
-//                    in.close();
-//                } catch (IOException e) {
-//                }
-//                //in = null;
-//            }
-//        }
-//        return null;
-//    }
 
 //    public static int checkSelfPermission(WtfUi thisUi, String perm){
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
