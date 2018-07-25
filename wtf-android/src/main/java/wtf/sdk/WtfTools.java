@@ -123,13 +123,13 @@ public class WtfTools {
         getJSWV().evaluateJavascript(jsString);
     }
 
-    private static WtfTools _shareInstance = new WtfTools();
+    private static WtfTools _shareInstance;
 
     public static WtfTools shareInstance() {
-//        if (_shareInstance != null) return _shareInstance;
-//        synchronized (WtfTools.class) {
-//            _shareInstance = new WtfTools();
-//        }
+        if (_shareInstance != null) return _shareInstance;
+        synchronized (WtfTools.class) {
+            _shareInstance = new WtfTools();
+        }
         return _shareInstance;
     }
 
