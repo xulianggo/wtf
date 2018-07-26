@@ -42,12 +42,23 @@
     }
     return nil;
 }
+
 + (JSO *) id2o :(id) idid
 {
     JSO * rt=[[JSO alloc] init];
     [rt setValue:idid forKey:@"_jv"];
     return rt;
 }
+
+//TODO sync with android valueOf(primitive value)
+//+ (JSO *) valueOf :(id)v
+//{
+//    JSO * rt=[[JSO alloc] init];
+//    id idid = @(12);
+//    [rt setValue:idid forKey:@"_jv"];
+//    return rt;
+//}
+
 + (NSString *) id2s :(id)idid
 {
     return [self id2s:idid :NO];

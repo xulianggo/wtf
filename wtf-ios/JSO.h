@@ -16,9 +16,11 @@
 + (NSString *) id2s :(id)idid;
 
 + (JSO *) id2o :(id) idid;
+//+ (JSO *) valueOf :(id)v;
 
 + (JSO *) s2o:(NSString *)s;
 + (NSString *) o2s:(JSO *)o;
+
 
 - (id) toId;
 - (NSString *) asString;

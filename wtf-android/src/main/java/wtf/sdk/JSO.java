@@ -62,7 +62,44 @@ public final class JSO {
         return jso;
     }
 
+    //暂时兼容旧的，稍后移除 TODO
     public static JSO valueOf(String s) {
+        JSO jso = new JSO();
+        jso.setValue(Json.value(s));
+        return jso;
+    }
+
+    public static JSO id2o(String s) {
+        JSO jso = new JSO();
+        jso.setValue(Json.value(s));
+        return jso;
+    }
+
+    public static JSO id2o(int s) {
+        JSO jso = new JSO();
+        jso.setValue(Json.value(s));
+        return jso;
+    }
+
+    public static JSO id2o(double s) {
+        JSO jso = new JSO();
+        jso.setValue(Json.value(s));
+        return jso;
+    }
+
+    public static JSO id2o(float s) {
+        JSO jso = new JSO();
+        jso.setValue(Json.value(s));
+        return jso;
+    }
+
+    public static JSO id2o(long s) {
+        JSO jso = new JSO();
+        jso.setValue(Json.value(s));
+        return jso;
+    }
+
+    public static JSO id2o(boolean s) {
         JSO jso = new JSO();
         jso.setValue(Json.value(s));
         return jso;
@@ -183,8 +220,7 @@ public final class JSO {
 
     //NOTES: this is tricky or not very good here.... if the child is "json-string", will try convert....which not standard...
     public void setChild(String k, String childAsString) {
-        //this.setChild(k, JSO.s2o(childAsString));
-        this.setChild(k, JSO.valueOf(childAsString));
+        this.setChild(k, JSO.id2o(childAsString));
     }
 
     public void setChild(String k, JSO chd) {
