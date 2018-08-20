@@ -66,7 +66,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 
 +(BOOL) isEmptyString :(NSString *)s;
 
-+ (void)appAlert:(NSString *)msg callback:(WtfBlock)callback;
++ (void)appAlert:(NSString *)msg :(WtfBlock)callback;
 + (void)appAlert:(NSString *)msg;
 
 + (void) quickShowMsgMain :(NSString *)msg;

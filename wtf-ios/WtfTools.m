@@ -134,7 +134,7 @@ SINGLETON_sharedInstance(WtfTools);
     return [[self wholeAppConfig] getChild:key];
 }
 
-+ (void)appAlert:(NSString *)msg callback:(WtfBlock)callback
++ (void)appAlert:(NSString *)msg :(WtfBlock)callback
 {
     //dispatch_async fix :
     //This application is modifying the autolayout engine from a background thread, which can lead to engine corruption and weird crashes.
@@ -153,7 +153,7 @@ SINGLETON_sharedInstance(WtfTools);
 }
 + (void)appAlert:(NSString *)msg
 {
-    [self appAlert:msg callback:^(){
+    [self appAlert:msg :^(){
         NSLog(@" completion after appAlert()");
     }];
 }
