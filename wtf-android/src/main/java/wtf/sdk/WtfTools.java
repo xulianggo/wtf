@@ -870,6 +870,7 @@ public class WtfTools {
     //TODO 跟 iOS 同步...
     private Map<String, WtfEventHandler> eventMap = new WtfCache<>();// new HashMap<>();//new WtfCache<String, WtfCallback>();
 
+    //TODO wjc ttl => to fix the mem-leak issue
     //public void on(NSString *)eventName :(HybridEventHandler) handler :(JSO *)initData :(NSInteger)expire;//new 201806 for TTL
     public static WtfTools on(String eventName, WtfEventHandler handler, JSO extraData, int ttl) {
         //eventMap.put(eventName,)

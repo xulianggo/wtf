@@ -40,6 +40,7 @@ typedef void (^WtfUiCallback)(WtfUi ui);
 //Singleton Pattern (for internal use):
 + (WtfTools *) sharedInstance;
 
+//change language as en/zh-cn etc...
 +(void) setLang :(NSString *)lang;
 
 

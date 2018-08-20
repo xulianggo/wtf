@@ -118,7 +118,7 @@ SINGLETON_sharedInstance(WtfTools);
 
 + (JSO *)wholeAppConfig{
     
-    WtfTools *theWtfTool = [self sharedInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     if(nil==theWtfTool._jAppConfig){
         NSString *s =[self readAssetInStr:@"config.json" :YES];
         if(s){
@@ -350,16 +350,16 @@ SINGLETON_sharedInstance(WtfTools);
 {
     //JSO *_i18n=[self getAppConfig:@"I18N"];
     //    JSO *_i18n = [self wholeAppConfig]._i18n;
-    WtfTools *theWtfTool = [self sharedInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     JSO *_i18n =theWtfTool._i18n;
     
     JSO *value_a=[_i18n getChild:key];
     //NSString *cached_lang=[self loadAppConfig:@"lang"];
-    NSString *lang=theWtfTool.lang;
-    if([self isEmptyString:lang]){
-        lang=@"en";
+    NSString *thelang=theWtfTool.lang;
+    if([self isEmptyString:thelang]){
+        thelang=@"en";
     }
-    JSO *value=[value_a getChild:lang];
+    JSO *value=[value_a getChild:thelang];
     if(nil==value || [value isNull]){
         //
     }else{
@@ -400,7 +400,7 @@ SINGLETON_sharedInstance(WtfTools);
 //+ (void)saveAppConfig
 //{
 //
-//    WtfTools *theWtfTool = [self sharedInstance];
+//    WtfTools *theWtfTool = [WtfTools sharedInstance];
 //    NSString *jsonString = [JSO o2s:theWtfTool.jso];
 //
 ////    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -478,7 +478,7 @@ SINGLETON_sharedInstance(WtfTools);
 //forward event(Pause) to uiRoot to handle
 + (void) notifyPause
 {
-    WtfTools *theWtfTool = [self sharedInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     if(nil!=theWtfTool.uiRoot){
         [theWtfTool.uiRoot trigger:WtfEventAppPause];
     }
@@ -487,7 +487,7 @@ SINGLETON_sharedInstance(WtfTools);
 //forward event(Resume) to uiRoot to handle
 + (void) notifyResume
 {
-    WtfTools *theWtfTool = [self sharedInstance];
+    WtfTools *theWtfTool = [WtfTools sharedInstance];
     if(nil!=theWtfTool.uiRoot){
         [theWtfTool.uiRoot trigger:WtfEventAppResume];
     }
