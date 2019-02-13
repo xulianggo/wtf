@@ -23,6 +23,12 @@ android {
 	//compileSdkVersion Integer.parseInt(ANDROID_BUILD_SDK_VERSION)
 	compileSdkVersion rootProject.ext.compileSdkVersion
 	//buildToolsVersion rootProject.ext.buildToolsVersion
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.appSourceCompatibility
+        targetCompatibility rootProject.ext.appTargetCompatibility
+    }
+		
 		defaultConfig {
 			minSdkVersion rootProject.ext.minSdkVersion
 			targetSdkVersion rootProject.ext.appTargetSdkVersion
