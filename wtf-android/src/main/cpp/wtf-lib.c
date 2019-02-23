@@ -40,5 +40,44 @@ JNIEXPORT jstring JNICALL Java_wtf_jni_WtfNative_ABI( JNIEnv* env, jobject thiz 
 #else
 #define ABI "unknown"
 #endif
-return (*env)->NewStringUTF(env, "ABI=" ABI ".");
+return (*env)->NewStringUTF(env, "."ABI);
 }
+
+//TODO https://github.com/googlesamples/android-ndk/blob/master/hello-jniCallback/app/src/main/cpp/hello-jnicallback.c
+/*
+ * processing one time initialization:
+ *     Cache the javaVM into our context
+ *     Find class ID for JniHelper
+ *     Create an instance of JniHelper
+ *     Make global reference since we are using them from a native thread
+ * Note:
+ *     All resources allocated here are never released by application
+ *     we rely on system to free all global refs when it goes away;
+ *     the pairing function JNI_OnUnload() never gets called at all.
+ */
+/*
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
+    JNIEnv* env;
+    memset(&g_ctx, 0, sizeof(g_ctx));
+
+    g_ctx.javaVM = vm;
+    if ((*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_6) != JNI_OK) {
+        return JNI_ERR; // JNI version not supported.
+    }
+
+    jclass  clz = (*env)->FindClass(env,
+                                    "com/example/hellojnicallback/JniHandler");
+    g_ctx.jniHelperClz = (*env)->NewGlobalRef(env, clz);
+
+    jmethodID  jniHelperCtor = (*env)->GetMethodID(env, g_ctx.jniHelperClz,
+                                                   "<init>", "()V");
+    jobject    handler = (*env)->NewObject(env, g_ctx.jniHelperClz,
+                                           jniHelperCtor);
+    g_ctx.jniHelperObj = (*env)->NewGlobalRef(env, handler);
+    queryRuntimeInfo(env, g_ctx.jniHelperObj);
+
+    g_ctx.done = 0;
+    g_ctx.mainActivityObj = NULL;
+    return  JNI_VERSION_1_6;
+}
+*/
