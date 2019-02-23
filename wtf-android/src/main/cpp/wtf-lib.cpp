@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <string>
-
-//#include <v8.h>
+#include <dlfcn.h>
+#include <v8.h>
 
 //TODO
 //#include <string.h>
@@ -47,7 +47,33 @@ Java_wtf_jni_WtfNative_ABI( JNIEnv * env, jobject thiz )
 #else
 #define ABI "unknown"
 #endif
+
 std::string hello = "[" ABI "]";
+	
+	void *dlWebCoreHandle = dlopen("libwebcore.so", RTLD_NOW);
+	//void *v8GetVersion = dlsym(dlWebCoreHandle, "_ZN2v82V810GetVersionEv");
+	//if (v8GetVersion == NULL)
+		if(dlWebCoreHandle==NULL)
+	{
+		/* does not appear to be V8 */
+		jclass widget = env->FindClass("android/webkit/WebView");
+		if(NULL!=widget){
+		hello = "android/webkit/WebView." ABI;//TODO now what?
+		}
+	}else{
+		hello = "V8." ABI;
+	}
+
+//v8::Isolate* isolate;// = v8::Isolate::GetCurrent();
+//v8::Platform* platform = v8::Platform::CreateDefaultPlatform();
+//v8::Persistent<v8::Context> context = v8::Context::New();
+
+//	v8::Isolate::CreateParams create_params;
+//	create_params.array_buffer_allocator = v8::ArrayBuffer::Allocator::NewDefaultAllocator();
+
+//v8::Persistent<v8::Context> context = v8::Persistent<v8::Context>::New(v8::Context::New());
+//context->Enter();
+
 return env->NewStringUTF(hello.c_str());
 
 //return (*env)->NewStringUTF(env, "."ABI);//c

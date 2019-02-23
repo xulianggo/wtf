@@ -33,4 +33,5 @@ include_directories(include/)
 
 target_link_libraries(wtf-lib
 android
+-Lwebcore
 ${log-lib})
