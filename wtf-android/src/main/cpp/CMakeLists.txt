@@ -2,7 +2,9 @@
 # This ensures that a certain set of CMake features is available to
 # your build.
 
-cmake_minimum_required(VERSION 3.6.4111459)
+cmake_minimum_required(VERSION 3.6.0)
+
+#enable_language(CXX)
 
 # Specifies a library name, specifies whether the library is STATIC or
 # SHARED, and provides relative paths to the source code. You can
@@ -17,7 +19,13 @@ add_library( # Specifies the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/wtf-lib.cpp )
+             #src/main/cpp/wtf-lib.cpp
+             wtf-lib.c
+             )
 
 # Specifies a path to native header files.
 #include_directories(src/main/cpp/include/)
+
+target_link_libraries(wtf-lib
+                      android
+log)

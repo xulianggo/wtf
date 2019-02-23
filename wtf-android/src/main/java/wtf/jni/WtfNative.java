@@ -1,7 +1,7 @@
 package wtf.jni;
 
 public class WtfNative {
-    public native String stringFromJNI();
+    static public native String ABI();
 
     static {
         System.loadLibrary("wtf-lib");

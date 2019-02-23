@@ -1,12 +1,13 @@
+#include <jni.h>
+
+//TODO
 //#include <string.h>
 //#include <inttypes.h>
 //#include <pthread.h>
-#include <jni.h>
 //#include <android/log.h>
 //#include <assert.h>
 
-JNIEXPORT jstring JNICALL
-Java_wtf_jni_WtfNative_stringFromJNI( JNIEnv* env, jobject thiz )
+JNIEXPORT jstring JNICALL Java_wtf_jni_WtfNative_ABI( JNIEnv* env, jobject thiz )
 {
 #if defined(__arm__)
     #if defined(__ARM_ARCH_7A__)
@@ -39,5 +40,5 @@ Java_wtf_jni_WtfNative_stringFromJNI( JNIEnv* env, jobject thiz )
 #else
 #define ABI "unknown"
 #endif
-return (*env)->NewStringUTF(env, "Hello from JNI !  Compiled with ABI " ABI ".");
+return (*env)->NewStringUTF(env, "ABI=" ABI ".");
 }
