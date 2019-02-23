@@ -1,4 +1,7 @@
 #include <jni.h>
+#include <string>
+
+//#include <v8.h>
 
 //TODO
 //#include <string.h>
@@ -7,8 +10,12 @@
 //#include <android/log.h>
 //#include <assert.h>
 
-JNIEXPORT jstring JNICALL Java_wtf_jni_WtfNative_ABI( JNIEnv* env, jobject thiz )
+extern "C" {
+
+JNIEXPORT jstring JNICALL
+Java_wtf_jni_WtfNative_ABI( JNIEnv * env, jobject thiz )
 {
+
 #if defined(__arm__)
     #if defined(__ARM_ARCH_7A__)
     #if defined(__ARM_NEON__)
@@ -40,9 +47,13 @@ JNIEXPORT jstring JNICALL Java_wtf_jni_WtfNative_ABI( JNIEnv* env, jobject thiz 
 #else
 #define ABI "unknown"
 #endif
-return (*env)->NewStringUTF(env, "."ABI);
-}
+std::string hello = "[" ABI "]";
+return env->NewStringUTF(hello.c_str());
 
+//return (*env)->NewStringUTF(env, "."ABI);//c
+
+}
+//https://github.com/fmtlib/android-ndk-example/blob/master/example/jni/hello-jni.cpp
 //TODO https://github.com/googlesamples/android-ndk/blob/master/hello-jniCallback/app/src/main/cpp/hello-jnicallback.c
 /*
  * processing one time initialization:
@@ -81,3 +92,5 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     return  JNI_VERSION_1_6;
 }
 */
+
+}

@@ -20,12 +20,17 @@ add_library( # Specifies the name of the library.
 
              # Provides a relative path to your source file(s).
              #src/main/cpp/wtf-lib.cpp
-             wtf-lib.c
+             wtf-lib.cpp
              )
+find_library( # Sets the name of the path variable.
+        log-lib
 
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
 # Specifies a path to native header files.
-#include_directories(src/main/cpp/include/)
+include_directories(include/)
 
 target_link_libraries(wtf-lib
-                      android
-log)
+android
+${log-lib})
